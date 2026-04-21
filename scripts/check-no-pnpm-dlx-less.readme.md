@@ -1,7 +1,7 @@
 # `check-no-pnpm-dlx-less` — JSON output schema
 
-Preflight guard that fails the build when any tracked file references the
-broken `pnpm dlx --package=less …` (or `npx --package less lessc`) invocation.
+Preflight guard that fails the build when any tracked file references a
+forbidden dynamic LESS compiler invocation instead of the local helper.
 
 This document describes the **stable machine-readable contract** emitted on
 stdout when the script is invoked with `--json`. CI tooling, problem matchers,

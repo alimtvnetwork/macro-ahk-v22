@@ -383,23 +383,76 @@ function _appendPreviewSection(body: HTMLElement): HTMLElement {
   return previewList;
 }
 
+// v2.189.0: snapshot live input values BEFORE re-rendering so the user's
+// typed start numbers survive every keystroke in prefix/template/suffix.
+// After re-render, attach `oninput` handlers that write back into `startNums`
+// and trigger a fresh preview.
 function _detectVarsAndRenderStarts(
-  container: HTMLElement, tmplRow: RenameInputsResult['tmplRow'], prefixRow: RenameInputsResult['prefixRow'], suffixRow: RenameInputsResult['suffixRow'],
-  startDollar: number, startHash: number, startStar: number, _updatePreview: () => void,
+  container: HTMLElement,
+  tmplRow: RenameInputsResult['tmplRow'],
+  prefixRow: RenameInputsResult['prefixRow'],
+  suffixRow: RenameInputsResult['suffixRow'],
+  startNums: StartNums,
+  updatePreview: () => void,
 ): void {
-  const allText = tmplRow.input.value + (prefixRow.cb?.checked ? prefixRow.input.value : '') + (suffixRow.cb?.checked ? suffixRow.input.value : '');
+  // 1. Snapshot any currently-rendered inputs into the closure state so we
+  //    don't blow away the user's typed values during the innerHTML wipe.
+  _snapshotStartNumInputsInto(startNums);
+
+  const allText = tmplRow.input.value
+    + (prefixRow.cb?.checked ? prefixRow.input.value : '')
+    + (suffixRow.cb?.checked ? suffixRow.input.value : '');
   const hasDollar = /\$+/.test(allText);
   const hasHash = /#+/.test(allText);
   const hasStar = /\*{2,}/.test(allText);
+
   let html = '';
   if (hasDollar || hasHash || hasStar) {
     html += '<div style="font-size:8px;color:#94a3b8;margin-bottom:3px;">Start Numbers:</div><div style="display:flex;gap:8px;flex-wrap:wrap;">';
-    if (hasDollar) html += buildStartNumInput('$', 'rename-start-dollar', startDollar, '#facc15');
-    if (hasHash) html += buildStartNumInput('#', 'rename-start-hash', startHash, cPrimaryLight);
-    if (hasStar) html += buildStartNumInput('**', 'rename-start-star', startStar, '#34d399');
+    if (hasDollar) html += buildStartNumInput('$', 'rename-start-dollar', startNums.dollar, '#facc15');
+    if (hasHash) html += buildStartNumInput('#', 'rename-start-hash', startNums.hash, cPrimaryLight);
+    if (hasStar) html += buildStartNumInput('**', 'rename-start-star', startNums.star, '#34d399');
     html += '</div>';
   }
   container.innerHTML = html;
+
+  // 2. Re-attach live handlers (innerHTML wiped them).
+  _wireStartNumInput('rename-start-dollar', 'dollar', startNums, updatePreview);
+  _wireStartNumInput('rename-start-hash', 'hash', startNums, updatePreview);
+  _wireStartNumInput('rename-start-star', 'star', startNums, updatePreview);
+}
+
+function _snapshotStartNumInputsInto(startNums: StartNums): void {
+  const dollarEl = document.getElementById('rename-start-dollar') as HTMLInputElement | null;
+  const hashEl = document.getElementById('rename-start-hash') as HTMLInputElement | null;
+  const starEl = document.getElementById('rename-start-star') as HTMLInputElement | null;
+  if (dollarEl) {
+    const n = parseInt(dollarEl.value, 10);
+    if (Number.isFinite(n) && n >= 0) { startNums.dollar = n; }
+  }
+  if (hashEl) {
+    const n = parseInt(hashEl.value, 10);
+    if (Number.isFinite(n) && n >= 0) { startNums.hash = n; }
+  }
+  if (starEl) {
+    const n = parseInt(starEl.value, 10);
+    if (Number.isFinite(n) && n >= 0) { startNums.star = n; }
+  }
+}
+
+function _wireStartNumInput(
+  id: string,
+  key: 'dollar' | 'hash' | 'star',
+  startNums: StartNums,
+  updatePreview: () => void,
+): void {
+  const el = document.getElementById(id) as HTMLInputElement | null;
+  if (!el) { return; }
+  el.oninput = function () {
+    const n = parseInt(el.value, 10);
+    startNums[key] = Number.isFinite(n) && n >= 0 ? n : 0;
+    updatePreview();
+  };
 }
 
 function _appendDelayAndEta(body: HTMLElement, count: number): { delaySlider: HTMLInputElement; etaRow: HTMLElement; updateStaticEta: () => void } {

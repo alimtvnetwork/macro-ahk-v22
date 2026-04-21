@@ -126,7 +126,14 @@ function _populateUiFromPreset(preset: RenamePreset, inputs: RenameInputsResult)
       slider.dispatchEvent(new Event('input'));
     }
   }
-  // Start numbers are populated via the variable detection on updatePreview
+  // v2.189.0: hydrate per-variable start numbers from IndexedDB BEFORE
+  // updatePreview() so the variable-detection re-render uses the loaded
+  // values instead of falling back to 1,1,1.
+  inputs.setStartNums({
+    dollar: typeof preset.startDollar === 'number' ? preset.startDollar : 1,
+    hash:   typeof preset.startHash   === 'number' ? preset.startHash   : 1,
+    star:   typeof preset.startStar   === 'number' ? preset.startStar   : 1,
+  });
   inputs.updatePreview();
   inputs.updateStaticEta();
 }

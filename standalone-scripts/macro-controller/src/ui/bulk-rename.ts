@@ -285,11 +285,14 @@ function _createRenameTitleBar(panel: HTMLElement, count: number): HTMLElement {
 }
 
 // ── Rename Inputs (prefix, template, suffix, vars, delay, preview) ──
+interface StartNums { dollar: number; hash: number; star: number }
+
 interface RenameInputsResult {
   prefixRow: ReturnType<typeof buildInputRow>;
   tmplRow: ReturnType<typeof buildTemplateRow>;
   suffixRow: ReturnType<typeof buildInputRow>;
-  getStartNums: () => { dollar: number; hash: number; star: number };
+  getStartNums: () => StartNums;
+  setStartNums: (partial: Partial<StartNums>) => void;
   updatePreview: () => void;
   updateStaticEta: () => void;
   etaRow: HTMLElement;
@@ -306,13 +309,30 @@ function _buildRenameInputs(body: HTMLElement, selected: WorkspaceCredit[]): Ren
   _appendVarHintAndStartNums(body);
 
   const startNumsContainer = document.getElementById('rename-start-nums') || document.createElement('div');
-  const startDollar = 1, startHash = 1, startStar = 1;
-  const getStartNums = function() { return { dollar: startDollar, hash: startHash, star: startStar }; };
+
+  // v2.189.0: mutable closure-scoped state replaces dead `const` locals.
+  // Preserves user-typed start numbers across re-renders AND across keystrokes
+  // in other fields. Lets _populateUiFromPreset hydrate from IndexedDB.
+  const startNums: StartNums = { dollar: 1, hash: 1, star: 1 };
+  const getStartNums = function (): StartNums {
+    return { dollar: startNums.dollar, hash: startNums.hash, star: startNums.star };
+  };
+  const setStartNums = function (partial: Partial<StartNums>): void {
+    if (typeof partial.dollar === 'number' && Number.isFinite(partial.dollar)) {
+      startNums.dollar = Math.max(0, Math.floor(partial.dollar));
+    }
+    if (typeof partial.hash === 'number' && Number.isFinite(partial.hash)) {
+      startNums.hash = Math.max(0, Math.floor(partial.hash));
+    }
+    if (typeof partial.star === 'number' && Number.isFinite(partial.star)) {
+      startNums.star = Math.max(0, Math.floor(partial.star));
+    }
+  };
 
   const previewList = _appendPreviewSection(body);
 
-  const updatePreview = function(): void {
-    _detectVarsAndRenderStarts(startNumsContainer, tmplRow, prefixRow, suffixRow, startDollar, startHash, startStar, updatePreview);
+  const updatePreview = function (): void {
+    _detectVarsAndRenderStarts(startNumsContainer, tmplRow, prefixRow, suffixRow, startNums, function () { updatePreview(); });
     const template = tmplRow.input.value;
     const prefix = prefixRow.cb!.checked ? prefixRow.input.value : '';
     const suffix = suffixRow.cb!.checked ? suffixRow.input.value : '';
@@ -335,7 +355,7 @@ function _buildRenameInputs(body: HTMLElement, selected: WorkspaceCredit[]): Ren
 
   const { etaRow, updateStaticEta } = _appendDelayAndEta(body, selected.length);
 
-  return { prefixRow, tmplRow, suffixRow, getStartNums, updatePreview, updateStaticEta, etaRow };
+  return { prefixRow, tmplRow, suffixRow, getStartNums, setStartNums, updatePreview, updateStaticEta, etaRow };
 }
 
 function _appendVarHintAndStartNums(body: HTMLElement): void {

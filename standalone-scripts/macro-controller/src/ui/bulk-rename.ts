@@ -134,6 +134,12 @@ function _populateUiFromPreset(preset: RenamePreset, inputs: RenameInputsResult)
     hash:   typeof preset.startHash   === 'number' ? preset.startHash   : 1,
     star:   typeof preset.startStar   === 'number' ? preset.startStar   : 1,
   });
+  // v2.191.0: Clear any stale start-number inputs left in the DOM from a
+  // previous preset. Without this, _snapshotStartNumInputsInto() runs on the
+  // first updatePreview() tick and overwrites the freshly hydrated values
+  // with whatever the previous preset's inputs still display.
+  const staleStartNums = document.getElementById('rename-start-nums');
+  if (staleStartNums) { staleStartNums.innerHTML = ''; }
   inputs.updatePreview();
   inputs.updateStaticEta();
 }

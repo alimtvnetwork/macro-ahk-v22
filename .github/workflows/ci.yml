@@ -414,7 +414,7 @@ jobs:
   # ════════════════════════════════════════════════════════════
   build-extension:
     name: Build · Chrome Extension
-    needs: [build-sdk, build-xpath, build-macro-controller, build-prompts]
+    needs: [spec-links, build-sdk, build-xpath, build-macro-controller, build-prompts]
     runs-on: ubuntu-latest
 
     steps:

@@ -167,6 +167,19 @@ function validateWasmHeadResponse(wasmUrl: string, response: Response, probe: Wa
     }
 }
 
+function throwAllAttemptsFailed(wasmUrl: string, probe: WasmProbeResult): never {
+    const lastError = probe.attempts[probe.attempts.length - 1]?.error ?? null;
+    probe.headError = lastError;
+    setWasmProbeResult(probe);
+    throw new Error(
+        `[WASM_FILE_MISSING_404] HEAD request failed for "${wasmUrl}" after ` +
+        `${HEAD_PROBE_ATTEMPTS} attempts (~${HEAD_PROBE_ATTEMPTS * HEAD_PROBE_DELAY_MS}ms). ` +
+        `The file "wasm/sql-wasm.wasm" appears to be missing from the packaged ` +
+        `chrome-extension/ output OR is not listed in manifest.web_accessible_resources. ` +
+        `Original error: ${lastError}`,
+    );
+}
+
 async function verifyWasmPresence(wasmUrl: string): Promise<void> {
     const probeStartedAt = performance.now();
     const probe: WasmProbeResult = {
@@ -179,12 +192,9 @@ async function verifyWasmPresence(wasmUrl: string): Promise<void> {
         attempts: [],
         totalDurationMs: 0,
     };
-
     // Bounded sequential re-probe ONLY for transient `fetch threw` failures
-    // ("Failed to fetch") that occur during service-worker cold start, before
-    // the extension's own chrome-extension:// URL space is fully wired up.
-    // This is NOT a recursive/exponential retry — it's a fixed, fail-fast
-    // 3-attempt budget (~600ms total) consistent with the no-retry policy.
+    // ("Failed to fetch") during service-worker cold start. NOT a recursive
+    // retry — fixed 3-attempt budget (~600ms) per the no-retry policy.
     let headResponse: Response | null = null;
     for (let attempt = 1; attempt <= HEAD_PROBE_ATTEMPTS; attempt += 1) {
         headResponse = await runWasmHeadAttempt(wasmUrl, probe, probeStartedAt, attempt);
@@ -194,18 +204,7 @@ async function verifyWasmPresence(wasmUrl: string): Promise<void> {
         }
     }
     probe.totalDurationMs = Math.round(performance.now() - probeStartedAt);
-    if (headResponse === null) {
-        const lastError = probe.attempts[probe.attempts.length - 1]?.error ?? null;
-        probe.headError = lastError;
-        setWasmProbeResult(probe);
-        throw new Error(
-            `[WASM_FILE_MISSING_404] HEAD request failed for "${wasmUrl}" after ` +
-            `${HEAD_PROBE_ATTEMPTS} attempts (~${HEAD_PROBE_ATTEMPTS * HEAD_PROBE_DELAY_MS}ms). ` +
-            `The file "wasm/sql-wasm.wasm" appears to be missing from the packaged ` +
-            `chrome-extension/ output OR is not listed in manifest.web_accessible_resources. ` +
-            `Original error: ${lastError}`,
-        );
-    }
+    if (headResponse === null) { throwAllAttemptsFailed(wasmUrl, probe); }
     validateWasmHeadResponse(wasmUrl, headResponse, probe);
     probe.ok = true;
     setWasmProbeResult(probe);

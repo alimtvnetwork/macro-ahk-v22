@@ -93,7 +93,7 @@ function isSkippableTarget(target) {
   if (!/[/.#]/.test(target)) return true;
   // False-positive guard: prose/code signatures like `[T](src.AppError()` or `[T any](...)`
   // are not file links even though they contain dots.
-  if (target === "..." || target.endsWith("(")) return true;
+  if (target === "..." || target.endsWith("(") || target.includes("(")) return true;
   return false;
 }
 

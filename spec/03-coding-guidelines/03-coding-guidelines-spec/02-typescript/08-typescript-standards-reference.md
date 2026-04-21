@@ -584,7 +584,7 @@ All standardized TypeScript enums for the frontend. Each enum has a dedicated sp
 - [Strict Typing](../01-cross-language/13-strict-typing.md) — Type declarations & docblock rules (all languages)
 - [DRY Principles](../01-cross-language/08-dry-principles.md)
 - [Golang Standards](../03-golang/04-golang-standards-reference/00-overview.md)
-- [Response Envelope Spec](../../../03-error-manage-spec/04-error-manage-spec/02-error-architecture/05-response-envelope/envelope.schema.json)
+- [Response Envelope Spec](../../../04-error-manage-spec/04-error-manage-spec/02-error-architecture/05-response-envelope/envelope.schema.json)
 
 ---
 

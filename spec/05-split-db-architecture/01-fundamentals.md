@@ -1012,7 +1012,7 @@ This pattern is used by:
 
 | Reference | Location |
 |-----------|----------|
-| Seedable Config | [Seedable Config Architecture](../05-seedable-config-architecture/00-overview.md) |
+| Seedable Config | [Seedable Config Architecture](../06-seedable-config-architecture/00-overview.md) |
 
 ---
 

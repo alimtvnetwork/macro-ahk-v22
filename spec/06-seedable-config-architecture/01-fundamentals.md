@@ -724,7 +724,7 @@ See: `06-validation-data-seeding.md` for complete implementation guide.
 
 | Reference | Location |
 |-----------|----------|
-| Split DB Architecture | [04-split-db-architecture/00-overview.md](../04-split-db-architecture/00-overview.md) |
+| Split DB Architecture | [04-split-db-architecture/00-overview.md](../05-split-db-architecture/00-overview.md) |
 
 ---
 

@@ -9,5 +9,5 @@ All application-level specification files live here.
 ## Related
 
 - Issue write-ups: [`/spec/17-app-issues/`](../02-app-issues/)
-- API response specs: [`/spec/07-data-and-api/api-response/`](../03-data-and-api/api-response/)
-- AHK technical spec: [`marco-script-ahk-v7.latest/specs/spec.md`](../../marco-script-ahk-v7.latest/specs/spec.md)
+- API response specs: [`/spec/07-data-and-api/api-response/`](../07-data-and-api/api-response)
+- AHK technical spec: [`marco-script-ahk-v7.latest/specs/spec.md`](../archive/ahk-v7.latest-specs/spec.md)

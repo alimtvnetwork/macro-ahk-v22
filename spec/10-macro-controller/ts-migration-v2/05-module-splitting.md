@@ -5,7 +5,7 @@
 
 ## Goal
 
-Split all monolithic files (>200 lines) in `standalone-scripts/macro-controller/src/` into focused sub-modules following the [200-line file limit](../../../spec/08-coding-guidelines/chrome-extension-guidelines/05-file-organization.md) (Rule ORG1). Each extraction uses a barrel re-export in the original file to preserve backward compatibility.
+Split all monolithic files (>200 lines) in `standalone-scripts/macro-controller/src/` into focused sub-modules following the [200-line file limit](../../03-coding-guidelines/03-coding-guidelines-spec/00-overview.md) (Rule ORG1). Each extraction uses a barrel re-export in the original file to preserve backward compatibility.
 
 ---
 

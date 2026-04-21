@@ -17,8 +17,8 @@ This document cross-references all E2E test specifications, regression checklist
 
 | Document | Path |
 |----------|------|
-| E2E Test Specification | [`spec/11-chrome-extension/testing/01-e2e-test-specification.md`](../07-chrome-extension/testing/01-e2e-test-specification.md) |
-| Pre-Release Regression Checklist | [`spec/11-chrome-extension/testing/02-pre-release-regression-checklist.md`](../07-chrome-extension/testing/02-pre-release-regression-checklist.md) |
+| E2E Test Specification | [`spec/11-chrome-extension/testing/01-e2e-test-specification.md`](../11-chrome-extension/testing/01-e2e-test-specification.md) |
+| Pre-Release Regression Checklist | [`spec/11-chrome-extension/testing/02-pre-release-regression-checklist.md`](../11-chrome-extension/testing/02-pre-release-regression-checklist.md) |
 
 ### Playwright Config
 

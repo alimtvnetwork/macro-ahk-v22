@@ -86,8 +86,8 @@ This ensures configuration is always traceable, auditable, and version-aware.
 
 | Reference | Description |
 |-----------|-------------|
-| [Split DB Architecture](../04-split-db-architecture/00-overview.md) | Database organization patterns |
-| [App Project Template](../01-spec-authoring-guide/05-app-project-template.md) | Template this spec follows |
+| [Split DB Architecture](../05-split-db-architecture/00-overview.md) | Database organization patterns |
+| [App Project Template](../02-spec-authoring-guide/05-app-project-template.md) | Template this spec follows |
 
 ---
 

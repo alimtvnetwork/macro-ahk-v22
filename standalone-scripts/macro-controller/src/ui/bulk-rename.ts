@@ -461,10 +461,21 @@ function _wireStartNumInput(
 ): void {
   const el = document.getElementById(id) as HTMLInputElement | null;
   if (!el) { return; }
+  // v2.192.0: clamp on every keystroke so preview + persistence never see
+  // NaN, negatives, or decimals. Empty string is treated as 0 in-memory but
+  // not echoed back during typing — the user keeps typing freely. On blur
+  // the field is reflowed to the canonical integer.
   el.oninput = function () {
-    const n = parseInt(el.value, 10);
-    startNums[key] = Number.isFinite(n) && n >= 0 ? n : 0;
+    const raw = parseInt(el.value, 10);
+    const clamped = Number.isFinite(raw) && raw >= 0 ? Math.floor(raw) : 0;
+    startNums[key] = clamped;
     updatePreview();
+  };
+  el.onblur = function () {
+    const raw = parseInt(el.value, 10);
+    const clamped = Number.isFinite(raw) && raw >= 0 ? Math.floor(raw) : 0;
+    startNums[key] = clamped;
+    el.value = String(clamped);
   };
 }
 

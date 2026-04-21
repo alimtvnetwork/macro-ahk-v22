@@ -175,7 +175,10 @@ export function buildStartNumInput(
   value: number,
   color: string,
 ): string {
-  return '<label style="display:flex;align-items:center;gap:3px;font-size:9px;color:' + color + ';">' + symbol + ' <input type="number" id="' + id + '" value="' + value + '" min="0" style="width:50px;padding:2px 4px;border:1px solid ' + cPrimary + CssFragment.BorderRadius3pxBackground + cPanelBg + ';color:' + color + ';font-size:9px;font-family:monospace;"></label>';
+  // v2.192.0: inputmode="numeric" surfaces the numeric keypad on mobile;
+  // pattern blocks non-digit characters at the form layer; step="1" forces
+  // integer increments. Runtime clamping (min=0) lives in _wireStartNumInput.
+  return '<label style="display:flex;align-items:center;gap:3px;font-size:9px;color:' + color + ';">' + symbol + ' <input type="number" inputmode="numeric" pattern="[0-9]*" step="1" id="' + id + '" value="' + value + '" min="0" style="width:50px;padding:2px 4px;border:1px solid ' + cPrimary + CssFragment.BorderRadius3pxBackground + cPanelBg + ';color:' + color + ';font-size:9px;font-family:monospace;"></label>';
 }
 
 // ── Token Row ──

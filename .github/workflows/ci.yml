@@ -33,6 +33,39 @@ permissions:
 
 jobs:
   # ════════════════════════════════════════════════════════════
+  # Job 0: Spec Links — fail-fast guard, no install needed
+  #
+  # Runs the strict spec-link checker (no baseline, ignores rot)
+  # against every .md file under spec/. Surfaces a Top-N failing-files
+  # leaderboard in the GitHub Actions Step Summary and emits inline
+  # `::error file=…,line=…::` annotations so each broken link shows
+  # up on the PR diff view.
+  #
+  # This job has NO dependencies — it only needs Node + the repo, so
+  # it returns in seconds and blocks the rest of the pipeline before
+  # we burn time on installs/builds. The final `build-extension` job
+  # also lists this job in its `needs:` so a broken link cannot be
+  # merged even if other checks pass.
+  # ════════════════════════════════════════════════════════════
+  spec-links:
+    name: Preflight · Spec Links
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Strict spec-link check (fails on ANY broken link)
+        run: node scripts/report-spec-links-ci.mjs
+
+  # ════════════════════════════════════════════════════════════
   # Job 1: Setup, Lint, Test
   # ════════════════════════════════════════════════════════════
   setup:

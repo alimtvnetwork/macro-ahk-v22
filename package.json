@@ -35,6 +35,7 @@
     "check:spec-links:refresh-baseline": "node scripts/refresh-spec-links-baseline.mjs",
     "check:spec-links:refresh-baseline:rewrite": "node scripts/refresh-spec-links-baseline.mjs --rewrite",
     "check:spec-links:refresh-baseline:accept": "node scripts/refresh-spec-links-baseline.mjs --accept-current",
+    "check:spec-links:ci": "node scripts/report-spec-links-ci.mjs",
     "lint:no-bun": "node scripts/no-bun-in-scripts.mjs",
     "lint:no-bg-dynamic-import": "node scripts/check-no-bg-dynamic-import.mjs",
     "lint:no-bg-dynamic-import:update-baseline": "node scripts/check-no-bg-dynamic-import.mjs --update-baseline",

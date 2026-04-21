@@ -95,22 +95,44 @@ async function verifyWasmPresence(wasmUrl: string): Promise<void> {
         at: new Date().toISOString(),
     };
 
-    let headResponse: Response;
-    try {
-        headResponse = await fetch(wasmUrl, { method: "HEAD" });
-        probe.status = headResponse.status;
-        probe.contentLength = headResponse.headers.get("content-length");
-    } catch (err) {
-        probe.headError = err instanceof Error ? err.message : String(err);
+    // Bounded sequential re-probe ONLY for transient `fetch threw` failures
+    // ("Failed to fetch") that occur during service-worker cold start, before
+    // the extension's own chrome-extension:// URL space is fully wired up.
+    // This is NOT a recursive/exponential retry — it's a fixed, fail-fast
+    // 3-attempt budget (~600ms total) consistent with the no-retry policy.
+    // Deterministic outcomes (404, non-2xx, Content-Length: 0) below still
+    // fail immediately on the first probe.
+    const HEAD_PROBE_ATTEMPTS = 3;
+    const HEAD_PROBE_DELAY_MS = 200;
+    let headResponse: Response | null = null;
+    let lastFetchError: string | null = null;
+    for (let attempt = 1; attempt <= HEAD_PROBE_ATTEMPTS; attempt += 1) {
+        try {
+            headResponse = await fetch(wasmUrl, { method: "HEAD" });
+            probe.status = headResponse.status;
+            probe.contentLength = headResponse.headers.get("content-length");
+            lastFetchError = null;
+            break;
+        } catch (err) {
+            lastFetchError = err instanceof Error ? err.message : String(err);
+            if (attempt < HEAD_PROBE_ATTEMPTS) {
+                await new Promise((resolve) => setTimeout(resolve, HEAD_PROBE_DELAY_MS));
+            }
+        }
+    }
+    if (headResponse === null) {
+        probe.headError = lastFetchError;
         setWasmProbeResult(probe);
-        // HEAD itself threw — treat as a missing file (web_accessible_resources
-        // misconfig or extension URL not yet ready). Tagged so the banner picks
-        // up the dedicated cause.
+        // All attempts threw — treat as a missing file (web_accessible_resources
+        // misconfig, packaging miss, or extension URL still unreachable after
+        // the bounded startup window). Tagged so the banner picks up the
+        // dedicated cause.
         throw new Error(
-            `[WASM_FILE_MISSING_404] HEAD request failed for "${wasmUrl}". ` +
+            `[WASM_FILE_MISSING_404] HEAD request failed for "${wasmUrl}" after ` +
+            `${HEAD_PROBE_ATTEMPTS} attempts (~${HEAD_PROBE_ATTEMPTS * HEAD_PROBE_DELAY_MS}ms). ` +
             `The file "wasm/sql-wasm.wasm" appears to be missing from the packaged ` +
             `chrome-extension/ output OR is not listed in manifest.web_accessible_resources. ` +
-            `Original error: ${probe.headError}`,
+            `Original error: ${lastFetchError}`,
         );
     }
     if (headResponse.status === 404) {

@@ -63,8 +63,8 @@ When the credit API (`GET /user/workspaces`) returns 401 or 403:
 
 | Pitfall | Prevention | Issue Reference |
 |---------|-----------|-----------------|
-| DOM observer picks up project name instead of workspace name | `isKnownWorkspaceName()` validation on all DOM-sourced names | [`/spec/17-app-issues/01`](../02-app-issues/01-workspace-name-shows-project-name.md) |
-| API detection fallback preserves invalid workspace name | `isKnownWorkspaceName()` validation on all "keep existing" fallback paths | [`/spec/17-app-issues/03`](../02-app-issues/03-progress-bar-missing-granted-stale-workspace.md) |
+| DOM observer picks up project name instead of workspace name | `isKnownWorkspaceName()` validation on all DOM-sourced names | [`/spec/17-app-issues/01`](../17-app-issues/01-workspace-name-shows-project-name.md) |
+| API detection fallback preserves invalid workspace name | `isKnownWorkspaceName()` validation on all "keep existing" fallback paths | [`/spec/17-app-issues/03`](../17-app-issues/03-progress-bar-missing-granted-stale-workspace.md) |
 | Credit API returns 401 → detection aborts | `runCheck()` falls through to XPath regardless of API status (v7.17 fix) | plan.md v7.17 RCA |
 | Reverse DOM lookup matches random body text (e.g., "Preview") | Replaced with explicit project dialog click → XPath read | v7.9.25 |
 | `LoopControlsXPath` points to wrong DOM node | Controller injection fails silently; updated from `div[2]` to `div[3]` (v7.17) | plan.md v7.17 RCA |

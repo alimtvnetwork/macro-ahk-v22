@@ -91,6 +91,9 @@ function isSkippableTarget(target) {
   // Things like `[T](val)` or `[K,V](items)` are TypeScript generic syntax in prose,
   // not markdown links — skip them.
   if (!/[/.#]/.test(target)) return true;
+  // False-positive guard: prose/code signatures like `[T](src.AppError()` or `[T any](...)`
+  // are not file links even though they contain dots.
+  if (target === "..." || target.endsWith("(") || target.includes("(")) return true;
   return false;
 }
 

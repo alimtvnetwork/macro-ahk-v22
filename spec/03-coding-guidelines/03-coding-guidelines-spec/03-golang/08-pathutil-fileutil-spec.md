@@ -3,7 +3,7 @@
 > **Version:** 1.0.0  
 > **Updated:** 2026-03-31  
 > **Applies to:** All Go backend code  
-> **Cross-refs:** [no-negatives](../01-cross-language/12-no-negatives.md), [golang-standards-reference](./04-golang-standards-reference/00-overview.md), [error-code-registry](../../../03-error-manage-spec/04-error-manage-spec/03-error-code-registry/01-registry.md#gen-700-file-system)
+> **Cross-refs:** [no-negatives](../01-cross-language/12-no-negatives.md), [golang-standards-reference](./04-golang-standards-reference/00-overview.md), [error-code-registry](../../../04-error-manage-spec/04-error-manage-spec/03-error-code-registry/01-registry.md#gen-700-file-system)
 
 ---
 
@@ -129,7 +129,7 @@ func FileSize(path string) apperror.Result[int64]        // Stat + Size()
 
 ### Error Code Mapping
 
-All error codes are from the [GEN-700: File System](../../../03-error-manage-spec/04-error-manage-spec/03-error-code-registry/01-registry.md#gen-700-file-system) range:
+All error codes are from the [GEN-700: File System](../../../04-error-manage-spec/04-error-manage-spec/03-error-code-registry/01-registry.md#gen-700-file-system) range:
 
 | Function | Success | Error Code | Error Constant |
 |----------|---------|------------|----------------|

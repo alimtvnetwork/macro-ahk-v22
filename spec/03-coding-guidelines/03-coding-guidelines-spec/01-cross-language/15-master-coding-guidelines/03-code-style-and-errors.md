@@ -131,7 +131,7 @@ class JobResult {
 
 **Rationale:** Raw `error` is an opaque interface — it cannot be serialized, queried, or transported. `*AppError` carries structured data (code, stack, diagnostics) that survives every boundary: HTTP responses, subprocess JSON protocol, error history DB, AI diagnostic clipboard, and log aggregation.
 
-See [apperror §10.6 — No Raw `error` in Struct Fields](../../../../03-error-manage-spec/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/00-overview.md#106-no-raw-error-in-struct-fields-invariant-i-2) for the full rule.
+See [apperror §10.6 — No Raw `error` in Struct Fields](../../../../04-error-manage-spec/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/00-overview.md#106-no-raw-error-in-struct-fields-invariant-i-2) for the full rule.
 
 ### 6.1 — Result Guard Rule (Zero Silent Failures)
 
@@ -227,7 +227,7 @@ func (a *Adapter) GetById(ctx context.Context, id int64) (*models.Plugin, error)
 }
 ```
 
-> **Full examples with PHP/Go/TypeScript:** see [apperror § Result Guard Rule](../../../../03-error-manage-spec/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/00-overview.md#12-result-guard-rule-mandatory-error-check-before-value-access)
+> **Full examples with PHP/Go/TypeScript:** see [apperror § Result Guard Rule](../../../../04-error-manage-spec/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/00-overview.md#12-result-guard-rule-mandatory-error-check-before-value-access)
 
 #### Enforcement Checklist
 

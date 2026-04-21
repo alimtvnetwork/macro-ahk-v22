@@ -241,6 +241,6 @@ type OrderResult = Result<Order, AppError>;
 - [Strict Typing](./13-strict-typing.md) — all parameters and returns must be explicitly typed
 - [Casting Elimination Patterns](./03-casting-elimination-patterns.md) — centralize casts at boundaries
 - [Boolean Flag Methods](./24-boolean-flag-methods.md) — split methods instead of returning different types
-- [AppError Result Types](../../../03-error-manage-spec/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/03-result-types.md) — Go Result[T] pattern
+- [AppError Result Types](../../../04-error-manage-spec/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/03-result-types.md) — Go Result[T] pattern
 
 ---

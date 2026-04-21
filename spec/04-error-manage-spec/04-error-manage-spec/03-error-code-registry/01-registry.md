@@ -424,7 +424,7 @@ All CLI frontends use a consistent error code pattern at offset +50 from their b
 
 ### GEN-600: Type Casting / Conversion
 
-> Cross-cutting errors used by `pkg/typecast/`. See [Casting Elimination Patterns](../../../02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/03-casting-elimination-patterns.md) for usage.
+> Cross-cutting errors used by `pkg/typecast/`. See [Casting Elimination Patterns](../../../03-coding-guidelines/03-coding-guidelines-spec/01-cross-language/03-casting-elimination-patterns.md) for usage.
 
 | Code | Name | Message |
 |------|------|---------|
@@ -441,7 +441,7 @@ All CLI frontends use a consistent error code pattern at offset +50 from their b
 **Rules:**
 - These codes are emitted exclusively by `pkg/typecast/` — never constructed manually
 - The `AppError` includes `.WithSkip(1)` so stack traces point to the caller
-- Cast errors must **never** be swallowed — see §7.2 and §10 in [03-casting-elimination-patterns.md](../../../02-coding-guidelines/03-coding-guidelines-spec/01-cross-language/03-casting-elimination-patterns.md)
+- Cast errors must **never** be swallowed — see §7.2 and §10 in [03-casting-elimination-patterns.md](../../../03-coding-guidelines/03-coding-guidelines-spec/01-cross-language/03-casting-elimination-patterns.md)
 
 
 ### GEN-700: File System

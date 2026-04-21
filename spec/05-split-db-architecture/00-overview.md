@@ -91,8 +91,8 @@ The **Split DB Architecture** defines a pattern for organizing SQLite databases 
 
 | Reference | Description |
 |-----------|-------------|
-| [Seedable Config](../05-seedable-config-architecture/00-overview.md) | Configuration seeding patterns |
-| [App Project Template](../01-spec-authoring-guide/05-app-project-template.md) | Template this spec follows |
+| [Seedable Config](../06-seedable-config-architecture/00-overview.md) | Configuration seeding patterns |
+| [App Project Template](../02-spec-authoring-guide/05-app-project-template.md) | Template this spec follows |
 
 ---
 

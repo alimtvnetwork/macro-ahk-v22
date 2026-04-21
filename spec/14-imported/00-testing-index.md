@@ -17,45 +17,45 @@ This document cross-references all E2E test specifications, regression checklist
 
 | Document | Path |
 |----------|------|
-| E2E Test Specification | [`spec/11-chrome-extension/testing/01-e2e-test-specification.md`](../07-chrome-extension/testing/01-e2e-test-specification.md) |
-| Pre-Release Regression Checklist | [`spec/11-chrome-extension/testing/02-pre-release-regression-checklist.md`](../07-chrome-extension/testing/02-pre-release-regression-checklist.md) |
+| E2E Test Specification | [`spec/11-chrome-extension/testing/01-e2e-test-specification.md`](../11-chrome-extension/testing/01-e2e-test-specification.md) |
+| Pre-Release Regression Checklist | [`spec/11-chrome-extension/testing/02-pre-release-regression-checklist.md`](../11-chrome-extension/testing/02-pre-release-regression-checklist.md) |
 
 ### Playwright Config
 
 | File | Purpose |
 |------|---------|
-| [`playwright.config.ts`](playwright.config.ts) | Chrome extension launch args, CI reporters (HTML, JUnit, GitHub), sequential execution |
+| [`playwright.config.ts`](../../playwright.config.ts) | Chrome extension launch args, CI reporters (HTML, JUnit, GitHub), sequential execution |
 
 ### Test Stubs (20 tests)
 
 | ID | Priority | Area | Stub File |
 |----|----------|------|-----------|
-| E2E-01 | P0 | Onboarding | [`tests/e2e/e2e-01-onboarding.spec.ts`](tests/e2e/e2e-01-onboarding.spec.ts) |
-| E2E-02 | P0 | Projects | [`tests/e2e/e2e-02-project-crud.spec.ts`](tests/e2e/e2e-02-project-crud.spec.ts) |
-| E2E-03 | P0 | URL Rules | [`tests/e2e/e2e-03-url-matching.spec.ts`](tests/e2e/e2e-03-url-matching.spec.ts) |
-| E2E-04 | P0 | Injection | [`tests/e2e/e2e-04-injection-isolated.spec.ts`](tests/e2e/e2e-04-injection-isolated.spec.ts) |
-| E2E-05 | P0 | Injection | [`tests/e2e/e2e-05-injection-main.spec.ts`](tests/e2e/e2e-05-injection-main.spec.ts) |
-| E2E-06 | P1 | Config | [`tests/e2e/e2e-06-config-cascade.spec.ts`](tests/e2e/e2e-06-config-cascade.spec.ts) |
-| E2E-07 | P0 | Auth | [`tests/e2e/e2e-07-auth-flow.spec.ts`](tests/e2e/e2e-07-auth-flow.spec.ts) |
-| E2E-08 | P0 | Popup | [`tests/e2e/e2e-08-popup-match.spec.ts`](tests/e2e/e2e-08-popup-match.spec.ts) |
-| E2E-09 | P0 | Recovery | [`tests/e2e/e2e-09-sw-rehydration.spec.ts`](tests/e2e/e2e-09-sw-rehydration.spec.ts) |
-| E2E-10 | P1 | Recovery | [`tests/e2e/e2e-10-wasm-fallback.spec.ts`](tests/e2e/e2e-10-wasm-fallback.spec.ts) |
-| E2E-11 | P1 | Recovery | [`tests/e2e/e2e-11-config-recovery.spec.ts`](tests/e2e/e2e-11-config-recovery.spec.ts) |
-| E2E-12 | P1 | Recovery | [`tests/e2e/e2e-12-csp-fallback.spec.ts`](tests/e2e/e2e-12-csp-fallback.spec.ts) |
-| E2E-13 | P2 | Recovery | [`tests/e2e/e2e-13-backoff.spec.ts`](tests/e2e/e2e-13-backoff.spec.ts) |
-| E2E-14 | P0 | Recovery | [`tests/e2e/e2e-14-state-transitions.spec.ts`](tests/e2e/e2e-14-state-transitions.spec.ts) |
-| E2E-15 | P1 | Edge | [`tests/e2e/e2e-15-multi-tab.spec.ts`](tests/e2e/e2e-15-multi-tab.spec.ts) |
-| E2E-16 | P1 | Deploy | [`tests/e2e/e2e-16-ps-install.spec.ts`](tests/e2e/e2e-16-ps-install.spec.ts) |
-| E2E-17 | P1 | Deploy | [`tests/e2e/e2e-17-watch-mode.spec.ts`](tests/e2e/e2e-17-watch-mode.spec.ts) |
-| E2E-18 | P2 | Deploy | [`tests/e2e/e2e-18-zip-export.spec.ts`](tests/e2e/e2e-18-zip-export.spec.ts) |
-| E2E-19 | P0 | UI | [`tests/e2e/e2e-19-options-crud.spec.ts`](tests/e2e/e2e-19-options-crud.spec.ts) |
-| E2E-20 | P2 | UI | [`tests/e2e/e2e-20-xpath-recorder.spec.ts`](tests/e2e/e2e-20-xpath-recorder.spec.ts) |
+| E2E-01 | P0 | Onboarding | [`tests/e2e/e2e-01-onboarding.spec.ts`](../../tests/e2e/e2e-01-onboarding.spec.ts) |
+| E2E-02 | P0 | Projects | [`tests/e2e/e2e-02-project-crud.spec.ts`](../../tests/e2e/e2e-02-project-crud.spec.ts) |
+| E2E-03 | P0 | URL Rules | [`tests/e2e/e2e-03-url-matching.spec.ts`](../../tests/e2e/e2e-03-url-matching.spec.ts) |
+| E2E-04 | P0 | Injection | [`tests/e2e/e2e-04-injection-isolated.spec.ts`](../../tests/e2e/e2e-04-injection-isolated.spec.ts) |
+| E2E-05 | P0 | Injection | [`tests/e2e/e2e-05-injection-main.spec.ts`](../../tests/e2e/e2e-05-injection-main.spec.ts) |
+| E2E-06 | P1 | Config | [`tests/e2e/e2e-06-config-cascade.spec.ts`](../../tests/e2e/e2e-06-config-cascade.spec.ts) |
+| E2E-07 | P0 | Auth | [`tests/e2e/e2e-07-auth-flow.spec.ts`](../../tests/e2e/e2e-07-auth-flow.spec.ts) |
+| E2E-08 | P0 | Popup | [`tests/e2e/e2e-08-popup-match.spec.ts`](../../tests/e2e/e2e-08-popup-match.spec.ts) |
+| E2E-09 | P0 | Recovery | [`tests/e2e/e2e-09-sw-rehydration.spec.ts`](../../tests/e2e/e2e-09-sw-rehydration.spec.ts) |
+| E2E-10 | P1 | Recovery | [`tests/e2e/e2e-10-wasm-fallback.spec.ts`](../../tests/e2e/e2e-10-wasm-fallback.spec.ts) |
+| E2E-11 | P1 | Recovery | [`tests/e2e/e2e-11-config-recovery.spec.ts`](../../tests/e2e/e2e-11-config-recovery.spec.ts) |
+| E2E-12 | P1 | Recovery | [`tests/e2e/e2e-12-csp-fallback.spec.ts`](../../tests/e2e/e2e-12-csp-fallback.spec.ts) |
+| E2E-13 | P2 | Recovery | [`tests/e2e/e2e-13-backoff.spec.ts`](../../tests/e2e/e2e-13-backoff.spec.ts) |
+| E2E-14 | P0 | Recovery | [`tests/e2e/e2e-14-state-transitions.spec.ts`](../../tests/e2e/e2e-14-state-transitions.spec.ts) |
+| E2E-15 | P1 | Edge | [`tests/e2e/e2e-15-multi-tab.spec.ts`](../../tests/e2e/e2e-15-multi-tab.spec.ts) |
+| E2E-16 | P1 | Deploy | [`tests/e2e/e2e-16-ps-install.spec.ts`](../../tests/e2e/e2e-16-ps-install.spec.ts) |
+| E2E-17 | P1 | Deploy | [`tests/e2e/e2e-17-watch-mode.spec.ts`](../../tests/e2e/e2e-17-watch-mode.spec.ts) |
+| E2E-18 | P2 | Deploy | [`tests/e2e/e2e-18-zip-export.spec.ts`](../../tests/e2e/e2e-18-zip-export.spec.ts) |
+| E2E-19 | P0 | UI | [`tests/e2e/e2e-19-options-crud.spec.ts`](../../tests/e2e/e2e-19-options-crud.spec.ts) |
+| E2E-20 | P2 | UI | [`tests/e2e/e2e-20-xpath-recorder.spec.ts`](../../tests/e2e/e2e-20-xpath-recorder.spec.ts) |
 
 ### Shared Fixtures
 
 | File | Exports |
 |------|---------|
-| [`tests/e2e/fixtures.ts`](tests/e2e/fixtures.ts) | `launchExtension`, `getExtensionId`, `openPopup`, `openOptions` |
+| [`tests/e2e/fixtures.ts`](../../tests/e2e/fixtures.ts) | `launchExtension`, `getExtensionId`, `openPopup`, `openOptions` |
 
 ---
 

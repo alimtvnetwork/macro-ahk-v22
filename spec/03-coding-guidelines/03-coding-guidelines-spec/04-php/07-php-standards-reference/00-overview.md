@@ -48,7 +48,7 @@ Previously a single 841-line file, now split into focused modules under 300 line
 ## Cross-References
 
 - WordPress Plugin Development Spec — Full 10-document guide *(Phase 4 target)*
-- [Error Handling Spec](../../../../03-error-manage-spec/04-error-manage-spec/02-error-architecture/01-error-handling-reference.md) — Cross-language error strategy
+- [Error Handling Spec](../../../../04-error-manage-spec/04-error-manage-spec/02-error-architecture/01-error-handling-reference.md) — Cross-language error strategy
 - Generic Enforce Spec — Type safety rules *(Phase 5/6 target)*
 - [DRY Principles](../../01-cross-language/08-dry-principles.md) — Cross-language DRY rules
 - [Cross-Language Code Style](../../01-cross-language/04-code-style/00-overview.md) — Braces, nesting & spacing rules (canonical)

@@ -54,5 +54,5 @@ Previously a single 858-line file, now split into focused modules under 300 line
 - [Go Boolean Standards](../../03-golang/02-boolean-standards.md) — Go-specific rules and exemptions (P7, P8)
 - [Master Coding Guidelines](../15-master-coding-guidelines/00-overview.md) — Consolidated reference
 - [Issues & Fixes Log](../01-issues-and-fixes-log.md) — Historical fixes
-- [apperror Package — Result Guard Rule](../../../../03-error-manage-spec/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/00-overview.md#12-result-guard-rule-mandatory-error-check-before-value-access)
+- [apperror Package — Result Guard Rule](../../../../04-error-manage-spec/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/00-overview.md#12-result-guard-rule-mandatory-error-check-before-value-access)
 

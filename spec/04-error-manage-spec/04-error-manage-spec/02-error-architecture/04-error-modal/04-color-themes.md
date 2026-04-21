@@ -547,7 +547,7 @@ className="text-destructive hover:text-destructive"
 - [Error Modal Overview](./00-overview.md) — Modal architecture overview
 - [Error Modal Reference](./03-error-modal-reference.md) — Full modal structure, data model, visual layout diagrams
 - [Notification Colors](../03-notification-colors.md) — Toast/notification color tokens
-- [LogLevel Enum](../../../../02-coding-guidelines/03-coding-guidelines-spec/02-typescript/10-log-level-enum.md) — Canonical `LogLevel` enum (Debug, Info, Warn, Error, Fatal) used in color mappings
+- [LogLevel Enum](../../../../03-coding-guidelines/03-coding-guidelines-spec/02-typescript/10-log-level-enum.md) — Canonical `LogLevel` enum (Debug, Info, Warn, Error, Fatal) used in color mappings
 
 ---
 

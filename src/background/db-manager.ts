@@ -86,6 +86,7 @@ let isInitialized = false;
  *     dedicated "WASM file missing" fix steps.
  */
 async function verifyWasmPresence(wasmUrl: string): Promise<void> {
+    const probeStartedAt = performance.now();
     const probe: WasmProbeResult = {
         url: wasmUrl,
         status: null,
@@ -93,6 +94,8 @@ async function verifyWasmPresence(wasmUrl: string): Promise<void> {
         headError: null,
         ok: false,
         at: new Date().toISOString(),
+        attempts: [],
+        totalDurationMs: 0,
     };
 
     // Bounded sequential re-probe ONLY for transient `fetch threw` failures
@@ -107,19 +110,52 @@ async function verifyWasmPresence(wasmUrl: string): Promise<void> {
     let headResponse: Response | null = null;
     let lastFetchError: string | null = null;
     for (let attempt = 1; attempt <= HEAD_PROBE_ATTEMPTS; attempt += 1) {
+        const attemptStart = performance.now();
+        const attemptAtIso = new Date().toISOString();
+        let attemptStatus: number | null = null;
+        let attemptContentLength: string | null = null;
+        let attemptError: string | null = null;
         try {
             headResponse = await fetch(wasmUrl, { method: "HEAD" });
-            probe.status = headResponse.status;
-            probe.contentLength = headResponse.headers.get("content-length");
+            attemptStatus = headResponse.status;
+            attemptContentLength = headResponse.headers.get("content-length");
+            probe.status = attemptStatus;
+            probe.contentLength = attemptContentLength;
             lastFetchError = null;
-            break;
         } catch (err) {
-            lastFetchError = err instanceof Error ? err.message : String(err);
-            if (attempt < HEAD_PROBE_ATTEMPTS) {
-                await new Promise((resolve) => setTimeout(resolve, HEAD_PROBE_DELAY_MS));
-            }
+            attemptError = err instanceof Error ? err.message : String(err);
+            lastFetchError = attemptError;
+            headResponse = null;
+        }
+        const attemptDurationMs = Math.round(performance.now() - attemptStart);
+        const atOffsetMs = Math.round(attemptStart - probeStartedAt);
+        const trace = {
+            attempt,
+            at: attemptAtIso,
+            atOffsetMs,
+            durationMs: attemptDurationMs,
+            status: attemptStatus,
+            contentLength: attemptContentLength,
+            error: attemptError,
+        };
+        probe.attempts.push(trace);
+        // Structured per-attempt log line, always emitted to the SW console.
+        // `[wasm-probe]` prefix makes it easy to grep boot timing across
+        // service-worker restarts (Service Worker → DevTools → Console).
+        console.debug(
+            `[wasm-probe] attempt=${attempt}/${HEAD_PROBE_ATTEMPTS} url=${wasmUrl} ` +
+            `status=${attemptStatus ?? "n/a"} contentLength=${attemptContentLength ?? "n/a"} ` +
+            `durationMs=${attemptDurationMs} atOffsetMs=${atOffsetMs}` +
+            (attemptError !== null ? ` error="${attemptError}"` : ""),
+        );
+        if (attemptError === null) {
+            break;
+        }
+        if (attempt < HEAD_PROBE_ATTEMPTS) {
+            await new Promise((resolve) => setTimeout(resolve, HEAD_PROBE_DELAY_MS));
         }
     }
+    probe.totalDurationMs = Math.round(performance.now() - probeStartedAt);
     if (headResponse === null) {
         probe.headError = lastFetchError;
         setWasmProbeResult(probe);
@@ -163,6 +199,12 @@ async function verifyWasmPresence(wasmUrl: string): Promise<void> {
 
     probe.ok = true;
     setWasmProbeResult(probe);
+    // Final summary line — useful when triaging "boot took N seconds" reports.
+    console.debug(
+        `[wasm-probe] OK url=${wasmUrl} status=${probe.status} ` +
+        `contentLength=${probe.contentLength ?? "n/a"} attempts=${probe.attempts.length} ` +
+        `totalDurationMs=${probe.totalDurationMs}`,
+    );
 }
 
 /** Loads sql.js WASM binary from the extension bundle. */

@@ -85,6 +85,88 @@ let isInitialized = false;
  *     `classifyCause()` in BootFailureBanner.tsx, which selects the
  *     dedicated "WASM file missing" fix steps.
  */
+const HEAD_PROBE_ATTEMPTS = 3;
+const HEAD_PROBE_DELAY_MS = 200;
+
+/**
+ * Runs one HEAD attempt, records a structured trace into `probe.attempts`,
+ * emits a `[wasm-probe]` debug line, and returns the Response (or null on
+ * fetch error). Caller decides whether to retry or fail.
+ */
+async function runWasmHeadAttempt(
+    wasmUrl: string,
+    probe: WasmProbeResult,
+    probeStartedAt: number,
+    attempt: number,
+): Promise<Response | null> {
+    const attemptStart = performance.now();
+    const attemptAtIso = new Date().toISOString();
+    let response: Response | null = null;
+    let attemptStatus: number | null = null;
+    let attemptContentLength: string | null = null;
+    let attemptError: string | null = null;
+    try {
+        response = await fetch(wasmUrl, { method: "HEAD" });
+        attemptStatus = response.status;
+        attemptContentLength = response.headers.get("content-length");
+        probe.status = attemptStatus;
+        probe.contentLength = attemptContentLength;
+    } catch (err) {
+        attemptError = err instanceof Error ? err.message : String(err);
+    }
+    const durationMs = Math.round(performance.now() - attemptStart);
+    const atOffsetMs = Math.round(attemptStart - probeStartedAt);
+    probe.attempts.push({
+        attempt,
+        at: attemptAtIso,
+        atOffsetMs,
+        durationMs,
+        status: attemptStatus,
+        contentLength: attemptContentLength,
+        error: attemptError,
+    });
+    // Structured per-attempt log line — `[wasm-probe]` prefix lets you
+    // grep boot timing across SW restarts (Service Worker DevTools console).
+    console.debug(
+        `[wasm-probe] attempt=${attempt}/${HEAD_PROBE_ATTEMPTS} url=${wasmUrl} ` +
+        `status=${attemptStatus ?? "n/a"} contentLength=${attemptContentLength ?? "n/a"} ` +
+        `durationMs=${durationMs} atOffsetMs=${atOffsetMs}` +
+        (attemptError !== null ? ` error="${attemptError}"` : ""),
+    );
+    return response;
+}
+
+/**
+ * Validates a successful HEAD response. Throws a tagged
+ * `[WASM_FILE_MISSING_404]` error for 404, non-2xx, or empty file.
+ */
+function validateWasmHeadResponse(wasmUrl: string, response: Response, probe: WasmProbeResult): void {
+    if (response.status === 404) {
+        setWasmProbeResult(probe);
+        throw new Error(
+            `[WASM_FILE_MISSING_404] HEAD ${wasmUrl} returned 404. ` +
+            `The packaged extension is missing "wasm/sql-wasm.wasm" — rebuild with ` +
+            `".\\run.ps1 -d" so viteStaticCopy regenerates it from node_modules/sql.js/dist/, ` +
+            `then reload the extension from chrome://extensions.`,
+        );
+    }
+    if (!response.ok) {
+        setWasmProbeResult(probe);
+        throw new Error(
+            `[WASM_FILE_MISSING_404] HEAD ${wasmUrl} returned HTTP ${response.status}. ` +
+            `Confirm "wasm/sql-wasm.wasm" is listed in manifest.web_accessible_resources and ` +
+            `present at chrome-extension/wasm/sql-wasm.wasm.`,
+        );
+    }
+    if (probe.contentLength !== null && Number(probe.contentLength) === 0) {
+        setWasmProbeResult(probe);
+        throw new Error(
+            `[WASM_FILE_MISSING_404] HEAD ${wasmUrl} reports Content-Length: 0. ` +
+            `The packaged WASM file exists but is empty — rebuild the extension to regenerate it.`,
+        );
+    }
+}
+
 async function verifyWasmPresence(wasmUrl: string): Promise<void> {
     const probeStartedAt = performance.now();
     const probe: WasmProbeResult = {
@@ -103,100 +185,28 @@ async function verifyWasmPresence(wasmUrl: string): Promise<void> {
     // the extension's own chrome-extension:// URL space is fully wired up.
     // This is NOT a recursive/exponential retry — it's a fixed, fail-fast
     // 3-attempt budget (~600ms total) consistent with the no-retry policy.
-    // Deterministic outcomes (404, non-2xx, Content-Length: 0) below still
-    // fail immediately on the first probe.
-    const HEAD_PROBE_ATTEMPTS = 3;
-    const HEAD_PROBE_DELAY_MS = 200;
     let headResponse: Response | null = null;
-    let lastFetchError: string | null = null;
     for (let attempt = 1; attempt <= HEAD_PROBE_ATTEMPTS; attempt += 1) {
-        const attemptStart = performance.now();
-        const attemptAtIso = new Date().toISOString();
-        let attemptStatus: number | null = null;
-        let attemptContentLength: string | null = null;
-        let attemptError: string | null = null;
-        try {
-            headResponse = await fetch(wasmUrl, { method: "HEAD" });
-            attemptStatus = headResponse.status;
-            attemptContentLength = headResponse.headers.get("content-length");
-            probe.status = attemptStatus;
-            probe.contentLength = attemptContentLength;
-            lastFetchError = null;
-        } catch (err) {
-            attemptError = err instanceof Error ? err.message : String(err);
-            lastFetchError = attemptError;
-            headResponse = null;
-        }
-        const attemptDurationMs = Math.round(performance.now() - attemptStart);
-        const atOffsetMs = Math.round(attemptStart - probeStartedAt);
-        const trace = {
-            attempt,
-            at: attemptAtIso,
-            atOffsetMs,
-            durationMs: attemptDurationMs,
-            status: attemptStatus,
-            contentLength: attemptContentLength,
-            error: attemptError,
-        };
-        probe.attempts.push(trace);
-        // Structured per-attempt log line, always emitted to the SW console.
-        // `[wasm-probe]` prefix makes it easy to grep boot timing across
-        // service-worker restarts (Service Worker → DevTools → Console).
-        console.debug(
-            `[wasm-probe] attempt=${attempt}/${HEAD_PROBE_ATTEMPTS} url=${wasmUrl} ` +
-            `status=${attemptStatus ?? "n/a"} contentLength=${attemptContentLength ?? "n/a"} ` +
-            `durationMs=${attemptDurationMs} atOffsetMs=${atOffsetMs}` +
-            (attemptError !== null ? ` error="${attemptError}"` : ""),
-        );
-        if (attemptError === null) {
-            break;
-        }
+        headResponse = await runWasmHeadAttempt(wasmUrl, probe, probeStartedAt, attempt);
+        if (headResponse !== null) { break; }
         if (attempt < HEAD_PROBE_ATTEMPTS) {
             await new Promise((resolve) => setTimeout(resolve, HEAD_PROBE_DELAY_MS));
         }
     }
     probe.totalDurationMs = Math.round(performance.now() - probeStartedAt);
     if (headResponse === null) {
-        probe.headError = lastFetchError;
+        const lastError = probe.attempts[probe.attempts.length - 1]?.error ?? null;
+        probe.headError = lastError;
         setWasmProbeResult(probe);
-        // All attempts threw — treat as a missing file (web_accessible_resources
-        // misconfig, packaging miss, or extension URL still unreachable after
-        // the bounded startup window). Tagged so the banner picks up the
-        // dedicated cause.
         throw new Error(
             `[WASM_FILE_MISSING_404] HEAD request failed for "${wasmUrl}" after ` +
             `${HEAD_PROBE_ATTEMPTS} attempts (~${HEAD_PROBE_ATTEMPTS * HEAD_PROBE_DELAY_MS}ms). ` +
             `The file "wasm/sql-wasm.wasm" appears to be missing from the packaged ` +
             `chrome-extension/ output OR is not listed in manifest.web_accessible_resources. ` +
-            `Original error: ${lastFetchError}`,
+            `Original error: ${lastError}`,
         );
     }
-    if (headResponse.status === 404) {
-        setWasmProbeResult(probe);
-        throw new Error(
-            `[WASM_FILE_MISSING_404] HEAD ${wasmUrl} returned 404. ` +
-            `The packaged extension is missing "wasm/sql-wasm.wasm" — rebuild with ` +
-            `".\\run.ps1 -d" so viteStaticCopy regenerates it from node_modules/sql.js/dist/, ` +
-            `then reload the extension from chrome://extensions.`,
-        );
-    }
-    if (!headResponse.ok) {
-        setWasmProbeResult(probe);
-        throw new Error(
-            `[WASM_FILE_MISSING_404] HEAD ${wasmUrl} returned HTTP ${headResponse.status}. ` +
-            `Confirm "wasm/sql-wasm.wasm" is listed in manifest.web_accessible_resources and ` +
-            `present at chrome-extension/wasm/sql-wasm.wasm.`,
-        );
-    }
-    // If Content-Length is reported and zero, the file is packaged but empty.
-    if (probe.contentLength !== null && Number(probe.contentLength) === 0) {
-        setWasmProbeResult(probe);
-        throw new Error(
-            `[WASM_FILE_MISSING_404] HEAD ${wasmUrl} reports Content-Length: 0. ` +
-            `The packaged WASM file exists but is empty — rebuild the extension to regenerate it.`,
-        );
-    }
-
+    validateWasmHeadResponse(wasmUrl, headResponse, probe);
     probe.ok = true;
     setWasmProbeResult(probe);
     // Final summary line — useful when triaging "boot took N seconds" reports.

@@ -343,7 +343,7 @@ function _buildRenameInputs(body: HTMLElement, selected: WorkspaceCredit[]): Ren
     const template = tmplRow.input.value;
     const prefix = prefixRow.cb!.checked ? prefixRow.input.value : '';
     const suffix = suffixRow.cb!.checked ? suffixRow.input.value : '';
-    const starts = getStartNums();
+    const starts: Record<string, number> = { ...getStartNums() };
     let html = '';
     for (const [j, ws] of selected.entries()) {
       const origName = ws.fullName || ws.name || '';

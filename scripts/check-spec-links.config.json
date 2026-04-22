@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Spec-Link Checker Config",
+  "description": "Shared configuration for scripts/check-spec-links.mjs and scripts/report-spec-links-ci.mjs. Underscore-prefixed sibling fields (e.g. _excludeDirsNote) are documentation comments and are ignored at runtime.",
+  "type": "object",
+  "additionalProperties": true,
+  "properties": {
+    "scanRoots": {
+      "type": "array",
+      "description": "Repo-relative directories scanned for .md files.",
+      "items": { "type": "string" },
+      "default": ["spec"]
+    },
+    "excludeDirs": {
+      "type": "array",
+      "description": "Directory NAMES (not paths) that are skipped during recursive scanning. Matched anywhere in the tree.",
+      "items": { "type": "string" },
+      "default": ["99-archive", "imported"]
+    },
+    "autoResolve": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Settings for the suffix-overlap auto-resolver that downgrades fixable broken links from errors to warnings.",
+      "properties": {
+        "enabled": { "type": "boolean", "default": false },
+        "minScore": { "type": "number", "minimum": 1, "default": 1 },
+        "searchRoots": {
+          "type": "array",
+          "description": "Roots used to build the basename → absolute-path index for candidate replacements.",
+          "items": { "type": "string" },
+          "default": ["spec", ".lovable"]
+        }
+      }
+    }
+  }
+}
+</content>
+</invoke>

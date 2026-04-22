@@ -222,8 +222,8 @@ If any default is wrong, tell me before Phase 1; otherwise reply **"next"** and 
 | 3 — Rename core folders to new numbering | ✅ done (2026-04-22) | `09-design-system/` → `07-design-system/`. Pre-emptively moved `07-data-and-api/` → `21-app/03-data-and-api/`. |
 | 4 — Redistribute `14-imported/` | ✅ done (2026-04-22) | WordPress + misc → `99-archive/`. Imported duplicates archived. Loose files → `02-coding-guidelines/imported/`. |
 | 5 — Create `21-app/` and migrate | ✅ done (2026-04-22) | Migrated 7 folders into `21-app/`. Created overview, fundamentals, features index, consistency report. Resolved `08-` collision. |
-| 6 — Consolidate `22-app-issues/` | ⏳ next | Rename `17-app-issues/` → `22-app-issues/`, merge `02-app-issues/` in. |
-| 7 — Root cleanup & governance files | ⏳ pending | |
+| 6 — Consolidate `22-app-issues/` | ✅ done (2026-04-22) | Renamed `17-app-issues/` → `22-app-issues/` (99 files preserved). Merged 4 files from `02-app-issues/` with `legacy-` prefix. Created `00-overview.md` + `99-consistency-report.md`. |
+| 7 — Root cleanup & governance files | ⏳ next | |
 | 8 — Cross-reference repair | ⏳ pending | |
 | 9 — Memory & policy sync | ⏳ pending | |
 | 10 — Final validation | ⏳ pending | |

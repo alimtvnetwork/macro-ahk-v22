@@ -83,17 +83,17 @@ const linesNoCode = (() => {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-/** Find the H1 line index (first `# ` heading at column 0). */
+/** Find the H1 line index (first `# ` heading at column 0, ignoring code blocks). */
 function findH1Index() {
-    for (let i = 0; i < lines.length; i++) {
-        if (/^# (?!#)/.test(lines[i])) return i;
+    for (let i = 0; i < linesNoCode.length; i++) {
+        if (/^# (?!#)/.test(linesNoCode[i])) return i;
     }
     return -1;
 }
 
-/** Count all H1 headings — there must be exactly one. */
+/** Count all H1 headings outside code fences — there must be exactly one. */
 function countH1() {
-    return lines.filter((l) => /^# (?!#)/.test(l)).length;
+    return linesNoCode.filter((l) => /^# (?!#)/.test(l)).length;
 }
 
 /**

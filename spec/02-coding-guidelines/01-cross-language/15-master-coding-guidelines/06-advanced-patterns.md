@@ -55,7 +55,7 @@ Any modification to an enum must follow the enum-consumer-checklist <!-- externa
 
 ## 14. Lazy Evaluation
 
-> Full reference: [16-lazy-evaluation-patterns.md](../16-lazy-evaluation-patterns.md)
+> Full reference: [29-lazy-evaluation-patterns.md](../29-lazy-evaluation-patterns.md)
 
 | Rule | Description |
 |------|-------------|

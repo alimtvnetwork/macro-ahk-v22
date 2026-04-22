@@ -63,7 +63,7 @@
  *               --apply to remediate; finally re-run the checker to confirm.)
  */
 
-import { readFileSync, writeFileSync, existsSync, copyFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, copyFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -80,6 +80,18 @@ const README_PATH = fileArg
     ? resolve(REPO_ROOT, fileArg.slice("--file=".length))
     : resolve(REPO_ROOT, "readme.md");
 
+// --audit (no value) → default path; --audit=<path> → explicit path; absent → no audit log.
+const auditFlag = args.find((a) => a === "--audit" || a.startsWith("--audit="));
+const AUDIT_ENABLED = Boolean(auditFlag);
+const AUDIT_PATH = (() => {
+    if (!AUDIT_ENABLED) return null;
+    if (auditFlag === "--audit") {
+        const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+        return resolve(REPO_ROOT, ".lovable/reports", `readme-repair-audit-${stamp}.json`);
+    }
+    return resolve(REPO_ROOT, auditFlag.slice("--audit=".length));
+})();
+
 if (!existsSync(README_PATH)) {
     die(`readme.md not found at: ${README_PATH}`);
 }
@@ -87,7 +99,7 @@ if (!existsSync(README_PATH)) {
 const original = readFileSync(README_PATH, "utf8");
 let working = original;
 
-/** @type {Array<{ id: string; label: string; status: "applied"|"would-apply"|"skipped"|"not-needed"; reason?: string; preview?: string }>} */
+/** @type {Array<{ id: string; label: string; status: "applied"|"would-apply"|"skipped"|"not-needed"; reason?: string; preview?: string; before?: string; after?: string; beforeRange?: { startLine: number; endLine: number }; afterRange?: { startLine: number; endLine: number } }>} */
 const repairs = [];
 
 // ─── Repair #1: centered-hero ────────────────────────────────────────────────

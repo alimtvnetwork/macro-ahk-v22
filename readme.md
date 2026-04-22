@@ -33,7 +33,14 @@
 [![CodeFactor](https://img.shields.io/codefactor/grade/github/alimtvnetwork/macro-ahk-v21/main?label=CodeFactor&logo=codefactor&style=flat-square)](https://www.codefactor.io/repository/github/alimtvnetwork/macro-ahk-v21)
 [![Codacy](https://img.shields.io/badge/Codacy-activate-blue?style=flat-square&logo=codacy&logoColor=white)](https://app.codacy.com/gh/alimtvnetwork/macro-ahk-v21/dashboard)
 [![Code Climate](https://img.shields.io/badge/Code%20Climate-activate-blue?style=flat-square&logo=codeclimate&logoColor=white)](https://codeclimate.com/github/alimtvnetwork/macro-ahk-v21)
+[![CodeQL](https://img.shields.io/github/actions/workflow/status/alimtvnetwork/macro-ahk-v21/codeql.yml?label=CodeQL&logo=github&style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/security/code-scanning)
+[![Snyk Vulnerabilities](https://img.shields.io/snyk/vulnerabilities/github/alimtvnetwork/macro-ahk-v21?label=Snyk&logo=snyk&logoColor=white&style=flat-square)](https://snyk.io/test/github/alimtvnetwork/macro-ahk-v21)
+[![Known Vulnerabilities](https://img.shields.io/badge/dependencies-audited-success?style=flat-square&logo=npm&logoColor=white)](https://github.com/alimtvnetwork/macro-ahk-v21/security/dependabot)
+[![Dependabot](https://img.shields.io/badge/Dependabot-active-025E8C?style=flat-square&logo=dependabot&logoColor=white)](https://github.com/alimtvnetwork/macro-ahk-v21/network/updates)
+[![Renovate](https://img.shields.io/badge/Renovate-ready-1A1F6C?style=flat-square&logo=renovatebot&logoColor=white)](https://docs.renovatebot.com/)
 [![Coverage](https://img.shields.io/badge/coverage-tracked-success?style=flat-square&logo=vitest&logoColor=white)](./vitest.config.ts)
+[![Codecov](https://img.shields.io/badge/Codecov-activate-F01F7A?style=flat-square&logo=codecov&logoColor=white)](https://app.codecov.io/gh/alimtvnetwork/macro-ahk-v21)
+[![TypeScript Strict](https://img.shields.io/badge/TypeScript-strict-blue?style=flat-square&logo=typescript&logoColor=white)](./tsconfig.json)
 [![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen?style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/commits/main)
 
 <!-- Stack & standards -->

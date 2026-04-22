@@ -1,8 +1,10 @@
 # CI/CD Integration — Coding-Guidelines Linter Pack
 
-> **Version:** 1.0.0
+> **Originally filed at slot 06 — renumbered to slot 12 on 2026-04-22 to remove duplicate-prefix collision with `06-ai-optimization/`.** Both subfolders are active; the AI-optimization folder retains slot 06 due to higher inbound reference count.
+
+> **Version:** 1.1.0
 > **Status:** Active (Phase 1 shipping)
-> **Updated:** 2026-04-19
+> **Updated:** 2026-04-22
 > **AI Confidence:** Production-Ready
 > **Ambiguity:** None
 

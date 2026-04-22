@@ -1,7 +1,9 @@
 # Lazy Evaluation Patterns
 
-**Version:** 3.2.0  
-**Updated:** 2026-04-16  
+> **Originally filed at slot 16 — renumbered to slot 29 on 2026-04-22 to remove file-vs-directory collision with `16-static-analysis/`.** The directory anchored slot 16; this file moved to the next available slot.
+
+**Version:** 3.2.1  
+**Updated:** 2026-04-22  
 **Applies to:** Go (primary), general principle cross-language  
 **Source:** Consolidated from `01-pre-code-review-guides/03-golang-code-review-guides.md`
 

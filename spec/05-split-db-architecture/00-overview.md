@@ -57,9 +57,9 @@ The **Split DB Architecture** defines a pattern for organizing SQLite databases 
 | 02.04 | `02-features/04-rbac-casbin.md` | Role-Based Access Control with Casbin |
 | 02.05 | `02-features/05-user-scoped-isolation.md` | User-scoped database isolation patterns |
 | 03 | `03-issues/00-overview.md` | Issues tracker |
-| 97 | `97-acceptance-criteria.md` | Acceptance criteria |
-| 97b | `97-changelog.md` | Changelog |
-| 98 | `98-acceptance-criteria.md` | Extended acceptance criteria |
+| 96 | `96-acceptance-criteria-legacy.md` | Legacy v1.0 acceptance checklist (pre-GIVEN/WHEN/THEN format, kept for traceability) |
+| 97 | `97-acceptance-criteria.md` | Acceptance criteria (GIVEN/WHEN/THEN, E2E-test-ready) |
+| 98 | `98-changelog.md` | Changelog |
 | 99 | `99-consistency-report.md` | Consistency report |
 
 ---
@@ -79,9 +79,9 @@ The **Split DB Architecture** defines a pattern for organizing SQLite databases 
 │   └── 05-user-scoped-isolation.md
 ├── 03-issues/
 │   └── 00-overview.md                ← Issues tracker
-├── 97-acceptance-criteria.md
-├── 97-changelog.md
-├── 98-acceptance-criteria.md
+├── 96-acceptance-criteria-legacy.md  ← v1.0 brief checklist (preserved)
+├── 97-acceptance-criteria.md         ← v2.0 GIVEN/WHEN/THEN (canonical)
+├── 98-changelog.md
 └── 99-consistency-report.md
 ```
 

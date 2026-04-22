@@ -1,4 +1,6 @@
-import { test, expect } from './fixtures';
+import { test, expect, EXTENSION_PATHS } from './fixtures';
+
+const POPUP_URL = (extensionId: string) => `chrome-extension://${extensionId}/${EXTENSION_PATHS.popup}`;
 
 /**
  * Script Injection E2E Suite

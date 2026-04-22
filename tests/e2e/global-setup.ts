@@ -31,7 +31,6 @@ function pickExtensionDir(): string {
   return EXTENSION_CANDIDATES[0];
 }
 const EXTENSION_DIR = pickExtensionDir();
-const MANIFEST_PATH = path.join(EXTENSION_DIR, 'manifest.json');
 
 const REQUIRED_MANIFEST_KEYS = [
   'manifest_version',

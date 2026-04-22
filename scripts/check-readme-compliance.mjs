@@ -60,6 +60,27 @@ if (!existsSync(README_PATH)) {
 const raw = readFileSync(README_PATH, "utf8");
 const lines = raw.split(/\r?\n/);
 
+// `linesNoCode` mirrors `lines` but lines that fall inside a fenced code block
+// (``` … ``` or ~~~ … ~~~) are blanked out. This prevents shell `# comment` and
+// example markdown headings inside code samples from polluting H1/heading
+// detection. Indentation level is preserved so line numbers stay stable.
+const linesNoCode = (() => {
+    const out = new Array(lines.length);
+    let inFence = false;
+    let fenceMarker = "";
+    for (let i = 0; i < lines.length; i++) {
+        const l = lines[i];
+        const fenceMatch = l.match(/^\s{0,3}(`{3,}|~{3,})/);
+        if (fenceMatch) {
+            const marker = fenceMatch[1][0];
+            if (!inFence) { inFence = true; fenceMarker = marker; out[i] = ""; continue; }
+            if (inFence && marker === fenceMarker) { inFence = false; fenceMarker = ""; out[i] = ""; continue; }
+        }
+        out[i] = inFence ? "" : l;
+    }
+    return out;
+})();
+
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
 /** Find the H1 line index (first `# ` heading at column 0). */

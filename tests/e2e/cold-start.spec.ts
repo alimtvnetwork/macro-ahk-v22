@@ -1,6 +1,4 @@
-import { test, expect, EXTENSION_PATHS } from './fixtures';
-
-const POPUP_URL = (extensionId: string) => `chrome-extension://${extensionId}/${EXTENSION_PATHS.popup}`;
+import { test, expect, openPopupPage, popupUrl } from './fixtures';
 
 /**
  * Cold Start E2E Suite
@@ -13,9 +11,7 @@ const POPUP_URL = (extensionId: string) => `chrome-extension://${extensionId}/${
 
 test.describe('Cold Start', () => {
   test('service worker responds to __PING__ after boot', async ({ context, extensionId }) => {
-    const page = await context.newPage();
-    await page.goto(POPUP_URL(extensionId));
-    await page.waitForLoadState('domcontentloaded');
+    const page = await openPopupPage(context, extensionId);
 
     // Send __PING__ and expect __PONG__
     const response = await page.evaluate(async () => {
@@ -36,9 +32,7 @@ test.describe('Cold Start', () => {
   });
 
   test('boot completes without fatal errors', async ({ context, extensionId }) => {
-    const page = await context.newPage();
-    await page.goto(POPUP_URL(extensionId));
-    await page.waitForLoadState('domcontentloaded');
+    const page = await openPopupPage(context, extensionId);
 
     // Query boot diagnostics via GET_BOOT_DIAGNOSTICS or health ping
     const health = await page.evaluate(async () => {
@@ -67,6 +61,9 @@ test.describe('Cold Start', () => {
   test('no "Receiving end does not exist" errors during cold start', async ({ context, extensionId }) => {
     const consoleErrors: string[] = [];
 
+    // Listeners must be attached BEFORE navigation, so this test cannot use
+    // openPopupPage() (which navigates immediately). Use the manifest-derived
+    // popupUrl() helper instead of any hard-coded "popup.html" string.
     const page = await context.newPage();
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
@@ -77,7 +74,7 @@ test.describe('Cold Start', () => {
       consoleErrors.push(err.message);
     });
 
-    await page.goto(POPUP_URL(extensionId));
+    await page.goto(popupUrl(extensionId));
     await page.waitForLoadState('domcontentloaded');
 
     // Give the popup time to complete its init messaging

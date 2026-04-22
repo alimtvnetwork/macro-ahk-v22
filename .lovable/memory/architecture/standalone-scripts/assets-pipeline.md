@@ -22,5 +22,5 @@ All vibrant gradient buttons use **glow intensification** on hover (brightness +
 
 ### Related Docs
 
-- `spec/12-devtools-and-injection/standalone-script-assets.md` — Full specification
+- `spec/21-app/02-features/devtools-and-injection/standalone-script-assets.md` — Full specification
 - `.lovable/plan.md` — Task breakdown and roadmap

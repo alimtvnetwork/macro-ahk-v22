@@ -11,7 +11,7 @@
  * Kept in `src/background/` (not in `standalone-scripts/types/`) so that
  * the SDK build's `rootDir` does not pull in a runtime module.
  *
- * See: spec/17-app-issues/66-sdk-global-object-missing.md
+ * See: spec/22-app-issues/66-sdk-global-object-missing.md
  */
 
 /**

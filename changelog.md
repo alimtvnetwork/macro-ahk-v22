@@ -164,7 +164,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 - 6 new regression tests: `findNextTasksPrompt` selection logic (4 tests), Windows `\r\n` normalization, whitespace-between-newlines collapse
-- Root cause analysis spec at `spec/02-app-issues/prompt-next-task-regression-newline-formatting-rca.md`
+- Root cause analysis spec at `spec/22-app-issues/prompt-next-task-regression-newline-formatting-rca.md`
 
 ### Changed
 - Version bump: 2.107.0 → 2.108.0 (all version files synced)
@@ -203,7 +203,7 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - Macro Controller version bump: 2.104.0 → 2.105.0
 
 ### Root Cause Analysis
-- [RCA: prompt-next-task-regression](spec/02-app-issues/prompt-next-task-regression-newline-formatting-root-cause-version-bump-and-changelog.md)
+- [RCA: prompt-next-task-regression](spec/22-app-issues/prompt-next-task-regression-newline-formatting-root-cause-version-bump-and-changelog.md)
 
 ---
 

@@ -16,9 +16,9 @@
  *   1. `standalone-scripts/marco-sdk/src/self-namespace.ts`
  *   2. The IIFE template in `src/background/project-namespace-builder.ts`
  *   3. `PROJECT_NAMESPACE_KEYS` in `project-namespace-shape-guard.ts`
- *   4. `spec/12-devtools-and-injection/developer-guide/04-sdk-namespace.md`
+ *   4. `spec/21-app/02-features/devtools-and-injection/developer-guide/04-sdk-namespace.md`
  *
- * See: spec/17-app-issues/66-sdk-global-object-missing.md
+ * See: spec/22-app-issues/66-sdk-global-object-missing.md
  */
 
 export {};

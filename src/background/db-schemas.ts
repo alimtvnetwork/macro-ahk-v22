@@ -451,7 +451,7 @@ CREATE INDEX IF NOT EXISTS IdxDynLoadStatus    ON DynamicLoadLog(Status);
 
 /* ------------------------------------------------------------------ */
 /*  SharedAsset (logs.db) — Cross-Project Sync                         */
-/*  See: spec/13-features/cross-project-sync.md                        */
+/*  See: spec/21-app/02-features/misc-features/cross-project-sync.md                        */
 /* ------------------------------------------------------------------ */
 
 export const SHARED_ASSET_SCHEMA = `

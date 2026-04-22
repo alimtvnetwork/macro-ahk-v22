@@ -77,8 +77,8 @@ It delegates entirely to `fetchLoopCredits` which:
 
 ## Related
 
-- `spec/17-app-issues/authentication-freeze-and-retry-loop.md`
-- `spec/17-app-issues/55-workspace-api-missing-bearer-token.md`
-- `spec/11-chrome-extension/36-cookie-only-bearer.md` — Auth Bridge Service spec
+- `spec/22-app-issues/authentication-freeze-and-retry-loop.md`
+- `spec/22-app-issues/55-workspace-api-missing-bearer-token.md`
+- `spec/21-app/02-features/chrome-extension/36-cookie-only-bearer.md` — Auth Bridge Service spec
 - Memory: `auth/session-token-recovery`
 - Memory: `features/macro-controller/token-fallback-auth`

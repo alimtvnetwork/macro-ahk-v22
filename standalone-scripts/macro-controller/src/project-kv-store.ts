@@ -8,7 +8,7 @@
  * Store:     kv  (keyPath: "key")
  * Compound:  ${section}::${key}
  *
- * @see spec/10-macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md
+ * @see spec/21-app/02-features/macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md
  */
 
 import { logError } from './error-utils';

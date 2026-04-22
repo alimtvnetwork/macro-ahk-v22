@@ -7,7 +7,7 @@ type: feature
 ## Cross-Project Sync — Data Layer (Phase 1)
 
 **Implemented**: 2026-04-09
-**Spec**: `spec/13-features/cross-project-sync.md` (READY v2.0.0)
+**Spec**: `spec/21-app/02-features/misc-features/cross-project-sync.md` (READY v2.0.0)
 
 ### New Tables (Migration v7 — logs.db)
 - `SharedAsset` — global reusable assets (prompts, scripts, chains, presets) with ContentHash (SHA-256)

@@ -160,7 +160,7 @@ function buildIndex() {
  * trailing path segments match. Higher = better.
  *
  * Example: broken target `../../06-macro-controller/workspace-name/overview.md`
- *          candidate     `spec/10-macro-controller/workspace-name/overview.md`
+ *          candidate     `spec/21-app/02-features/macro-controller/workspace-name/overview.md`
  *          → trailing match = 3 (`workspace-name/overview.md` + numeric-prefix-shifted dir)
  */
 function suffixScore(brokenTargetPath, candidateAbsPath) {

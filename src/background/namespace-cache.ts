@@ -7,7 +7,7 @@
  * Cache key: `ns_cache_<projectId>` in chrome.storage.local
  * Invalidation: called on project save, file save/delete, config save.
  *
- * @see spec/12-devtools-and-injection/sdk-convention.md — SDK namespace convention
+ * @see spec/21-app/02-features/devtools-and-injection/sdk-convention.md — SDK namespace convention
  * @see .lovable/memory/architecture/injection-pipeline-optimization.md — Namespace caching
  */
 

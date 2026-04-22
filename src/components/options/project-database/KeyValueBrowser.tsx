@@ -5,7 +5,7 @@
  * Supports viewing, adding, editing, and deleting KV entries
  * with namespace filtering.
  *
- * @see spec/11-chrome-extension/90-namespace-database-creation.md
+ * @see spec/21-app/02-features/chrome-extension/90-namespace-database-creation.md
  */
 
 import { useState, useEffect, useCallback } from "react";

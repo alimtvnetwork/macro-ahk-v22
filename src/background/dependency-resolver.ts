@@ -4,7 +4,7 @@
  * Resolves project injection order using topological sort (Kahn's algorithm).
  * Supports transitive dependencies and semver range matching.
  *
- * See: spec/12-devtools-and-injection/sdk-convention.md §Dependency Resolution
+ * See: spec/21-app/02-features/devtools-and-injection/sdk-convention.md §Dependency Resolution
  * See: spec/05-chrome-extension/57-project-dependency-system.md
  */
 

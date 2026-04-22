@@ -57,7 +57,7 @@ _Nothing currently in progress — last session closed v2.169.0._
 
 #### Error Logging & Type Safety — ✅
 
-**Spec**: `spec/10-macro-controller/ts-migration-v2/08-error-logging-and-type-safety.md`
+**Spec**: `spec/21-app/02-features/macro-controller/ts-migration-v2/08-error-logging-and-type-safety.md`
 
 | Task | Description | Status |
 |------|-------------|--------|
@@ -74,7 +74,7 @@ Grouped 85+ constants into 8 string enums in `types/`: `DomId`, `DataAttr`, `Sty
 
 #### Rename Preset Persistence — ✅
 
-**Spec**: `spec/10-macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md`
+**Spec**: `spec/21-app/02-features/macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md`
 
 | Task | Description | Status |
 |------|-------------|--------|

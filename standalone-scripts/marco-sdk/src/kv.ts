@@ -8,7 +8,7 @@
  * code name ("RiseupMacroSdk") as the projectId; per-project IIFEs supply
  * their resolved project id.
  *
- * See: spec/12-devtools-and-injection/sdk-convention.md §marco.kv
+ * See: spec/21-app/02-features/devtools-and-injection/sdk-convention.md §marco.kv
  */
 
 import { sendMessage } from "./bridge";

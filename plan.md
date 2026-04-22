@@ -7,7 +7,7 @@
 **Detailed Plan**: `.lovable/plan.md`
 **Suggestions Tracker**: `.lovable/memory/suggestions/01-suggestions-tracker.md`
 **Completed Plans**: `.lovable/memory/workflow/completed/`
-**Issue Write-Ups**: `/spec/17-app-issues/`
+**Issue Write-Ups**: `/spec/22-app-issues/`
 **Risk Report**: `.lovable/memory/workflow/03-reliability-risk-report.md`
 
 ---
@@ -81,7 +81,7 @@ All critical AHK features implemented. 44 issue write-ups documented. 26 enginee
 - **Release CI hardening (v2.117.0)**: Fixed GitHub Actions failure when `pnpm-lock.yaml` is absent by falling back to `pnpm install --no-frozen-lockfile --lockfile=false` for root and `chrome-extension`. Added root + extension lint steps before tests. Release notes now explicitly include PowerShell/Bash install commands, manual unpacked-install steps, and `changelog.md` asset listing.
 
 - **Rename Preset Persistence (v2.115.0)**: Added project-scoped IndexedDB KV store (`ProjectKvStore`) and `RenamePresetStore` for persistent rename configuration presets. Preset selector dropdown in bulk rename panel with Save/New/Delete. Auto-save on Apply, Close, and Cancel. Auto-load on panel open. Generic KV store is reusable by any plugin.
-- **Spec Created**: `spec/10-macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md` — full spec for rename persistence with IndexedDB.
+- **Spec Created**: `spec/21-app/02-features/macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md` — full spec for rename persistence with IndexedDB.
 - **New Files**: `project-kv-store.ts` (generic KV), `rename-preset-store.ts` (preset CRUD).
 - **Modified**: `bulk-rename.ts` (preset UI), `bulk-rename-fields.ts` (preset row builder), `workspace-rename.ts` (barrel exports).
 
@@ -132,7 +132,7 @@ Spec folder: `spec/05-chrome-extension/82-pstore-project-store/`
 
 Phase 1 (data layer) and Phase 2 (Library UI) complete. Remaining: ProjectGroup management UI, drag-to-assign projects, sync notifications, and E2E testing.
 
-Spec: `spec/13-features/cross-project-sync.md`
+Spec: `spec/21-app/02-features/misc-features/cross-project-sync.md`
 
 ### Priority 5: Release Installer Hardening (v0.2)
 

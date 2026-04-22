@@ -22,9 +22,9 @@
 
 | Action | Result |
 |--------|--------|
-| Renamed `spec/17-app-issues/` → `spec/22-app-issues/` | ✅ 99 files preserved |
-| Merged `spec/02-app-issues/` (4 files) with `legacy-` prefix | ✅ No collisions |
-| Deleted empty `spec/02-app-issues/` | ✅ Done |
+| Renamed `spec/22-app-issues/` → `spec/22-app-issues/` | ✅ 99 files preserved |
+| Merged `spec/22-app-issues/` (4 files) with `legacy-` prefix | ✅ No collisions |
+| Deleted empty `spec/22-app-issues/` | ✅ Done |
 | Created `00-overview.md` | ✅ Done |
 | Created `99-consistency-report.md` | ✅ Done |
 

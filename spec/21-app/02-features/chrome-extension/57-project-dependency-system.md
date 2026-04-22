@@ -2,7 +2,7 @@
 
 **Priority**: Medium
 **Status**: Planning
-**Related**: `spec/11-chrome-extension/50-script-dependency-system.md` (script-level deps)
+**Related**: `spec/21-app/02-features/chrome-extension/50-script-dependency-system.md` (script-level deps)
 
 ---
 

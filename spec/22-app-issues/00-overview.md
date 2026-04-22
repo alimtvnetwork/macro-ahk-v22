@@ -32,8 +32,8 @@ Single canonical tracker for **all app-specific issues, bugs, and root-cause ana
 
 This folder consolidates the previous two issue trackers:
 
-- **`spec/17-app-issues/`** (former canonical) — renamed to this folder.
-- **`spec/02-app-issues/`** (4 loose files) — merged in with the `legacy-` filename prefix to preserve provenance.
+- **`spec/22-app-issues/`** (former canonical) — renamed to this folder.
+- **`spec/22-app-issues/`** (4 loose files) — merged in with the `legacy-` filename prefix to preserve provenance.
 
 ---
 

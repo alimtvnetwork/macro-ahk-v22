@@ -17,7 +17,7 @@
  * - Writes to the matching `console.*` method
  * - Never swallows — always outputs
  *
- * @see spec/10-macro-controller/ts-migration-v2/08-error-logging-and-type-safety.md §3.1
+ * @see spec/21-app/02-features/macro-controller/ts-migration-v2/08-error-logging-and-type-safety.md §3.1
  */
 
 const PREFIX = "[RiseupAsia]";

@@ -14,7 +14,7 @@
  * — both this file and `src/background/project-namespace-builder.ts`
  * MUST produce a value satisfying `ProjectNamespace`.
  *
- * See: spec/17-app-issues/66-sdk-global-object-missing.md
+ * See: spec/22-app-issues/66-sdk-global-object-missing.md
  */
 
 import { NamespaceLogger } from "./logger";

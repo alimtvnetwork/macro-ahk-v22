@@ -4,7 +4,7 @@
  * Hydrates compiled HTML templates (from templates.json) with data.
  * Supports: {{var}}, {{#if cond}}...{{/if}}, {{#each items}}...{{/each}}
  *
- * Spec: spec/12-devtools-and-injection/standalone-script-assets.md §5
+ * Spec: spec/21-app/02-features/devtools-and-injection/standalone-script-assets.md §5
  * Compiler: scripts/compile-templates.mjs
  */
 

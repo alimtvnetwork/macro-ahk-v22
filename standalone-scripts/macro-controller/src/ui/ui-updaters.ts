@@ -66,7 +66,7 @@ export function updateUILight(): void {
  */
 export function updateProjectNameDisplay(): void {
   // Intentionally empty — the `loop-project-name` element was removed to fix
-  // the duplicate project name regression. See spec/02-app-issues/project-name-duplication-rca.md
+  // the duplicate project name regression. See spec/22-app-issues/project-name-duplication-rca.md
 }
 
 /**

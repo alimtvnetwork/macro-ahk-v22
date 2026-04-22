@@ -4,7 +4,7 @@
  * CRUD operations for SharedAsset, AssetLink, ProjectGroup,
  * and ProjectGroupMember tables in logs.db.
  *
- * @see spec/13-features/cross-project-sync.md — Full feature spec
+ * @see spec/21-app/02-features/misc-features/cross-project-sync.md — Full feature spec
  */
 
 import type { Database as SqlJsDatabase } from "sql.js";

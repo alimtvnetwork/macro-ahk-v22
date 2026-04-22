@@ -3,7 +3,7 @@
  *
  * Version bump utilities for SharedAsset version management.
  *
- * @see spec/13-features/cross-project-sync.md §6.2 — Version Conflicts
+ * @see spec/21-app/02-features/misc-features/cross-project-sync.md §6.2 — Version Conflicts
  */
 
 /** Parse a semver string into [major, minor, patch]. */

@@ -65,7 +65,7 @@ If FILES or GKV breaks while KV stays healthy (e.g. a regression in `file-storag
 
 ## Cross-references
 
-- Surface docs: `spec/12-devtools-and-injection/sdk-convention.md` (`marco.kv`, `marco.files`)
+- Surface docs: `spec/21-app/02-features/devtools-and-injection/sdk-convention.md` (`marco.kv`, `marco.files`)
 - Background handlers exercised: `src/background/handlers/kv-handler.ts`, `file-storage-handler.ts`, `grouped-kv-handler.ts`
 - Layer 4 (Errors panel hookup): `.lovable/memory/workflow/10-session-2026-04-20-binderror-into-errors-panel.md`
 - Bind safety architecture: `mem://architecture/sqlite-bind-safety`

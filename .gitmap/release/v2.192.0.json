@@ -8,5 +8,7 @@
   "isDraft": false,
   "isPreRelease": false,
   "createdAt": "2026-04-22T03:48:25Z",
-  "isLatest": false
+  "isLatest": false,
+  "rcaRef": "spec/17-app-issues/95-release-page-missing-built-assets-rca.md",
+  "notes": "Release page has only Source-code archives — release.yml never fired because the v2.192.0 tag was not pushed via `git push origin v2.192.0` (or the tag was created via the GitHub web UI which does not emit push:tags). Replay via Actions → Release Build → Run workflow with version=v2.192.0."
 }

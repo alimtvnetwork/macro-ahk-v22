@@ -144,7 +144,8 @@ IMPORTANT — AI INSTRUCTION:
 | 09 | [PowerShell Integration](./09-powershell-integration/00-overview.md) | PowerShell scripting conventions and cross-platform automation | 0 |
 | 10 | [Research](./10-research/00-overview.md) | Comparative studies, technology evaluations, exploratory technical notes | 0 |
 | 11 | [Security](./11-security/00-overview.md) | Security policies, dependency pinning (Axios), vulnerability tracking | 6 |
-| 12–20 | _Reserved_ | Available for future core fundamental topics | — |
+| 12 | [CI/CD Integration](./12-cicd-integration/00-overview.md) | SARIF contract, plugin model, language roadmap, CI templates, distribution, rules-mapping (renumbered from slot 06 on 2026-04-22 to resolve duplicate prefix) | 11 |
+| 13–20 | _Reserved_ | Available for future core fundamental topics | — |
 
 ### App-Specific (21+)
 

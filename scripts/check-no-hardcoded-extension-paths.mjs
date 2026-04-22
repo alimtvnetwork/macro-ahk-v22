@@ -111,17 +111,20 @@ for (const file of specs) {
       continue;
     }
 
-    // Skip lines that look like comments — false positives in JSDoc are noisy.
-    const stripped = line.replace(/\/\/.*$/, '').trim();
-    if (stripped.startsWith('*') || stripped.startsWith('//')) continue;
+    // Skip lines that are pure comments (JSDoc / line comments). We test
+    // whether the FIRST non-whitespace character starts a comment, because a
+    // naive `replace(/\/\/.*$/)` strip would eat the `//` inside legitimate
+    // `chrome-extension://...` URLs and silently mask violations.
+    const trimmed = line.trim();
+    if (trimmed.startsWith('*') || trimmed.startsWith('//')) continue;
 
     for (const rule of RULES) {
-      if (rule.pattern.test(stripped)) {
+      if (rule.pattern.test(line)) {
         violations.push({
           file: relative(REPO_ROOT, file),
           line: i + 1,
           ruleId: rule.id,
-          snippet: line.trim(),
+          snippet: trimmed,
           hint: rule.hint,
         });
       }

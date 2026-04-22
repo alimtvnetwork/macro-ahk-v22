@@ -347,6 +347,7 @@ function recordDisabled(id, label) {
             }
         }
     }
+    }
 }
 
 // ─── Apply / Report ──────────────────────────────────────────────────────────

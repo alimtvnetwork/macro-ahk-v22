@@ -36,6 +36,17 @@ on:
       - "release/**"
     tags:
       - "v*"
+  # Manual replay path — used to recover a release whose original tag-push
+  # event never reached Actions (e.g., tag created via the GitHub web UI's
+  # "Create release from tag" flow). See
+  # spec/17-app-issues/95-release-page-missing-built-assets-rca.md and
+  # spec/11-chrome-extension/release-procedure.md.
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Existing tag to (re)publish, e.g. v2.192.0'
+        required: true
+        type: string
 
 # Release builds must NEVER be cancelled — every release commit
 # must produce a GitHub Release regardless of newer commits.
@@ -68,7 +79,13 @@ jobs:
       - name: Resolve version
         id: version
         run: |
-          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            VERSION="${{ github.event.inputs.version }}"
+            if [[ -z "$VERSION" ]]; then
+              echo "::error::workflow_dispatch invoked without a version input"
+              exit 1
+            fi
+          elif [[ "$GITHUB_REF" == refs/tags/* ]]; then
             VERSION="${GITHUB_REF_NAME}"
           elif [[ "$GITHUB_REF" == refs/heads/release/* ]]; then
             VERSION="${GITHUB_REF_NAME#release/}"

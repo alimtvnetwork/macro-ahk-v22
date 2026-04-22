@@ -10,12 +10,28 @@
 
 | Metric | Count |
 |---|---|
-| **Hard collisions** (true duplicates — must fix) | **8** |
-| **Soft collisions** (file + directory at same slot, companion-doc convention) | 9 (OK) |
-| **Soft collisions** (file + directory at same slot, unrelated) | **2** (review) |
+| **Hard collisions** (true duplicates) | **8 reported** → **4 resolved 2026-04-22**, 4 remain |
+| **Soft collisions** (companion-doc convention) | 9 (OK) |
+| **Soft collisions** (unrelated file+dir) | **2 reported** → 1 resolved (slot 16), 1 accepted (slot 99 root) |
 | `spec/22-app-issues/` collisions | **0** ✅ (target folder is clean) |
 
-**Headline:** The folder targeted by the recent renumbering work — `spec/22-app-issues/` — is **completely clean**. However, 8 unrelated hard collisions exist elsewhere in the tree, and 2 unrelated file+dir pairs warrant review.
+**Headline:** The folder targeted by the recent renumbering work — `spec/22-app-issues/` — is **completely clean**. As of 2026-04-22 a follow-up pass cleared 4 of 8 hard collisions (06 in coding-guidelines, 97/98 in split-db, 97/98 in seedable, plus the earlier slot-00 fix in error-resolution) and the slot-16 cross-language file/dir collision. See **Resolution log** below; the 4 remaining hard collisions (slot 04 in spec-authoring-guide, slot 05 in apperror-reference, slot 01 in powershell-integration, slot 58 in chrome-extension) are unchanged.
+
+---
+
+## ✅ Resolution log — 2026-04-22 follow-up pass
+
+| Collision | Resolution | New location |
+|---|---|---|
+| Slot 06 in `02-coding-guidelines/` | Renamed `06-cicd-integration/` → `12-cicd-integration/` | `spec/02-coding-guidelines/12-cicd-integration/` |
+| Slot 16 in `01-cross-language/` (file vs dir) | Renamed `16-lazy-evaluation-patterns.md` → slot 29 | `spec/02-coding-guidelines/01-cross-language/29-lazy-evaluation-patterns.md` |
+| Slot 00 in `01-error-resolution/` | Renamed `00-error-documentation-guideline.md` → `06-…` | `spec/03-error-manage/01-error-resolution/06-error-documentation-guideline.md` |
+| Slot 97/98 in `05-split-db-architecture/` | v1.0 brief → `96-acceptance-criteria-legacy.md`; v2.0 GIVEN/WHEN/THEN → `97-acceptance-criteria.md`; `98-changelog.md` retained | folder cleaned |
+| Slot 97/98 in `06-seedable-config-architecture/` | Same pattern: v3.2 brief → `96-…-legacy.md`; v3.2 GIVEN/WHEN/THEN → `97-…`; renamed `97-changelog.md` → `98-changelog.md` | folder cleaned |
+
+Inbound references updated in: `12-cicd-pipeline-workflows/00-overview.md`, `12-cicd-pipeline-workflows/01-repo-rename-script.md`, `02-coding-guidelines/00-overview.md`, `05-split-db-architecture/00-overview.md`, `06-seedable-config-architecture/00-overview.md`. The 6 cross-language link sites that referenced lazy-evaluation already pointed to `29-lazy-evaluation-patterns.md` from earlier passes.
+
+---
 
 ---
 

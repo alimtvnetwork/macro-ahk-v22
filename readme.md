@@ -28,20 +28,6 @@
 
 </div>
 
-> **Report cards — activation status**
->
-> - **CodeFactor** — ✅ live; grades automatically with no signup required.
-> - **CodeQL** — ✅ live via GitHub Actions (`.github/workflows/codeql.yml`); results visible under **Security → Code scanning**.
-> - **Snyk Vulnerabilities** — ✅ live; auto-resolves once shields.io polls the public Snyk index for this repo. To accelerate, log in at [snyk.io](https://snyk.io/) and import the project under the same GitHub org.
-> - **Dependabot** — ✅ active via `.github/dependabot.yml`; PRs raised automatically for outdated `npm` and `github-actions` dependencies.
-> - **Codacy** — ⏳ pending owner activation. Sign in at [app.codacy.com](https://app.codacy.com/) with the GitHub account that owns this repo, click **Add organization** → **macro-ahk-v21** → **Add project**. Once the first analysis completes, replace the placeholder badge with the live grade badge from **Project → Settings → General → Badges** (the URL contains your project UUID, e.g. `https://app.codacy.com/project/badge/Grade/<UUID>`).
-> - **Code Climate Maintainability** — ⏳ pending owner activation. Sign in at [codeclimate.com/quality](https://codeclimate.com/quality) → **Add a repository** → select **macro-ahk-v21**. After the first analysis, replace the placeholder badge with `https://api.codeclimate.com/v1/badges/<TOKEN>/maintainability` (find the token under **Repo Settings → Badges**).
-> - **Codecov** — ⏳ pending owner activation. Sign in at [codecov.io](https://app.codecov.io/) with the GitHub account that owns this repo, **Add new repository** → **macro-ahk-v21**, then add `codecov/codecov-action@v4` to the CI workflow. Replace the placeholder with the live coverage badge from **Settings → Badge**.
-> - **Renovate** — placeholder; enable in [Renovate Dashboard](https://app.renovatebot.com/dashboard) if Dependabot is later swapped out (the two should not run concurrently).
-> - **TypeScript Strict** / **Maintained** — informational, no activation required.
->
-> Codacy, Code Climate, and Codecov require OAuth signup with the repo owner's GitHub account, so they cannot be activated automatically — the placeholders above link directly to the activation pages.
-
 **Current Version:** v2.158.0 | **Macro Controller:** v7.41
 
 ---

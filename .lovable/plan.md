@@ -14,7 +14,7 @@ _Nothing currently in progress — last session closed v2.169.0._
 
 | # | Item | Priority | Reference |
 |---|---|---|---|
-| 1 | Vitest coverage for `assertBindable` + `BindError` (Proxy intercept + column-name inference) | Medium | `.lovable/suggestions.md` |
+| 1 | ✅ ~~Vitest coverage for `assertBindable` + `BindError`~~ — completed 2026-04-22 (`src/test/regression/sqlite-bind-safety.test.ts`, 20 tests, full suite 293 tests passing) | — | — |
 | 2 | Vitest regression suite for handler-guards (missing-field payloads → clean `{ isOk:false }`) | Medium | `.lovable/suggestions.md` |
 | 3 | Surface latest sdkSelfTest + kv/files/gkv round-trip results in popup (✅/❌ + last-run timestamp) | Medium | `.lovable/suggestions.md` |
 

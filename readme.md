@@ -301,7 +301,7 @@ pnpm install
 pnpm run dev
 ```
 
-Load `chrome-extension/dist/` as an unpacked extension in Developer mode.
+Load `chrome-extension/` (at the repo root, **not** `dist/`) as an unpacked extension in Developer mode.
 
 ### Production Build (Full Pipeline)
 

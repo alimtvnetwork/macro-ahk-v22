@@ -126,7 +126,20 @@ function _populateUiFromPreset(preset: RenamePreset, inputs: RenameInputsResult)
       slider.dispatchEvent(new Event('input'));
     }
   }
-  // Start numbers are populated via the variable detection on updatePreview
+  // v2.189.0: hydrate per-variable start numbers from IndexedDB BEFORE
+  // updatePreview() so the variable-detection re-render uses the loaded
+  // values instead of falling back to 1,1,1.
+  inputs.setStartNums({
+    dollar: typeof preset.startDollar === 'number' ? preset.startDollar : 1,
+    hash:   typeof preset.startHash   === 'number' ? preset.startHash   : 1,
+    star:   typeof preset.startStar   === 'number' ? preset.startStar   : 1,
+  });
+  // v2.191.0: Clear any stale start-number inputs left in the DOM from a
+  // previous preset. Without this, _snapshotStartNumInputsInto() runs on the
+  // first updatePreview() tick and overwrites the freshly hydrated values
+  // with whatever the previous preset's inputs still display.
+  const staleStartNums = document.getElementById('rename-start-nums');
+  if (staleStartNums) { staleStartNums.innerHTML = ''; }
   inputs.updatePreview();
   inputs.updateStaticEta();
 }
@@ -285,11 +298,14 @@ function _createRenameTitleBar(panel: HTMLElement, count: number): HTMLElement {
 }
 
 // ── Rename Inputs (prefix, template, suffix, vars, delay, preview) ──
+interface StartNums { dollar: number; hash: number; star: number }
+
 interface RenameInputsResult {
   prefixRow: ReturnType<typeof buildInputRow>;
   tmplRow: ReturnType<typeof buildTemplateRow>;
   suffixRow: ReturnType<typeof buildInputRow>;
-  getStartNums: () => { dollar: number; hash: number; star: number };
+  getStartNums: () => StartNums;
+  setStartNums: (partial: Partial<StartNums>) => void;
   updatePreview: () => void;
   updateStaticEta: () => void;
   etaRow: HTMLElement;
@@ -306,17 +322,34 @@ function _buildRenameInputs(body: HTMLElement, selected: WorkspaceCredit[]): Ren
   _appendVarHintAndStartNums(body);
 
   const startNumsContainer = document.getElementById('rename-start-nums') || document.createElement('div');
-  const startDollar = 1, startHash = 1, startStar = 1;
-  const getStartNums = function() { return { dollar: startDollar, hash: startHash, star: startStar }; };
+
+  // v2.189.0: mutable closure-scoped state replaces dead `const` locals.
+  // Preserves user-typed start numbers across re-renders AND across keystrokes
+  // in other fields. Lets _populateUiFromPreset hydrate from IndexedDB.
+  const startNums: StartNums = { dollar: 1, hash: 1, star: 1 };
+  const getStartNums = function (): StartNums {
+    return { dollar: startNums.dollar, hash: startNums.hash, star: startNums.star };
+  };
+  const setStartNums = function (partial: Partial<StartNums>): void {
+    if (typeof partial.dollar === 'number' && Number.isFinite(partial.dollar)) {
+      startNums.dollar = Math.max(0, Math.floor(partial.dollar));
+    }
+    if (typeof partial.hash === 'number' && Number.isFinite(partial.hash)) {
+      startNums.hash = Math.max(0, Math.floor(partial.hash));
+    }
+    if (typeof partial.star === 'number' && Number.isFinite(partial.star)) {
+      startNums.star = Math.max(0, Math.floor(partial.star));
+    }
+  };
 
   const previewList = _appendPreviewSection(body);
 
-  const updatePreview = function(): void {
-    _detectVarsAndRenderStarts(startNumsContainer, tmplRow, prefixRow, suffixRow, startDollar, startHash, startStar, updatePreview);
+  const updatePreview = function (): void {
+    _detectVarsAndRenderStarts(startNumsContainer, tmplRow, prefixRow, suffixRow, startNums, function () { updatePreview(); });
     const template = tmplRow.input.value;
     const prefix = prefixRow.cb!.checked ? prefixRow.input.value : '';
     const suffix = suffixRow.cb!.checked ? suffixRow.input.value : '';
-    const starts = getStartNums();
+    const starts: Record<string, number> = { ...getStartNums() };
     let html = '';
     for (const [j, ws] of selected.entries()) {
       const origName = ws.fullName || ws.name || '';
@@ -335,7 +368,7 @@ function _buildRenameInputs(body: HTMLElement, selected: WorkspaceCredit[]): Ren
 
   const { etaRow, updateStaticEta } = _appendDelayAndEta(body, selected.length);
 
-  return { prefixRow, tmplRow, suffixRow, getStartNums, updatePreview, updateStaticEta, etaRow };
+  return { prefixRow, tmplRow, suffixRow, getStartNums, setStartNums, updatePreview, updateStaticEta, etaRow };
 }
 
 function _appendVarHintAndStartNums(body: HTMLElement): void {
@@ -363,23 +396,87 @@ function _appendPreviewSection(body: HTMLElement): HTMLElement {
   return previewList;
 }
 
+// v2.189.0: snapshot live input values BEFORE re-rendering so the user's
+// typed start numbers survive every keystroke in prefix/template/suffix.
+// After re-render, attach `oninput` handlers that write back into `startNums`
+// and trigger a fresh preview.
 function _detectVarsAndRenderStarts(
-  container: HTMLElement, tmplRow: RenameInputsResult['tmplRow'], prefixRow: RenameInputsResult['prefixRow'], suffixRow: RenameInputsResult['suffixRow'],
-  startDollar: number, startHash: number, startStar: number, _updatePreview: () => void,
+  container: HTMLElement,
+  tmplRow: RenameInputsResult['tmplRow'],
+  prefixRow: RenameInputsResult['prefixRow'],
+  suffixRow: RenameInputsResult['suffixRow'],
+  startNums: StartNums,
+  updatePreview: () => void,
 ): void {
-  const allText = tmplRow.input.value + (prefixRow.cb?.checked ? prefixRow.input.value : '') + (suffixRow.cb?.checked ? suffixRow.input.value : '');
+  // 1. Snapshot any currently-rendered inputs into the closure state so we
+  //    don't blow away the user's typed values during the innerHTML wipe.
+  _snapshotStartNumInputsInto(startNums);
+
+  const allText = tmplRow.input.value
+    + (prefixRow.cb?.checked ? prefixRow.input.value : '')
+    + (suffixRow.cb?.checked ? suffixRow.input.value : '');
   const hasDollar = /\$+/.test(allText);
   const hasHash = /#+/.test(allText);
   const hasStar = /\*{2,}/.test(allText);
+
   let html = '';
   if (hasDollar || hasHash || hasStar) {
     html += '<div style="font-size:8px;color:#94a3b8;margin-bottom:3px;">Start Numbers:</div><div style="display:flex;gap:8px;flex-wrap:wrap;">';
-    if (hasDollar) html += buildStartNumInput('$', 'rename-start-dollar', startDollar, '#facc15');
-    if (hasHash) html += buildStartNumInput('#', 'rename-start-hash', startHash, cPrimaryLight);
-    if (hasStar) html += buildStartNumInput('**', 'rename-start-star', startStar, '#34d399');
+    if (hasDollar) html += buildStartNumInput('$', 'rename-start-dollar', startNums.dollar, '#facc15');
+    if (hasHash) html += buildStartNumInput('#', 'rename-start-hash', startNums.hash, cPrimaryLight);
+    if (hasStar) html += buildStartNumInput('**', 'rename-start-star', startNums.star, '#34d399');
     html += '</div>';
   }
   container.innerHTML = html;
+
+  // 2. Re-attach live handlers (innerHTML wiped them).
+  _wireStartNumInput('rename-start-dollar', 'dollar', startNums, updatePreview);
+  _wireStartNumInput('rename-start-hash', 'hash', startNums, updatePreview);
+  _wireStartNumInput('rename-start-star', 'star', startNums, updatePreview);
+}
+
+function _snapshotStartNumInputsInto(startNums: StartNums): void {
+  const dollarEl = document.getElementById('rename-start-dollar') as HTMLInputElement | null;
+  const hashEl = document.getElementById('rename-start-hash') as HTMLInputElement | null;
+  const starEl = document.getElementById('rename-start-star') as HTMLInputElement | null;
+  if (dollarEl) {
+    const n = parseInt(dollarEl.value, 10);
+    if (Number.isFinite(n) && n >= 0) { startNums.dollar = n; }
+  }
+  if (hashEl) {
+    const n = parseInt(hashEl.value, 10);
+    if (Number.isFinite(n) && n >= 0) { startNums.hash = n; }
+  }
+  if (starEl) {
+    const n = parseInt(starEl.value, 10);
+    if (Number.isFinite(n) && n >= 0) { startNums.star = n; }
+  }
+}
+
+function _wireStartNumInput(
+  id: string,
+  key: 'dollar' | 'hash' | 'star',
+  startNums: StartNums,
+  updatePreview: () => void,
+): void {
+  const el = document.getElementById(id) as HTMLInputElement | null;
+  if (!el) { return; }
+  // v2.192.0: clamp on every keystroke so preview + persistence never see
+  // NaN, negatives, or decimals. Empty string is treated as 0 in-memory but
+  // not echoed back during typing — the user keeps typing freely. On blur
+  // the field is reflowed to the canonical integer.
+  el.oninput = function () {
+    const raw = parseInt(el.value, 10);
+    const clamped = Number.isFinite(raw) && raw >= 0 ? Math.floor(raw) : 0;
+    startNums[key] = clamped;
+    updatePreview();
+  };
+  el.onblur = function () {
+    const raw = parseInt(el.value, 10);
+    const clamped = Number.isFinite(raw) && raw >= 0 ? Math.floor(raw) : 0;
+    startNums[key] = clamped;
+    el.value = String(clamped);
+  };
 }
 
 function _appendDelayAndEta(body: HTMLElement, count: number): { delaySlider: HTMLInputElement; etaRow: HTMLElement; updateStaticEta: () => void } {

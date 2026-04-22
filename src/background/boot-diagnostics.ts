@@ -39,6 +39,32 @@ export interface BootErrorContext {
 }
 
 /**
+ * Per-attempt trace recorded by the bounded HEAD-probe loop in
+ * `verifyWasmPresence()`. Always populated (success AND failure) so cold-start
+ * timing issues — e.g. attempt #1 throws "Failed to fetch" then attempt #2
+ * returns 200 — are visible in the popup support report and the SW console
+ * without needing to repro live.
+ *
+ * @since v2.190.0
+ */
+export interface WasmProbeAttempt {
+    /** 1-based attempt index. */
+    attempt: number;
+    /** ISO timestamp when this attempt started. */
+    at: string;
+    /** Milliseconds since the parent probe started (attempt #1 ≈ 0). */
+    atOffsetMs: number;
+    /** Wall-clock duration of this attempt's HEAD request, in ms. */
+    durationMs: number;
+    /** HTTP status returned, or null if the fetch itself threw. */
+    status: number | null;
+    /** `Content-Length` header (raw string), or null when not reported. */
+    contentLength: string | null;
+    /** Error thrown by `fetch(..., { method: "HEAD" })`, or null on success. */
+    error: string | null;
+}
+
+/**
  * Result of the upfront HEAD probe against the bundled WASM asset
  * (`chrome-extension/wasm/sql-wasm.wasm`). Captured by `verifyWasmPresence()`
  * regardless of outcome — when boot fails, this snapshot is persisted into
@@ -57,8 +83,12 @@ export interface WasmProbeResult {
     headError: string | null;
     /** True when the probe completed with status 2xx and non-zero Content-Length. */
     ok: boolean;
-    /** ISO timestamp of when the probe ran. */
+    /** ISO timestamp of when the probe ran (start of attempt #1). */
     at: string;
+    /** Per-attempt trace (always present, even on first-try success). @since v2.190.0 */
+    attempts: WasmProbeAttempt[];
+    /** Total wall-clock duration of the probe across all attempts, in ms. @since v2.190.0 */
+    totalDurationMs: number;
 }
 
 /* ------------------------------------------------------------------ */

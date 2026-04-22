@@ -424,6 +424,25 @@ function truncate(s, n) {
     return s.length <= n ? s : `${s.slice(0, n - 1)}…`;
 }
 
+/**
+ * Extract a 1-indexed line snippet from a line array, optionally with `pad`
+ * lines of leading/trailing context. Returns `{ text, range: { startLine, endLine } }`
+ * where line numbers are 1-indexed and inclusive.
+ *
+ * @param {string[]} ls   - line array (0-indexed)
+ * @param {number}   from - 0-indexed start (inclusive) of the affected range
+ * @param {number}   to   - 0-indexed end (exclusive) of the affected range
+ * @param {number}   pad  - context lines on each side (default 0)
+ */
+function snippetFromLines(ls, from, to, pad = 0) {
+    const start = Math.max(0, from - pad);
+    const end = Math.min(ls.length, to + pad);
+    return {
+        text: ls.slice(start, end).join("\n"),
+        range: { startLine: start + 1, endLine: end },
+    };
+}
+
 function die(msg) {
     if (JSON_MODE) {
         process.stdout.write(JSON.stringify({ version: 1, ok: false, error: msg }, null, 2) + "\n");

@@ -285,11 +285,16 @@ const repairs = [];
                     const after = linesArr.slice(authorBlock.endIdx);
                     const reordered = [...before, ...authorContent, ...middle, ...companyContent, ...after];
                     working = reordered.join("\n");
+                    // Snippet: capture from companyBlock.startIdx through authorBlock.endIdx (the reorder window).
+                    const beforeSnip = snippetFromLines(linesArr, companyBlock.startIdx, authorBlock.endIdx, 1);
+                    const afterSnip = snippetFromLines(reordered, companyBlock.startIdx, authorBlock.endIdx, 1);
                     repairs.push({
                         id,
                         label,
                         status: APPLY ? "applied" : "would-apply",
                         preview: `~ swap "${truncate(companyBlock.heading, 60)}" (lines ${companyBlock.startIdx + 1}-${companyBlock.endIdx}) with "${truncate(authorBlock.heading, 60)}" (lines ${authorBlock.startIdx + 1}-${authorBlock.endIdx})`,
+                        before: beforeSnip.text, beforeRange: beforeSnip.range,
+                        after: afterSnip.text, afterRange: afterSnip.range,
                     });
                 }
             }

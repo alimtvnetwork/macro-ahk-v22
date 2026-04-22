@@ -6,23 +6,9 @@
 
 > **Browser automation for workspace management, credit monitoring, and AI-driven macro execution** — built as a Manifest V3 Chrome extension with a modular standalone script architecture.
 
-<!-- Build & Release -->
-[![CI](https://img.shields.io/github/actions/workflow/status/alimtvnetwork/macro-ahk-v21/ci.yml?branch=main&label=CI&logo=github&style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/actions/workflows/ci.yml)
-
-<!-- Repo activity -->
-[![Issues](https://img.shields.io/github/issues/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/issues)
-[![Pull Requests](https://img.shields.io/github/issues-pr/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/pulls)
-[![Repo Size](https://img.shields.io/github/repo-size/alimtvnetwork/macro-ahk-v21?style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21)
-
-<!-- Community -->
-<!-- (intentionally empty — see mem://constraints/no-static-mockup-badges; only live community badges with real data may be added back here) -->
-
-<!-- Code-quality -->
-[![Known Vulnerabilities](https://img.shields.io/github/issues-search/alimtvnetwork/macro-ahk-v21?query=is%3Aissue%20label%3Asecurity&label=security%20issues&style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/issues?q=is%3Aissue+label%3Asecurity)
-[![Dependabot](https://img.shields.io/github/issues-pr/alimtvnetwork/macro-ahk-v21/dependencies?label=dependabot%20PRs&style=flat-square&logo=dependabot)](https://github.com/alimtvnetwork/macro-ahk-v21/pulls?q=is%3Apr+label%3Adependencies)
-
-<!-- Stack & standards -->
-[![License](https://img.shields.io/github/license/alimtvnetwork/macro-ahk-v21?style=flat-square)](#license)
+<!-- Build & Release --> [![CI](https://img.shields.io/github/actions/workflow/status/alimtvnetwork/macro-ahk-v21/ci.yml?branch=main&label=CI&logo=github&style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/actions/workflows/ci.yml) <!-- Repo activity --> [![Issues](https://img.shields.io/github/issues/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/issues) [![Pull Requests](https://img.shields.io/github/issues-pr/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/pulls) [![Repo Size](https://img.shields.io/github/repo-size/alimtvnetwork/macro-ahk-v21?style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21)
+<!-- Community --> <!-- (intentionally empty — see mem://constraints/no-static-mockup-badges; only live community badges with real data may be added back here) -->
+<!-- Code-quality --> [![Known Vulnerabilities](https://img.shields.io/github/issues-search/alimtvnetwork/macro-ahk-v21?query=is%3Aissue%20label%3Asecurity&label=security%20issues&style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/issues?q=is%3Aissue+label%3Asecurity) [![Dependabot](https://img.shields.io/github/issues-pr/alimtvnetwork/macro-ahk-v21/dependencies?label=dependabot%20PRs&style=flat-square&logo=dependabot)](https://github.com/alimtvnetwork/macro-ahk-v21/pulls?q=is%3Apr+label%3Adependencies) <!-- Stack & standards --> [![License](https://img.shields.io/github/license/alimtvnetwork/macro-ahk-v21?style=flat-square)](#license)
 
 <img src="docs/assets/marco-extension-hero.png" alt="Marco Chrome Extension — Projects view inside the options page" width="820" />
 

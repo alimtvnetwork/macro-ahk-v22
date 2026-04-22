@@ -1,6 +1,6 @@
 # Root README — Read / Write / Validate Procedure
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Updated:** 2026-04-22
 **Status:** Active
 **AI Confidence:** Production-Ready
@@ -72,10 +72,21 @@ Always perform these reads **in parallel** before mutating the file:
 The first ~30 lines (the centered hero `<div>…</div>`) are governed by the strictest invariants. When editing:
 
 1. **Preserve order**: opening `<div align="center">` → logo `<img>` → `# H1` → `> tagline` blockquote → five `<!-- group -->` markers in the fixed order Build & Release / Repo activity / Community / Code-quality / Stack & standards → hero `<img>` → closing `</div>`.
-2. **All five group HTML comment markers must remain present**, even if a group is empty. Empty groups must carry an explanatory `<!-- (intentionally empty …) -->` comment.
-3. **No `img.shields.io/badge/…-…-<color>` static mockup badges** (see `mem://constraints/no-static-mockup-badges`).
-4. **No badges whose rendered text resolves to** `activate`, `no status`, `not found`, `404`, `repo not found`, `no releases found`, `badge not found`. If shields.io fails for a badge URL, remove the badge entirely — do not leave a broken image.
-5. The hero image (last element inside the centering div) stays at `width=820`.
+2. **All five group HTML comment markers must remain present**, even if a group is empty. Empty groups must carry an explanatory `<!-- (intentionally empty …) -->` comment **on the same line** as their group marker.
+3. **Badge layout is 1–2 visual lines, never 5 stacked rows.** All HTML group markers and their badges sit space-separated on at most two consecutive lines with **no blank line between them**. See `11-root-readme-conventions.md` §"Badge Layout Rules" for the grammar.
+4. **No `img.shields.io/badge/…-…-<color>` static mockup badges** (see `mem://constraints/no-static-mockup-badges`).
+5. **No badges whose rendered text resolves to** `activate`, `no status`, `not found`, `404`, `repo not found`, `no releases found`, `badge not found`. If shields.io fails for a badge URL, remove the badge entirely — do not leave a broken image.
+6. The hero image (last element inside the centering div) stays at `width=820`.
+
+#### Quick recipes for common badge edits
+
+| You want to… | Do this | Don't do this |
+|--------------|---------|----------------|
+| Add a new live-data badge to the Code-quality group | Locate `<!-- Code-quality -->` marker, insert the new `[![…](shields-url)](link)` **immediately after** the existing badges in that group on the same line, separated by a single space. | Don't push the new badge onto its own line — it will break the 1–2 line layout. |
+| Remove a broken/`activate` placeholder badge | Delete just that `[![…](…)](…)` segment plus the leading space. Leave the group marker in place. | Don't delete the `<!-- … -->` group marker too — the checker requires all five. |
+| Empty a group entirely (e.g., Codecov was deactivated) | Replace the badges following that group's marker with `<!-- (intentionally empty — <reason>) -->` on the same line as the marker. | Don't insert a `PRs-welcome` or "no status" placeholder to "fill" the group. |
+| Reorder groups | **Don't.** The five-marker order is fixed: Build & Release → Repo activity → Community → Code-quality → Stack & standards. | Don't move Stack & standards above Build & Release "for emphasis". |
+| Switch from 1-row to 2-row layout | Move the `<!-- Community -->` marker (and everything after it) to a new line. The two rows form one paragraph (no blank line between them). | Don't insert a blank line — that creates two paragraphs and the layout becomes "stacked" again. |
 
 ### 3.3 Author / License section editing rules
 

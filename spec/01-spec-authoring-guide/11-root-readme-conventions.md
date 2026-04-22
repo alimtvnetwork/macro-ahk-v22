@@ -53,6 +53,54 @@ The first ~30 lines of `readme.md` MUST follow this exact skeleton:
 
 ---
 
+## Badge Layout Rules (v2.1.0)
+
+The hero badge area MUST be visually compact: **one row preferred, two rows maximum**, never the five-stacked-rows pattern that earlier README revisions used. This keeps the above-the-fold area dominated by the title + tagline + hero screenshot rather than a tall column of shields.
+
+### Why 1–2 lines
+
+- A tall badge stack pushes the hero screenshot below the fold on 1080p displays.
+- Visitors scan badges horizontally — 5 separated rows reads as "noisy", a single row reads as "summary".
+- GitHub's markdown renderer collapses adjacent badge images on the same paragraph into a single wrapping row that breaks naturally at the viewport edge — that wrapping IS the "1–2 line" budget.
+
+### Grammar
+
+A compliant badge area uses **at most two markdown paragraphs** (a paragraph = block separated by blank lines). Within each paragraph, all five group HTML comment markers and their badges sit on the **same line, space-separated**:
+
+```markdown
+<!-- Build & Release --> [![CI](…)](…) <!-- Repo activity --> [![Issues](…)](…) [![PRs](…)](…) [![Repo Size](…)](…)
+<!-- Community --> <!-- (intentionally empty …) --> <!-- Code-quality --> [![Sec](…)](…) [![Dep](…)](…) <!-- Stack & standards --> [![License](…)](…)
+```
+
+Rules:
+
+1. **No blank line between the two badge rows** — they form one paragraph that GitHub wraps to ~1–2 visual lines depending on viewport width.
+2. **Each HTML group marker is followed (on the same line, space-separated) by the badges that belong to it.** The next marker either continues on the same line or starts the second row.
+3. **Empty groups still need their marker** — collapse the explanatory `<!-- (intentionally empty …) -->` onto the same line as the group marker.
+4. **No trailing whitespace** on either badge row, no `<br/>` tags, no `<p>` wrappers.
+5. **The compliance checker (`scripts/check-readme-compliance.mjs`)** parses badge ownership by reading from one HTML comment marker until the next, regardless of line breaks — so collapsed inline form is fully supported (verified 2026-04-22).
+
+### Allowed shapes
+
+| Shape | When to use | Visual outcome |
+|-------|------------|----------------|
+| **One row** (all 5 markers + all badges on one line) | ≤4 total badges | Single wrapping row, ~1 visual line on desktop |
+| **Two rows** (markers split across exactly 2 lines, no blank line between) | 5–9 total badges | 1 visual line on wide desktop, 2 on laptop |
+| **Forbidden: stacked** (each marker on its own line with blank lines between) | — | 5–7 visual rows, pushes hero below fold |
+
+### Worked example (post-2026-04-22 amendment)
+
+This is the canonical layout currently in `readme.md`:
+
+```markdown
+<!-- Build & Release --> [![CI](https://img.shields.io/github/actions/workflow/status/<owner>/<repo>/ci.yml?branch=main&label=CI&logo=github&style=flat-square)](https://github.com/<owner>/<repo>/actions/workflows/ci.yml) <!-- Repo activity --> [![Issues](https://img.shields.io/github/issues/<owner>/<repo>?style=flat-square&logo=github)](https://github.com/<owner>/<repo>/issues) [![Pull Requests](https://img.shields.io/github/issues-pr/<owner>/<repo>?style=flat-square&logo=github)](https://github.com/<owner>/<repo>/pulls) [![Repo Size](https://img.shields.io/github/repo-size/<owner>/<repo>?style=flat-square)](https://github.com/<owner>/<repo>)
+<!-- Community --> <!-- (intentionally empty — see mem://constraints/no-static-mockup-badges) --> <!-- Code-quality --> [![Security](…)](…) [![Dependabot](…)](…) <!-- Stack & standards --> [![License](https://img.shields.io/github/license/<owner>/<repo>?style=flat-square)](#license)
+```
+
+Renders as ~1 line on a 1440px viewport, ~2 lines on a 1024px viewport, exactly as required.
+
+---
+
 ## Forbidden Badge Patterns
 
 The following badge URLs and patterns **MUST NOT** appear in the hero block:

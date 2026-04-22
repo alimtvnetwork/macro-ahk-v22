@@ -1,5 +1,6 @@
 import { test as base, chromium, type BrowserContext, type Page } from '@playwright/test';
 import path from 'path';
+import fs from 'fs';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -18,7 +19,62 @@ const __dirname = path.dirname(__filename);
  * Ref: spec/05-chrome-extension/testing/01-e2e-test-specification.md
  */
 
-const EXTENSION_PATH = path.resolve(__dirname, '../../dist');
+// ─── Build-Output Resolution ─────────────────────────────────────────
+//
+// Vite builds the extension into `chrome-extension/` (see vite.config.extension.ts:31
+// `DIST_DIR = resolve(__dirname, "chrome-extension")`). Older fixtures pointed at
+// `dist/`, which Chromium silently treats as an empty directory and returns
+// ERR_FILE_NOT_FOUND for every popup/options navigation.
+//
+// We probe both candidates and pick the one that actually contains a manifest, so
+// the fixture survives any future rename without breaking E2E.
+
+const REPO_ROOT = path.resolve(__dirname, '../..');
+const EXTENSION_CANDIDATES = [
+  path.join(REPO_ROOT, 'chrome-extension'),
+  path.join(REPO_ROOT, 'dist'),
+];
+
+function resolveExtensionPath(): string {
+  for (const candidate of EXTENSION_CANDIDATES) {
+    if (fs.existsSync(path.join(candidate, 'manifest.json'))) {
+      return candidate;
+    }
+  }
+  // Fall back to the canonical build dir; Chromium will produce a clear error
+  // and the diagnostic message below points at the real cause.
+  return EXTENSION_CANDIDATES[0];
+}
+
+const EXTENSION_PATH = resolveExtensionPath();
+
+// ─── Manifest-Driven Page Paths ──────────────────────────────────────
+//
+// popup / options HTML paths are declared in the built manifest. Reading them
+// from disk eliminates hard-coded paths drifting between vite config + fixture.
+
+interface BuiltManifest {
+  action?: { default_popup?: string };
+  options_page?: string;
+  options_ui?: { page?: string };
+}
+
+function readBuiltManifest(): BuiltManifest {
+  const manifestPath = path.join(EXTENSION_PATH, 'manifest.json');
+  if (!fs.existsSync(manifestPath)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(manifestPath, 'utf8')) as BuiltManifest;
+  } catch {
+    return {};
+  }
+}
+
+const BUILT_MANIFEST = readBuiltManifest();
+const POPUP_PATH = BUILT_MANIFEST.action?.default_popup ?? 'src/popup/popup.html';
+const OPTIONS_PATH =
+  BUILT_MANIFEST.options_page ??
+  BUILT_MANIFEST.options_ui?.page ??
+  'src/options/options.html';
 
 // ─── Standalone Helpers ──────────────────────────────────────────────
 
@@ -26,6 +82,14 @@ const EXTENSION_PATH = path.resolve(__dirname, '../../dist');
 export async function launchExtension(
   browserType: typeof chromium = chromium
 ): Promise<BrowserContext> {
+  if (!fs.existsSync(path.join(EXTENSION_PATH, 'manifest.json'))) {
+    throw new Error(
+      `[fixtures] Built extension not found at ${EXTENSION_PATH}.\n` +
+      `Expected manifest.json at "${path.join(EXTENSION_PATH, 'manifest.json')}".\n` +
+      `Reason: tests/e2e/global-setup.ts must run "build:extension" before any spec.\n` +
+      `Fix: ensure the build step succeeded, or run \`pnpm run build:extension\` manually.`
+    );
+  }
   return browserType.launchPersistentContext('', {
     headless: false,
     args: [
@@ -51,7 +115,7 @@ export async function getExtensionId(context: BrowserContext): Promise<string> {
 /** Open the extension popup page. */
 export async function openPopup(context: BrowserContext, extensionId: string): Promise<Page> {
   const popup = await context.newPage();
-  await popup.goto(`chrome-extension://${extensionId}/popup.html`);
+  await popup.goto(`chrome-extension://${extensionId}/${POPUP_PATH}`);
   await popup.waitForLoadState('domcontentloaded');
   return popup;
 }
@@ -59,10 +123,18 @@ export async function openPopup(context: BrowserContext, extensionId: string): P
 /** Open the extension options page. */
 export async function openOptions(context: BrowserContext, extensionId: string): Promise<Page> {
   const options = await context.newPage();
-  await options.goto(`chrome-extension://${extensionId}/options.html`);
+  await options.goto(`chrome-extension://${extensionId}/${OPTIONS_PATH}`);
   await options.waitForLoadState('domcontentloaded');
   return options;
 }
+
+/** Resolved paths exposed for spec files that navigate manually. */
+export const EXTENSION_PATHS = {
+  root: EXTENSION_PATH,
+  popup: POPUP_PATH,
+  options: OPTIONS_PATH,
+} as const;
+
 
 // ─── Custom Test Fixture ─────────────────────────────────────────────
 

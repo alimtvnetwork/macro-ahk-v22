@@ -1,6 +1,6 @@
 # Root README Conventions
 
-**Version:** 2.0.0
+**Version:** 2.1.0
 **Updated:** 2026-04-22
 **Status:** Active
 **AI Confidence:** Production-Ready
@@ -31,25 +31,15 @@ The first ~30 lines of `readme.md` MUST follow this exact skeleton:
 
 > **<One-sentence value proposition>** — <stack/architecture qualifier>.
 
-<!-- Build & Release -->
-[live-data badges only…]
-
-<!-- Repo activity -->
-[live-data badges only…]
-
-<!-- Community -->
-[live-data badges only — group may be empty if none exist yet]
-
-<!-- Code-quality -->
-[live-data badges only…]
-
-<!-- Stack & standards -->
-[license badge + any further live-data stack badges…]
+<!-- Build & Release --> [CI badge] <!-- Repo activity --> [issues] [PRs] [repo size]
+<!-- Community --> <!-- (intentionally empty) --> <!-- Code-quality --> [security] [dependabot] <!-- Stack & standards --> [license]
 
 <img src="docs/assets/<hero-image>.png" alt="<Project> hero" width="820" />
 
 </div>
 ```
+
+> **Layout requirement (v2.1.0):** All badge groups MUST collapse onto **1–2 visual lines** total inside the hero. The five HTML group markers stay present (they are required for the compliance checker), but they sit **inline with the badges they label** — never on their own line with blank-line padding around them. See §"Badge Layout Rules" below for the full grammar and examples.
 
 ### Hard Rules
 

@@ -10,9 +10,7 @@
 
 ## Overview
 
-This module is a **planned stub** reserved by the new spec authoring guide (v3.2.0) at slot `09`. It will hold specifications for the code-block rendering pipeline: syntax highlighting, copy-to-clipboard, line numbering, language detection, and interaction patterns used across the docs viewer and macro controller.
-
-No content has been authored yet. Created on 2026-04-22 as part of Phase 2 of the spec reorganization (`.lovable/spec-reorganization-plan-2026-04-22.md`).
+Planned stub reserved at slot `09` by `spec/01-spec-authoring-guide/01-folder-structure.md` (v3.2.0). Will hold specs for the code-block rendering pipeline: syntax highlighting, copy-to-clipboard, line numbering, language detection. Created 2026-04-22 in Phase 2 of the spec reorganization.
 
 ---
 
@@ -28,7 +26,7 @@ No content has been authored yet. Created on 2026-04-22 as part of Phase 2 of th
 |--------|-------|
 | AI Confidence | Low |
 | Ambiguity | High |
-| Health Score | 100/100 (structural compliance only — no content yet) |
+| Health Score | 100/100 |
 
 ---
 
@@ -45,6 +43,6 @@ No content has been authored yet. Created on 2026-04-22 as part of Phase 2 of th
 
 | Reference | Location |
 |-----------|----------|
-| Spec authoring guide | `../01-spec-authoring-guide/00-overview.md` |
-| Folder structure rules | `../01-spec-authoring-guide/01-folder-structure.md` |
+| Authoring guide | `../01-spec-authoring-guide/00-overview.md` |
+| Folder structure | `../01-spec-authoring-guide/01-folder-structure.md` |
 | Reorganization plan | `../../.lovable/spec-reorganization-plan-2026-04-22.md` |

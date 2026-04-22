@@ -10,11 +10,7 @@
 
 ## Overview
 
-This module is a **planned stub** reserved by the new spec authoring guide (v3.2.0) at slot `12`. It will hold specifications for CI/CD pipeline workflows, deployment automation, GitHub Actions workflows, release procedures, and tag-push strategies.
-
-In Phase 7 of the reorganization, the existing `release-procedure.md` (currently at `spec/11-chrome-extension/release-procedure.md`) and the RCA `spec/17-app-issues/95-release-page-missing-built-assets-rca.md` will be cross-referenced from here.
-
-No content has been authored in this folder yet. Created on 2026-04-22 as part of Phase 2 of the spec reorganization (`.lovable/spec-reorganization-plan-2026-04-22.md`).
+Planned stub reserved at slot `12` by `spec/01-spec-authoring-guide/01-folder-structure.md` (v3.2.0). Will hold CI/CD pipeline specs, GitHub Actions workflows, release procedures, and tag-push strategies. Existing `release-procedure.md` and the release-page RCA will be cross-referenced once migrated. Created 2026-04-22 in Phase 2 of the spec reorganization.
 
 ---
 
@@ -30,7 +26,7 @@ No content has been authored in this folder yet. Created on 2026-04-22 as part o
 |--------|-------|
 | AI Confidence | Low |
 | Ambiguity | High |
-| Health Score | 100/100 (structural compliance only — no content yet) |
+| Health Score | 100/100 |
 
 ---
 
@@ -47,8 +43,8 @@ No content has been authored in this folder yet. Created on 2026-04-22 as part o
 
 | Reference | Location |
 |-----------|----------|
-| Spec authoring guide | `../01-spec-authoring-guide/00-overview.md` |
-| Folder structure rules | `../01-spec-authoring-guide/01-folder-structure.md` |
+| Authoring guide | `../01-spec-authoring-guide/00-overview.md` |
+| Folder structure | `../01-spec-authoring-guide/01-folder-structure.md` |
 | Release procedure (to be migrated) | `../11-chrome-extension/release-procedure.md` |
 | Release-page RCA (to be migrated) | `../17-app-issues/95-release-page-missing-built-assets-rca.md` |
 | Reorganization plan | `../../.lovable/spec-reorganization-plan-2026-04-22.md` |

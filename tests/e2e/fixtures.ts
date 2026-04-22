@@ -135,6 +135,68 @@ export const EXTENSION_PATHS = {
   options: OPTIONS_PATH,
 } as const;
 
+// ─── Shared URL Builders & Page Openers ──────────────────────────────
+//
+// MANDATORY: Spec files must NEVER hard-code "popup.html" or "options.html",
+// nor manually template a `chrome-extension://${id}/...` string. The
+// manifest is the single source of truth for both paths — `vite.config.extension.ts`
+// can rename them, and any spec that bypasses these helpers will silently
+// break the next time the build layout changes (this is exactly what caused
+// the ERR_FILE_NOT_FOUND wave that produced this fixture refactor).
+//
+// Use:
+//   - `popupUrl(extensionId)` / `optionsUrl(extensionId)` to build a URL
+//   - `openPopupPage(context, id)` / `openOptionsPage(context, id)` to open + wait
+//   - `extensionUrl(id, EXTENSION_PATHS.popup)` for any other ad-hoc path
+//
+// `scripts/check-no-hardcoded-extension-paths.mjs` enforces this contract
+// in CI by lint-failing any spec that contains the literals `popup.html`,
+// `options.html`, or `chrome-extension://${...}` outside of fixtures.ts.
+
+/** Build any chrome-extension:// URL from a manifest-relative path. */
+export function extensionUrl(extensionId: string, relativePath: string): string {
+  const clean = relativePath.replace(/^\/+/, '');
+  return `chrome-extension://${extensionId}/${clean}`;
+}
+
+/** Build the manifest-declared popup URL. */
+export function popupUrl(extensionId: string): string {
+  return extensionUrl(extensionId, EXTENSION_PATHS.popup);
+}
+
+/** Build the manifest-declared options URL. */
+export function optionsUrl(extensionId: string): string {
+  return extensionUrl(extensionId, EXTENSION_PATHS.options);
+}
+
+/**
+ * Open a manifest-declared extension page on an existing context and wait for
+ * `domcontentloaded`. Use this whenever a spec needs an *additional* page
+ * beyond the auto-injected `popup` / `options` fixtures (e.g. cold-start tests
+ * that need their own console listener attached before the navigation).
+ */
+export async function openExtensionPage(
+  context: BrowserContext,
+  extensionId: string,
+  which: 'popup' | 'options',
+): Promise<Page> {
+  const page = await context.newPage();
+  const url = which === 'popup' ? popupUrl(extensionId) : optionsUrl(extensionId);
+  await page.goto(url);
+  await page.waitForLoadState('domcontentloaded');
+  return page;
+}
+
+/** Convenience alias: open a fresh popup page on the existing context. */
+export function openPopupPage(context: BrowserContext, extensionId: string): Promise<Page> {
+  return openExtensionPage(context, extensionId, 'popup');
+}
+
+/** Convenience alias: open a fresh options page on the existing context. */
+export function openOptionsPage(context: BrowserContext, extensionId: string): Promise<Page> {
+  return openExtensionPage(context, extensionId, 'options');
+}
+
 
 // ─── Custom Test Fixture ─────────────────────────────────────────────
 

@@ -272,7 +272,7 @@ a second column.
 
 > **Spec:** [Database Naming Conventions — Rule 9: Auto-Generated Inverted (Computed) Fields](../../04-database-conventions/01-naming-conventions.md#rule-9-auto-generated-inverted-computed-fields-in-code)
 >
-> **Codegen:** [`linters-cicd/codegen/`](../../../linters-cicd/codegen/README.md) emits the inverse methods/traits/getters for Go, PHP, and TypeScript automatically.
+> **Codegen:** `linters-cicd/codegen/` (planned out-of-repo package) emits the inverse methods/traits/getters for Go, PHP, and TypeScript automatically.
 >
 > **Linter:** `BOOL-NEG-001` blocks `Not`/`No`-prefixed column names from being introduced via migration.
 

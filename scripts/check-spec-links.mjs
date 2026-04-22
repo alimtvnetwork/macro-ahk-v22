@@ -2,146 +2,75 @@
 /**
  * check-spec-links.mjs
  *
- * Build-time guard that scans every Markdown file under `spec/` for relative
- * links and fails (exit 1) if any link target is missing on disk.
+ * Build-time guard for relative links under `spec/`.
  *
- * Why: prevents silent rot of cross-spec references (e.g. links into
- * spec/21-app/02-features/devtools-and-injection/developer-guide/04-sdk-namespace.md) when
- * files are renamed, moved, or deleted without updating callers.
+ * Behaviour is driven by `scripts/check-spec-links.config.json`:
+ *   - `scanRoots`   — directories scanned for .md files
+ *   - `excludeDirs` — directory NAMES skipped during scan (archives)
+ *   - `autoResolve` — see scripts/lib/spec-links-core.mjs (used by report-spec-links-ci.mjs)
  *
- * Rules:
- *  - Scans files matching: spec/**\/*.md
- *  - Extracts `[text](target)` link patterns; ignores fenced code blocks (```).
- *  - Skips external/anchor targets (http(s)://, mailto:, tel:, #..., /..., mem://, knowledge://).
- *  - Skips false-positive prose like `[T](val)` where target has no `/`, `.`, or `#`.
- *  - Strips `#fragment` and `?query` before resolving.
- *  - Resolves the target relative to the markdown file's directory.
- *  - Fails if the resolved path does not exist on disk.
+ * Modes:
+ *   (default)            baseline-aware — pre-existing breaks pass, new ones fail
+ *   --strict             ignore baseline; fail on ANY broken link
+ *   --update-baseline    snapshot current breaks into baseline file and exit OK
  *
- * Baseline:
- *  - A snapshot of pre-existing broken links lives at
- *    scripts/check-spec-links.baseline.json. Builds pass when current breaks
- *    match the baseline; they fail on any NEW break.
- *  - Regenerate the baseline after intentional spec moves:
- *      node scripts/check-spec-links.mjs --update-baseline
- *  - To ignore the baseline and fail on ANY broken link:
- *      node scripts/check-spec-links.mjs --strict
- *
- * Output format follows project Code Red logging:
- *   exact path, missing item, reason.
+ * Output follows project Code Red logging: exact path, missing item, reason.
  */
 
-import { readdirSync, readFileSync, statSync, existsSync, writeFileSync } from "node:fs";
-import { join, resolve, dirname, relative } from "node:path";
-import { fileURLToPath } from "node:url";
+import { readFileSync, existsSync, writeFileSync } from "node:fs";
+import { join, relative } from "node:path";
+import {
+  REPO_ROOT,
+  loadConfig,
+  CONFIG_PATH,
+  collectMarkdownFiles,
+  extractLinks,
+  isSkippableTarget,
+  resolveLinkTarget,
+} from "./lib/spec-links-core.mjs";
 
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const REPO_ROOT = resolve(__dirname, "..");
-const SPEC_ROOT = join(REPO_ROOT, "spec");
 const BASELINE_PATH = join(REPO_ROOT, "scripts", "check-spec-links.baseline.json");
-
 const SCRIPT_TAG = "[check-spec-links]";
 
 const argv = new Set(process.argv.slice(2));
 const UPDATE_BASELINE = argv.has("--update-baseline");
-const STRICT = argv.has("--strict"); // ignore baseline; fail on ANY broken link
-
-/**
- * Directories whose contents are NEVER scanned for broken links.
- * Kept in sync with scripts/report-spec-links-ci.mjs — see that file
- * for the Code Red rationale.
- */
-const SCAN_EXCLUDE_DIRS = new Set([
-  "99-archive",
-  "imported", // matches spec/02-coding-guidelines/imported/
-]);
-
-/** Recursively collect all .md files under a directory, skipping archives. */
-function collectMarkdownFiles(dir) {
-  const out = [];
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    const st = statSync(full);
-    if (st.isDirectory()) {
-      if (SCAN_EXCLUDE_DIRS.has(entry)) continue;
-      out.push(...collectMarkdownFiles(full));
-    } else if (st.isFile() && entry.toLowerCase().endsWith(".md")) {
-      out.push(full);
-    }
-  }
-  return out;
-}
-
-
-/** Strip fenced code blocks (``` ... ```) so we don't lint code samples. */
-function stripFencedBlocks(source) {
-  const lines = source.split(/\r?\n/);
-  const out = [];
-  let inFence = false;
-  for (const line of lines) {
-    if (/^\s*```/.test(line)) {
-      inFence = !inFence;
-      out.push(""); // preserve line numbers
-      continue;
-    }
-    out.push(inFence ? "" : line);
-  }
-  return out.join("\n");
-}
-
-/** Returns true if the link target should be skipped (external / anchor / etc). */
-function isSkippableTarget(target) {
-  if (!target) return true;
-  if (target.startsWith("#")) return true;
-  if (target.startsWith("/")) return true; // root-relative — out of scope here
-  if (target.startsWith("mem://")) return true;
-  if (target.startsWith("knowledge://")) return true;
-  if (/^[a-z][a-z0-9+.-]*:/i.test(target)) return true; // http:, https:, mailto:, tel:, etc.
-  // False-positive guard: real file links contain at least one of `/`, `.`, or `#`.
-  // Things like `[T](val)` or `[K,V](items)` are TypeScript generic syntax in prose,
-  // not markdown links — skip them.
-  if (!/[/.#]/.test(target)) return true;
-  // False-positive guard: prose/code signatures like `[T](src.AppError()` or `[T any](...)`
-  // are not file links even though they contain dots.
-  if (target === "..." || target.endsWith("(") || target.includes("(")) return true;
-  return false;
-}
-
-/** Extract all markdown links (text, target, lineNumber) from a source string. */
-function extractLinks(source) {
-  const stripped = stripFencedBlocks(source);
-  const links = [];
-  const linkRegex = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
-  const lines = stripped.split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    let match;
-    linkRegex.lastIndex = 0;
-    while ((match = linkRegex.exec(line)) !== null) {
-      links.push({
-        text: match[1],
-        target: match[2],
-        lineNumber: i + 1,
-      });
-    }
-  }
-  return links;
-}
+const STRICT = argv.has("--strict");
 
 function main() {
-  if (!existsSync(SPEC_ROOT)) {
-    console.error(
-      `${SCRIPT_TAG} HARD ERROR — spec root not found.\n` +
-        `  path: ${SPEC_ROOT}\n` +
-        `  missing: directory 'spec/'\n` +
-        `  reason: this script must be run from repo root and 'spec/' must exist.`
+  const { config, source: configSource, error: configError } = loadConfig();
+
+  if (configSource === "invalid") {
+    console.warn(
+      `${SCRIPT_TAG} WARN — config file failed to parse, falling back to defaults.\n` +
+        `  path:   ${relative(REPO_ROOT, CONFIG_PATH)}\n` +
+        `  reason: ${configError}\n` +
+        `  fix:    repair the JSON or delete the file to use built-in defaults.`
     );
-    process.exit(1);
   }
 
-  const files = collectMarkdownFiles(SPEC_ROOT);
+  const excludeDirNames = new Set(config.excludeDirs);
+
+  const scanAbsRoots = [];
+  for (const rel of config.scanRoots) {
+    const abs = join(REPO_ROOT, rel);
+    if (!existsSync(abs)) {
+      console.error(
+        `${SCRIPT_TAG} HARD ERROR — scan root not found.\n` +
+          `  path:    ${rel}  (resolved: ${abs})\n` +
+          `  missing: directory listed in scanRoots\n` +
+          `  reason:  every scanRoots entry must exist on disk.\n` +
+          `  fix:     edit ${relative(REPO_ROOT, CONFIG_PATH)} → "scanRoots".`
+      );
+      process.exit(1);
+    }
+    scanAbsRoots.push(abs);
+  }
+
+  const files = [];
+  for (const root of scanAbsRoots) {
+    collectMarkdownFiles(root, excludeDirNames, files);
+  }
+
   let totalLinks = 0;
   let checkedLinks = 0;
   const broken = [];
@@ -154,13 +83,8 @@ function main() {
     for (const link of links) {
       if (isSkippableTarget(link.target)) continue;
       checkedLinks++;
-
-      // Strip fragment + query.
-      const cleanTarget = link.target.split("#")[0].split("?")[0];
-      if (!cleanTarget) continue; // pure fragment after split — skip
-
-      const resolved = resolve(dirname(file), cleanTarget);
-
+      const resolved = resolveLinkTarget(file, link.target);
+      if (!resolved) continue;
       if (!existsSync(resolved)) {
         broken.push({
           source: relative(REPO_ROOT, file),
@@ -177,12 +101,10 @@ function main() {
     `${SCRIPT_TAG} scanned ${files.length} markdown files, ` +
     `${totalLinks} total links, ${checkedLinks} relative links checked.`;
 
-  // Build a stable key for each broken link so the baseline survives unrelated
-  // file edits (we key on source + target only, NOT line number).
+  // Baseline survives unrelated edits — key on (source, target), not line.
   const keyOf = (b) => `${b.source}|${b.target}`;
   const currentKeys = new Set(broken.map(keyOf));
 
-  // --update-baseline: snapshot ALL current breaks and exit OK.
   if (UPDATE_BASELINE) {
     const payload = {
       generatedAt: new Date().toISOString(),
@@ -193,15 +115,12 @@ function main() {
     };
     writeFileSync(BASELINE_PATH, JSON.stringify(payload, null, 2) + "\n", "utf8");
     console.log(
-      `${SCRIPT_TAG} baseline updated: ${broken.length} entries written to ${relative(
-        REPO_ROOT,
-        BASELINE_PATH
-      )}.`
+      `${SCRIPT_TAG} baseline updated: ${broken.length} entries written to ` +
+        relative(REPO_ROOT, BASELINE_PATH) + "."
     );
     return;
   }
 
-  // Load baseline (if present) so pre-existing rot doesn't fail the build.
   let baselineKeys = new Set();
   if (!STRICT && existsSync(BASELINE_PATH)) {
     try {
@@ -211,7 +130,7 @@ function main() {
     } catch (err) {
       console.error(
         `${SCRIPT_TAG} HARD ERROR — failed to parse baseline.\n` +
-          `  path: ${relative(REPO_ROOT, BASELINE_PATH)}\n` +
+          `  path:   ${relative(REPO_ROOT, BASELINE_PATH)}\n` +
           `  reason: ${err instanceof Error ? err.message : String(err)}\n` +
           `  fix:    delete the file or regenerate via 'node scripts/check-spec-links.mjs --update-baseline'.`
       );
@@ -219,7 +138,6 @@ function main() {
     }
   }
 
-  // Partition: new breaks (not in baseline) vs known/baselined.
   const newlyBroken = broken.filter((b) => !baselineKeys.has(keyOf(b)));
   const stale = [...baselineKeys].filter((k) => !currentKeys.has(k));
 

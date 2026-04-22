@@ -264,6 +264,8 @@ function recordDisabled(id, label) {
 {
     const id = "author-misorder";
     const label = "Reorder Author/Company H3 sub-sections (Author first)";
+    if (!enabled(id)) { recordDisabled(id, label); }
+    else {
     const linesNoCode = stripCodeFences(working).split(/\r?\n/);
     const authorIdx = linesNoCode.findIndex((l) => /^##\s+Author\b/i.test(l));
 

@@ -101,8 +101,8 @@
  *               --apply to remediate; finally re-run the checker to confirm.)
  */
 
-import { readFileSync, writeFileSync, existsSync, copyFileSync, mkdirSync, statSync, readdirSync } from "node:fs";
-import { resolve, dirname, relative, join, sep } from "node:path";
+import { readFileSync, writeFileSync, existsSync, copyFileSync, mkdirSync, readdirSync } from "node:fs";
+import { resolve, dirname, relative, join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);

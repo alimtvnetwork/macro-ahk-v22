@@ -37,17 +37,45 @@ const REQUIRED_PERMISSIONS = [
 async function globalSetup() {
   console.log('\n🔨 Building extension…');
 
-  // Step 1: Build
-  try {
-    execSync('npm run build:extension', {
-      cwd: path.resolve(__dirname, '../..'),
-      stdio: 'inherit',
-      timeout: 120_000,
-    });
-  } catch (err) {
-    throw new Error(
-      `Extension build failed. Ensure "build:extension" script exists in package.json.\n${err}`
-    );
+  const repoRoot = path.resolve(__dirname, '../..');
+
+  // Detect package manager: composite scripts (e.g. build:macro-controller) call `pnpm run …`
+  // internally, so we prefer pnpm when available and fall back to npm otherwise.
+  const pm = (() => {
+    try {
+      execSync('pnpm --version', { stdio: 'ignore' });
+      return 'pnpm';
+    } catch {
+      return 'npm';
+    }
+  })();
+  console.log(`📦 Using package manager: ${pm}`);
+
+  // build:extension requires standalone dist artifacts (marco-sdk, xpath, macro-controller)
+  // to already exist on disk. CI builds them in parallel jobs; for local/playwright runs we
+  // must build them sequentially first, then run the extension build.
+  const buildSteps: { label: string; script: string; timeout: number }[] = [
+    { label: 'marco-sdk',        script: 'build:sdk',              timeout: 180_000 },
+    { label: 'xpath',            script: 'build:xpath',            timeout: 180_000 },
+    { label: 'macro-controller', script: 'build:macro-controller', timeout: 240_000 },
+    { label: 'extension',        script: 'build:extension',        timeout: 240_000 },
+  ];
+
+  for (const step of buildSteps) {
+    const cmd = `${pm} run ${step.script}`;
+    console.log(`\n→ Building ${step.label} (${cmd})…`);
+    try {
+      execSync(cmd, {
+        cwd: repoRoot,
+        stdio: 'inherit',
+        timeout: step.timeout,
+      });
+    } catch (err) {
+      throw new Error(
+        `Build step "${step.label}" failed (command: ${cmd}).\n` +
+        `Ensure the corresponding npm script exists in package.json and that prior steps produced their dist/ output.\n${err}`
+      );
+    }
   }
 
   // Step 2: Verify dist/ exists

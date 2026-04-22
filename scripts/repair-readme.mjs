@@ -141,9 +141,12 @@ function recordDisabled(id, label) {
     repairs.push({ id, label, status: "skipped", reason });
 }
 
+// ─── Repair #1: centered-hero ────────────────────────────────────────────────
 {
     const id = "centered-hero";
     const label = "Insert <div align=\"center\"> wrapper around hero block";
+    if (!enabled(id)) { recordDisabled(id, label); }
+    else {
     const lines = working.split(/\r?\n/);
 
     // Already has centering div above the H1?

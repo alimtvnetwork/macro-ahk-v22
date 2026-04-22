@@ -41,6 +41,15 @@
  *
  *   --file=<path>       Override target README path (default: ./readme.md).
  *
+ *   --audit[=<path>]    Write a JSON audit log of every mutation performed
+ *                       (or that would be performed in dry-run). The log
+ *                       captures, per repair: id, label, status, reason,
+ *                       and exact before/after snippets of the affected
+ *                       region. Default path:
+ *                         .lovable/reports/readme-repair-audit-<ISO>.json
+ *                       Audit logs are written for BOTH dry-run and apply
+ *                       modes so handoffs can review proposed changes.
+ *
  * Safety contract:
  *   - The script never edits content INSIDE existing badge blocks, code
  *     fences, or the author biography paragraphs.
@@ -54,7 +63,7 @@
  *               --apply to remediate; finally re-run the checker to confirm.)
  */
 
-import { readFileSync, writeFileSync, existsSync, copyFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, copyFileSync, mkdirSync } from "node:fs";
 import { resolve, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -71,6 +80,18 @@ const README_PATH = fileArg
     ? resolve(REPO_ROOT, fileArg.slice("--file=".length))
     : resolve(REPO_ROOT, "readme.md");
 
+// --audit (no value) → default path; --audit=<path> → explicit path; absent → no audit log.
+const auditFlag = args.find((a) => a === "--audit" || a.startsWith("--audit="));
+const AUDIT_ENABLED = Boolean(auditFlag);
+const AUDIT_PATH = (() => {
+    if (!AUDIT_ENABLED) return null;
+    if (auditFlag === "--audit") {
+        const stamp = new Date().toISOString().replace(/[:.]/g, "-");
+        return resolve(REPO_ROOT, ".lovable/reports", `readme-repair-audit-${stamp}.json`);
+    }
+    return resolve(REPO_ROOT, auditFlag.slice("--audit=".length));
+})();
+
 if (!existsSync(README_PATH)) {
     die(`readme.md not found at: ${README_PATH}`);
 }
@@ -78,7 +99,7 @@ if (!existsSync(README_PATH)) {
 const original = readFileSync(README_PATH, "utf8");
 let working = original;
 
-/** @type {Array<{ id: string; label: string; status: "applied"|"would-apply"|"skipped"|"not-needed"; reason?: string; preview?: string }>} */
+/** @type {Array<{ id: string; label: string; status: "applied"|"would-apply"|"skipped"|"not-needed"; reason?: string; preview?: string; before?: string; after?: string; beforeRange?: { startLine: number; endLine: number }; afterRange?: { startLine: number; endLine: number } }>} */
 const repairs = [];
 
 // ─── Repair #1: centered-hero ────────────────────────────────────────────────
@@ -110,7 +131,15 @@ const repairs = [];
             const newLines = [...lines];
             newLines.splice(insertAt, 0, "</div>", "");
             const next = newLines.join("\n");
-            repairs.push({ id, label, status: APPLY ? "applied" : "would-apply", preview: `+ insert </div> at line ${insertAt + 1} (before first ## heading) — close unbalanced opening` });
+            const beforeSnip = snippetFromLines(lines, insertAt - 1, insertAt, 3);
+            const afterSnip = snippetFromLines(newLines, insertAt - 1, insertAt + 2, 3);
+            repairs.push({
+                id, label,
+                status: APPLY ? "applied" : "would-apply",
+                preview: `+ insert </div> at line ${insertAt + 1} (before first ## heading) — close unbalanced opening`,
+                before: beforeSnip.text, beforeRange: beforeSnip.range,
+                after: afterSnip.text, afterRange: afterSnip.range,
+            });
             working = next;
         } else {
             repairs.push({ id, label, status: "skipped", reason: `more closing </div> than opening (${opens} open / ${closes} close) — manual review required` });
@@ -136,7 +165,16 @@ const repairs = [];
             `+ insert <div align="center"> at line ${openAt + 1}`,
             `+ insert </div> at line ${closeAt + 3} (before first ## heading)`,
         ];
-        repairs.push({ id, label, status: APPLY ? "applied" : "would-apply", preview: previewParts.join("; ") });
+        // Snippet: capture the entire hero region (from openAt up to old closeAt).
+        const beforeSnip = snippetFromLines(lines, openAt, Math.min(closeAt, openAt + 12), 2);
+        const afterSnip = snippetFromLines(newLines, openAt, Math.min(closeAt + 2, openAt + 14), 2);
+        repairs.push({
+            id, label,
+            status: APPLY ? "applied" : "would-apply",
+            preview: previewParts.join("; "),
+            before: beforeSnip.text, beforeRange: beforeSnip.range,
+            after: afterSnip.text, afterRange: afterSnip.range,
+        });
         working = next;
     }
 }
@@ -162,7 +200,17 @@ const repairs = [];
         ].join("\n");
         const trimmed = working.replace(/\s+$/, "");
         const next = `${trimmed}\n${stub}`;
-        repairs.push({ id, label, status: APPLY ? "applied" : "would-apply", preview: `+ append 7-line "## License" section at end of file` });
+        const workingLines = working.split(/\r?\n/);
+        const nextLines = next.split(/\r?\n/);
+        const beforeSnip = snippetFromLines(workingLines, Math.max(0, workingLines.length - 4), workingLines.length, 0);
+        const afterSnip = snippetFromLines(nextLines, Math.max(0, workingLines.length - 4), nextLines.length, 0);
+        repairs.push({
+            id, label,
+            status: APPLY ? "applied" : "would-apply",
+            preview: `+ append 7-line "## License" section at end of file`,
+            before: beforeSnip.text, beforeRange: beforeSnip.range,
+            after: afterSnip.text, afterRange: afterSnip.range,
+        });
         working = next;
     }
 }
@@ -237,11 +285,16 @@ const repairs = [];
                     const after = linesArr.slice(authorBlock.endIdx);
                     const reordered = [...before, ...authorContent, ...middle, ...companyContent, ...after];
                     working = reordered.join("\n");
+                    // Snippet: capture from companyBlock.startIdx through authorBlock.endIdx (the reorder window).
+                    const beforeSnip = snippetFromLines(linesArr, companyBlock.startIdx, authorBlock.endIdx, 1);
+                    const afterSnip = snippetFromLines(reordered, companyBlock.startIdx, authorBlock.endIdx, 1);
                     repairs.push({
                         id,
                         label,
                         status: APPLY ? "applied" : "would-apply",
                         preview: `~ swap "${truncate(companyBlock.heading, 60)}" (lines ${companyBlock.startIdx + 1}-${companyBlock.endIdx}) with "${truncate(authorBlock.heading, 60)}" (lines ${authorBlock.startIdx + 1}-${authorBlock.endIdx})`,
+                        before: beforeSnip.text, beforeRange: beforeSnip.range,
+                        after: afterSnip.text, afterRange: afterSnip.range,
                     });
                 }
             }
@@ -259,6 +312,48 @@ if (APPLY && changed) {
     writeFileSync(README_PATH, working, "utf8");
 }
 
+// ─── Audit log ───────────────────────────────────────────────────────────────
+// Always written when --audit is passed, for BOTH dry-run and apply, so handoff
+// reviewers can inspect proposed changes before granting --apply.
+let auditWritten = null;
+if (AUDIT_ENABLED && AUDIT_PATH) {
+    const auditPayload = {
+        version: 1,
+        kind: "readme-repair-audit",
+        timestamp: new Date().toISOString(),
+        file: README_PATH,
+        mode: APPLY ? "apply" : "dry-run",
+        applied: APPLY && changed,
+        changedBytes: working.length - original.length,
+        summary: {
+            total: repairs.length,
+            applied: repairs.filter((r) => r.status === "applied").length,
+            wouldApply: repairs.filter((r) => r.status === "would-apply").length,
+            skipped: repairs.filter((r) => r.status === "skipped").length,
+            notNeeded: repairs.filter((r) => r.status === "not-needed").length,
+        },
+        // Mutations only — repairs that actually changed (or would change) the file.
+        mutations: repairs
+            .filter((r) => r.status === "applied" || r.status === "would-apply")
+            .map((r) => ({
+                id: r.id,
+                label: r.label,
+                status: r.status,
+                preview: r.preview ?? null,
+                before: { range: r.beforeRange ?? null, snippet: r.before ?? "" },
+                after: { range: r.afterRange ?? null, snippet: r.after ?? "" },
+            })),
+        // Full repair set for traceability (skipped/not-needed too, no snippets).
+        allRepairs: repairs.map((r) => ({
+            id: r.id, label: r.label, status: r.status,
+            reason: r.reason ?? null, preview: r.preview ?? null,
+        })),
+    };
+    mkdirSync(dirname(AUDIT_PATH), { recursive: true });
+    writeFileSync(AUDIT_PATH, JSON.stringify(auditPayload, null, 2) + "\n", "utf8");
+    auditWritten = AUDIT_PATH;
+}
+
 if (JSON_MODE) {
     process.stdout.write(JSON.stringify({
         version: 1,
@@ -266,6 +361,7 @@ if (JSON_MODE) {
         applied: APPLY && changed,
         dryRun: !APPLY,
         changedBytes: working.length - original.length,
+        auditLog: auditWritten,
         repairs,
     }, null, 2) + "\n");
     process.exit(0);
@@ -296,6 +392,9 @@ if (APPLY) {
         console.log(`  ✅ No repairs needed — README is already compliant on the 3 auto-repairable rules.`);
     }
 }
+if (auditWritten) {
+    console.log(`  📒 audit log → ${relative(REPO_ROOT, auditWritten)}`);
+}
 console.log("");
 process.exit(0);
 
@@ -323,6 +422,25 @@ function stripCodeFences(text) {
 function truncate(s, n) {
     if (!s) return "";
     return s.length <= n ? s : `${s.slice(0, n - 1)}…`;
+}
+
+/**
+ * Extract a 1-indexed line snippet from a line array, optionally with `pad`
+ * lines of leading/trailing context. Returns `{ text, range: { startLine, endLine } }`
+ * where line numbers are 1-indexed and inclusive.
+ *
+ * @param {string[]} ls   - line array (0-indexed)
+ * @param {number}   from - 0-indexed start (inclusive) of the affected range
+ * @param {number}   to   - 0-indexed end (exclusive) of the affected range
+ * @param {number}   pad  - context lines on each side (default 0)
+ */
+function snippetFromLines(ls, from, to, pad = 0) {
+    const start = Math.max(0, from - pad);
+    const end = Math.min(ls.length, to + pad);
+    return {
+        text: ls.slice(start, end).join("\n"),
+        range: { startLine: start + 1, endLine: end },
+    };
 }
 
 function die(msg) {

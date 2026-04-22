@@ -312,6 +312,48 @@ if (APPLY && changed) {
     writeFileSync(README_PATH, working, "utf8");
 }
 
+// ─── Audit log ───────────────────────────────────────────────────────────────
+// Always written when --audit is passed, for BOTH dry-run and apply, so handoff
+// reviewers can inspect proposed changes before granting --apply.
+let auditWritten = null;
+if (AUDIT_ENABLED && AUDIT_PATH) {
+    const auditPayload = {
+        version: 1,
+        kind: "readme-repair-audit",
+        timestamp: new Date().toISOString(),
+        file: README_PATH,
+        mode: APPLY ? "apply" : "dry-run",
+        applied: APPLY && changed,
+        changedBytes: working.length - original.length,
+        summary: {
+            total: repairs.length,
+            applied: repairs.filter((r) => r.status === "applied").length,
+            wouldApply: repairs.filter((r) => r.status === "would-apply").length,
+            skipped: repairs.filter((r) => r.status === "skipped").length,
+            notNeeded: repairs.filter((r) => r.status === "not-needed").length,
+        },
+        // Mutations only — repairs that actually changed (or would change) the file.
+        mutations: repairs
+            .filter((r) => r.status === "applied" || r.status === "would-apply")
+            .map((r) => ({
+                id: r.id,
+                label: r.label,
+                status: r.status,
+                preview: r.preview ?? null,
+                before: { range: r.beforeRange ?? null, snippet: r.before ?? "" },
+                after: { range: r.afterRange ?? null, snippet: r.after ?? "" },
+            })),
+        // Full repair set for traceability (skipped/not-needed too, no snippets).
+        allRepairs: repairs.map((r) => ({
+            id: r.id, label: r.label, status: r.status,
+            reason: r.reason ?? null, preview: r.preview ?? null,
+        })),
+    };
+    mkdirSync(dirname(AUDIT_PATH), { recursive: true });
+    writeFileSync(AUDIT_PATH, JSON.stringify(auditPayload, null, 2) + "\n", "utf8");
+    auditWritten = AUDIT_PATH;
+}
+
 if (JSON_MODE) {
     process.stdout.write(JSON.stringify({
         version: 1,
@@ -319,6 +361,7 @@ if (JSON_MODE) {
         applied: APPLY && changed,
         dryRun: !APPLY,
         changedBytes: working.length - original.length,
+        auditLog: auditWritten,
         repairs,
     }, null, 2) + "\n");
     process.exit(0);

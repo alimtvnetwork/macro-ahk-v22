@@ -53,9 +53,9 @@ This ensures configuration is always traceable, auditable, and version-aware.
 | 02.05 | `02-features/05-validation-data-seeding.md` | CW Config → Root DB seeding pattern |
 | 02.06 | `02-features/06-update-check-keys.md` | `Update.*` and `Storage.Backend` keys for update-check subsystem |
 | 03 | `03-issues/00-overview.md` | Issues tracker |
-| 97 | `97-acceptance-criteria.md` | Acceptance criteria |
-| 97b | `97-changelog.md` | Changelog |
-| 98 | `98-acceptance-criteria.md` | Extended acceptance criteria |
+| 96 | `96-acceptance-criteria-legacy.md` | Legacy v3.2 acceptance checklist (pre-GIVEN/WHEN/THEN format, kept for traceability) |
+| 97 | `97-acceptance-criteria.md` | Acceptance criteria (GIVEN/WHEN/THEN, E2E-test-ready) |
+| 98 | `98-changelog.md` | Changelog |
 | 99 | `99-consistency-report.md` | Consistency report |
 
 ---
@@ -75,9 +75,9 @@ This ensures configuration is always traceable, auditable, and version-aware.
 │   └── 05-validation-data-seeding.md
 ├── 03-issues/
 │   └── 00-overview.md                ← Issues tracker
-├── 97-acceptance-criteria.md
-├── 97-changelog.md
-├── 98-acceptance-criteria.md
+├── 96-acceptance-criteria-legacy.md  ← v3.2 brief checklist (preserved)
+├── 97-acceptance-criteria.md         ← v3.2 GIVEN/WHEN/THEN (canonical)
+├── 98-changelog.md                   ← Renumbered from 97-changelog on 2026-04-22
 └── 99-consistency-report.md
 ```
 

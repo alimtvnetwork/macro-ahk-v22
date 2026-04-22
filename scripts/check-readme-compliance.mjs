@@ -117,14 +117,27 @@ function countH1() {
 }
 
 function sectionBetween(commentLabel) {
+    // Treat the entire file as one string so badges placed on the SAME line
+    // as their `<!-- Group -->` marker (single-line collapsed hero rows) are
+    // still attributed to the correct group. The body of a group spans from
+    // the end of its own marker until the start of the NEXT HTML comment
+    // (whichever group it belongs to) or end of file.
     const startRe = new RegExp(`<!--\\s*${escapeRe(commentLabel)}[^>]*-->`, "i");
-    const startIdx = lines.findIndex((l) => startRe.test(l));
-    if (startIdx < 0) return null;
-    const nextCommentIdx = lines.findIndex(
-        (l, i) => i > startIdx && /<!--[^]*?-->/.test(l),
-    );
-    const endIdx = nextCommentIdx > 0 ? nextCommentIdx : lines.length;
-    return { startIdx, endIdx, body: lines.slice(startIdx + 1, endIdx).join("\n") };
+    const startMatch = startRe.exec(raw);
+    if (!startMatch) return null;
+    const startOffset = startMatch.index;
+    const bodyStart = startMatch.index + startMatch[0].length;
+    const nextCommentRe = /<!--[^]*?-->/g;
+    nextCommentRe.lastIndex = bodyStart;
+    const nextMatch = nextCommentRe.exec(raw);
+    const bodyEnd = nextMatch ? nextMatch.index : raw.length;
+    // Compute startIdx / endIdx in line numbers (best-effort, used only by the
+    // closing-div check downstream which still works with approximate ranges).
+    const before = raw.slice(0, startOffset).split(/\r?\n/);
+    const startIdx = before.length - 1;
+    const beforeEnd = raw.slice(0, bodyEnd).split(/\r?\n/);
+    const endIdx = beforeEnd.length - 1;
+    return { startIdx, endIdx, body: raw.slice(bodyStart, bodyEnd) };
 }
 
 function escapeRe(s) {

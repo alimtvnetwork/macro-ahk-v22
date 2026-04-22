@@ -392,6 +392,9 @@ if (APPLY) {
         console.log(`  ✅ No repairs needed — README is already compliant on the 3 auto-repairable rules.`);
     }
 }
+if (auditWritten) {
+    console.log(`  📒 audit log → ${relative(REPO_ROOT, auditWritten)}`);
+}
 console.log("");
 process.exit(0);
 

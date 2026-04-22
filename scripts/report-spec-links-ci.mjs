@@ -2,136 +2,58 @@
 /**
  * report-spec-links-ci.mjs
  *
- * CI-friendly wrapper around `scripts/check-spec-links.mjs --strict`.
+ * CI-friendly spec-link checker.
  *
- * What it adds on top of the strict checker:
- *  - Aggregates broken links per source file and prints a "Top N failing
- *    files" leaderboard so reviewers can spot hot-spots immediately.
- *  - Emits GitHub Actions annotations (`::error file=...,line=...::...`)
- *    so each broken link shows up inline on the PR diff view.
- *  - Writes a Markdown summary to `$GITHUB_STEP_SUMMARY` (if present)
- *    with the top failing files and the first 50 broken links.
- *  - Exits 1 on ANY broken link (strict — never consults baseline).
- *  - Exits 0 only when every relative link resolves on disk.
+ * What it adds on top of the basic checker:
+ *  - Reads exclude/scan dirs and auto-resolve settings from a single
+ *    on-disk config: `scripts/check-spec-links.config.json`. Adding a new
+ *    archive folder is a JSON edit — no JS changes required.
+ *  - Optional auto-resolver: when `autoResolve.enabled` is true (or
+ *    `--auto-resolve` is passed) the checker tries to find a confident
+ *    replacement target for each broken link via the same suffix-overlap
+ *    algorithm `rewrite-spec-links.mjs` uses. Confidently-resolvable
+ *    links are downgraded from ERROR → WARNING (build still passes); only
+ *    truly-missing or ambiguous links remain hard errors.
+ *  - Aggregates broken links per source file and prints a leaderboard.
+ *  - Emits GitHub Actions inline annotations + a Markdown step-summary.
  *
- * Why a separate script and not just CLI flags on check-spec-links.mjs:
- *  - check-spec-links.mjs is the canonical local tool with baseline
- *    semantics (allows pre-existing rot during a migration). CI must NOT
- *    inherit that escape hatch — broken links fail the build, period.
- *  - This wrapper imports the same parser primitives (re-implemented
- *    here to avoid coupling) so the rules stay in lock-step.
+ * Exit codes:
+ *   0 — every link resolves (possibly via auto-resolve fallback).
+ *   1 — at least one link could not be resolved (hard error).
+ *   2 — usage error (missing spec root, malformed config used as hard fail).
  *
- * Usage (CI):
- *    node scripts/report-spec-links-ci.mjs
- *
- * Usage (local repro of the CI run):
- *    node scripts/report-spec-links-ci.mjs --no-annotations
+ * Flags (override config):
+ *   --no-annotations    suppress GitHub Actions inline annotations
+ *   --auto-resolve      force-enable the suffix-overlap fallback
+ *   --no-auto-resolve   force-disable the suffix-overlap fallback
+ *   --strict            shorthand for --no-auto-resolve (legacy CI contract)
  *
  * Output follows project Code Red logging: exact path, missing item, reason.
  */
 
-import { readdirSync, readFileSync, statSync, existsSync, appendFileSync } from "node:fs";
-import { join, resolve, dirname, relative } from "node:path";
-import { fileURLToPath } from "node:url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const REPO_ROOT = resolve(__dirname, "..");
-const SPEC_ROOT = join(REPO_ROOT, "spec");
+import { readFileSync, existsSync, appendFileSync } from "node:fs";
+import { join, relative } from "node:path";
+import {
+  REPO_ROOT,
+  loadConfig,
+  CONFIG_PATH,
+  collectMarkdownFiles,
+  extractLinks,
+  isSkippableTarget,
+  resolveLinkTarget,
+  buildBasenameIndex,
+  findReplacement,
+  relativeFromSource,
+} from "./lib/spec-links-core.mjs";
 
 const SCRIPT_TAG = "[report-spec-links-ci]";
 
 const argv = new Set(process.argv.slice(2));
 const NO_ANNOTATIONS = argv.has("--no-annotations");
-const TOP_N = 10; // top failing files to surface
-const MAX_DETAIL_LINKS = 50; // cap for full-detail Markdown summary
-
-/**
- * Directories whose contents are NEVER scanned for broken links.
- *
- * Rationale (Code Red — file path errors require exact path + reason):
- *   - `spec/99-archive/`   — frozen historical content; cross-links into
- *     deleted/refactored siblings are intentional rot, not actionable bugs.
- *   - `spec/02-coding-guidelines/imported/` — imported legacy WordPress /
- *     PowerShell guidance preserved verbatim; same rationale as above.
- *
- * Active specs MUST resolve every relative link — these exclusions only
- * suppress dead references inside the archive trees themselves.
- *
- * Update path: if an archive doc graduates back into active rotation,
- * move it OUT of these directories first, then this guard stops applying.
- */
-const SCAN_EXCLUDE_DIRS = new Set([
-  "99-archive",
-  "imported", // matches spec/02-coding-guidelines/imported/
-]);
-
-/** Recursively collect all .md files under a directory, skipping archives. */
-function collectMarkdownFiles(dir, out = []) {
-  for (const entry of readdirSync(dir)) {
-    const full = join(dir, entry);
-    const st = statSync(full);
-    if (st.isDirectory()) {
-      if (SCAN_EXCLUDE_DIRS.has(entry)) continue;
-      collectMarkdownFiles(full, out);
-    } else if (st.isFile() && entry.toLowerCase().endsWith(".md")) {
-      out.push(full);
-    }
-  }
-  return out;
-}
-
-
-/** Strip fenced code blocks so we don't lint code samples. */
-function stripFencedBlocks(source) {
-  const lines = source.split(/\r?\n/);
-  const out = [];
-  let inFence = false;
-  for (const line of lines) {
-    if (/^\s*```/.test(line)) {
-      inFence = !inFence;
-      out.push("");
-      continue;
-    }
-    out.push(inFence ? "" : line);
-  }
-  return out.join("\n");
-}
-
-/** Same skip rules as check-spec-links.mjs. */
-function isSkippableTarget(target) {
-  if (!target) return true;
-  if (target.startsWith("#")) return true;
-  if (target.startsWith("/")) return true;
-  if (target.startsWith("mem://")) return true;
-  if (target.startsWith("knowledge://")) return true;
-  if (/^[a-z][a-z0-9+.-]*:/i.test(target)) return true;
-  if (!/[/.#]/.test(target)) return true;
-  if (target === "..." || target.endsWith("(") || target.includes("(")) return true;
-  return false;
-}
-
-/** Extract markdown links with line numbers. */
-function extractLinks(source) {
-  const stripped = stripFencedBlocks(source);
-  const links = [];
-  const linkRegex = /\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g;
-  const lines = stripped.split(/\r?\n/);
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i];
-    let match;
-    linkRegex.lastIndex = 0;
-    while ((match = linkRegex.exec(line)) !== null) {
-      links.push({ text: match[1], target: match[2], lineNumber: i + 1 });
-    }
-  }
-  return links;
-}
-
-/** Escape a string for safe use inside a GitHub Actions annotation message. */
-function escapeAnnotation(s) {
-  return String(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
-}
+const FORCE_AUTO_RESOLVE = argv.has("--auto-resolve");
+const FORCE_NO_AUTO_RESOLVE = argv.has("--no-auto-resolve") || argv.has("--strict");
+const TOP_N = 10;
+const MAX_DETAIL_LINKS = 50;
 
 /** Append a chunk of markdown to $GITHUB_STEP_SUMMARY if defined. */
 function appendStepSummary(markdown) {
@@ -148,18 +70,62 @@ function appendStepSummary(markdown) {
   }
 }
 
+/** Escape a string for safe use inside a GitHub Actions annotation message. */
+function escapeAnnotation(s) {
+  return String(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+}
+
 function main() {
-  if (!existsSync(SPEC_ROOT)) {
-    console.error(
-      `${SCRIPT_TAG} HARD ERROR — spec root not found.\n` +
-        `  path:    ${SPEC_ROOT}\n` +
-        `  missing: directory 'spec/'\n` +
-        `  reason:  this script must be run from repo root and 'spec/' must exist.`
+  const { config, source: configSource, error: configError } = loadConfig();
+
+  if (configSource === "invalid") {
+    console.warn(
+      `${SCRIPT_TAG} WARN — config file failed to parse, falling back to defaults.\n` +
+        `  path:   ${relative(REPO_ROOT, CONFIG_PATH)}\n` +
+        `  reason: ${configError}\n` +
+        `  fix:    repair the JSON or delete the file to use built-in defaults.`
     );
-    process.exit(2);
   }
 
-  const files = collectMarkdownFiles(SPEC_ROOT);
+  // CLI flags override config.
+  const autoResolveEnabled = FORCE_NO_AUTO_RESOLVE
+    ? false
+    : FORCE_AUTO_RESOLVE
+      ? true
+      : config.autoResolve.enabled;
+
+  const excludeDirNames = new Set(config.excludeDirs);
+
+  // Validate scan roots up front so a typo in config is a clear error,
+  // not a silent "0 files scanned, all green" false-positive.
+  const scanAbsRoots = [];
+  for (const rel of config.scanRoots) {
+    const abs = join(REPO_ROOT, rel);
+    if (!existsSync(abs)) {
+      console.error(
+        `${SCRIPT_TAG} HARD ERROR — scan root not found.\n` +
+          `  path:    ${rel}  (resolved: ${abs})\n` +
+          `  missing: directory listed in scanRoots\n` +
+          `  reason:  this script must be run from repo root and every scanRoots entry must exist.\n` +
+          `  fix:     edit ${relative(REPO_ROOT, CONFIG_PATH)} → "scanRoots".`
+      );
+      process.exit(2);
+    }
+    scanAbsRoots.push(abs);
+  }
+
+  console.log(
+    `${SCRIPT_TAG} config: source=${configSource}, scanRoots=[${config.scanRoots.join(", ")}], ` +
+      `excludeDirs=[${config.excludeDirs.join(", ")}], autoResolve=${autoResolveEnabled ? "ON" : "off"}` +
+      (autoResolveEnabled ? ` (minScore=${config.autoResolve.minScore})` : "")
+  );
+
+  // Collect every .md across all scanRoots, honouring excludeDirs.
+  const files = [];
+  for (const root of scanAbsRoots) {
+    collectMarkdownFiles(root, excludeDirNames, files);
+  }
+
   let totalLinks = 0;
   let checkedLinks = 0;
   const broken = [];
@@ -172,14 +138,12 @@ function main() {
     for (const link of links) {
       if (isSkippableTarget(link.target)) continue;
       checkedLinks++;
-
-      const cleanTarget = link.target.split("#")[0].split("?")[0];
-      if (!cleanTarget) continue;
-
-      const resolved = resolve(dirname(file), cleanTarget);
+      const resolved = resolveLinkTarget(file, link.target);
+      if (!resolved) continue;
       if (!existsSync(resolved)) {
         broken.push({
           source: relative(REPO_ROOT, file),
+          sourceAbs: file,
           line: link.lineNumber,
           text: link.text,
           target: link.target,
@@ -189,26 +153,88 @@ function main() {
     }
   }
 
-  const headline = `${SCRIPT_TAG} scanned ${files.length} markdown files, ${totalLinks} total links, ${checkedLinks} relative links checked.`;
+  const headline =
+    `${SCRIPT_TAG} scanned ${files.length} markdown files, ` +
+    `${totalLinks} total links, ${checkedLinks} relative links checked.`;
 
   if (broken.length === 0) {
     console.log(`${headline} OK — all relative links resolve.`);
-    appendStepSummary(`## ✅ Spec links\n\n- Files scanned: **${files.length}**\n- Relative links checked: **${checkedLinks}**\n- Broken links: **0**\n`);
+    appendStepSummary(
+      `## ✅ Spec links\n\n- Files scanned: **${files.length}**\n` +
+        `- Relative links checked: **${checkedLinks}**\n- Broken links: **0**\n`
+    );
     process.exit(0);
   }
 
-  // Aggregate broken links per source file for the leaderboard.
-  const perFile = new Map();
-  for (const b of broken) {
-    perFile.set(b.source, (perFile.get(b.source) ?? 0) + 1);
+  // ── Auto-resolve pass ────────────────────────────────────────────
+  let autoResolved = [];
+  let unresolved = broken;
+
+  if (autoResolveEnabled) {
+    console.log(
+      `${SCRIPT_TAG} ${broken.length} broken link(s) detected — running auto-resolve ` +
+        `against [${config.autoResolve.searchRoots.join(", ")}]…`
+    );
+    const index = buildBasenameIndex(config.autoResolve.searchRoots);
+    autoResolved = [];
+    unresolved = [];
+    for (const b of broken) {
+      const result = findReplacement(b.target, index, config.autoResolve.minScore);
+      if (result.confident && result.winner) {
+        autoResolved.push({
+          ...b,
+          suggested: relative(REPO_ROOT, result.winner),
+          rewrittenTarget: relativeFromSource(b.sourceAbs, result.winner),
+          score: result.candidates[0].score,
+        });
+      } else {
+        unresolved.push({ ...b, autoResolveReason: result.reason });
+      }
+    }
+    console.log(
+      `${SCRIPT_TAG} auto-resolve summary: ${autoResolved.length} resolvable, ` +
+        `${unresolved.length} truly missing.`
+    );
   }
-  const ranked = [...perFile.entries()]
-    .sort((a, b) => b[1] - a[1])
-    .slice(0, TOP_N);
 
   // ── Console output (Code Red format) ──────────────────────────────
+  if (autoResolved.length > 0) {
+    console.warn(
+      `\n${SCRIPT_TAG} WARN — ${autoResolved.length} broken link(s) auto-resolvable. ` +
+        `Run \`pnpm check:spec-links:rewrite:apply\` to commit the fixes.`
+    );
+    for (const r of autoResolved.slice(0, MAX_DETAIL_LINKS)) {
+      console.warn(
+        `  source:    ${r.source}:${r.line}\n` +
+          `  link:      [${r.text}](${r.target})\n` +
+          `  suggested: ${r.suggested}  (score=${r.score})\n` +
+          `  rewrite:   [${r.text}](${r.rewrittenTarget})\n`
+      );
+    }
+    if (autoResolved.length > MAX_DETAIL_LINKS) {
+      console.warn(`  …and ${autoResolved.length - MAX_DETAIL_LINKS} more.`);
+    }
+  }
+
+  if (unresolved.length === 0) {
+    console.log(
+      `\n${headline} OK via auto-resolve — ${autoResolved.length} link(s) need rewriting ` +
+        `but every target exists somewhere indexable.`
+    );
+    appendStepSummary(buildSummaryMarkdown({ files, checkedLinks, autoResolved, unresolved: [] }));
+    process.exit(0);
+  }
+
+  // Aggregate per-file leaderboard for the unresolved set.
+  const perFile = new Map();
+  for (const b of unresolved) {
+    perFile.set(b.source, (perFile.get(b.source) ?? 0) + 1);
+  }
+  const ranked = [...perFile.entries()].sort((a, b) => b[1] - a[1]).slice(0, TOP_N);
+
   console.error(
-    `${SCRIPT_TAG} HARD ERROR — ${broken.length} broken relative link(s) detected across ${perFile.size} file(s).\n`
+    `\n${SCRIPT_TAG} HARD ERROR — ${unresolved.length} unresolvable broken link(s) ` +
+      `across ${perFile.size} file(s).\n`
   );
   console.error(`Top ${ranked.length} failing files:`);
   for (const [src, count] of ranked) {
@@ -216,12 +242,15 @@ function main() {
   }
   console.error("");
 
-  for (const b of broken) {
+  for (const b of unresolved) {
+    const reason = b.autoResolveReason
+      ? `auto-resolve failed: ${b.autoResolveReason}`
+      : "target file does not exist on disk; rename or update the link.";
     console.error(
       `  source:   ${b.source}:${b.line}\n` +
         `  link:     [${b.text}](${b.target})\n` +
         `  missing:  ${b.resolved}\n` +
-        `  reason:   target file does not exist on disk; rename or update the link.\n`
+        `  reason:   ${reason}\n`
     );
     if (!NO_ANNOTATIONS && process.env.GITHUB_ACTIONS === "true") {
       const msg = escapeAnnotation(
@@ -232,49 +261,53 @@ function main() {
   }
 
   console.error(headline);
+  appendStepSummary(buildSummaryMarkdown({ files, checkedLinks, autoResolved, unresolved, ranked }));
+  process.exit(1);
+}
 
-  // ── GitHub Step Summary (Markdown) ────────────────────────────────
-  const summaryParts = [];
-  summaryParts.push(`## ❌ Spec links — ${broken.length} broken`);
-  summaryParts.push("");
-  summaryParts.push(`- Files scanned: **${files.length}**`);
-  summaryParts.push(`- Relative links checked: **${checkedLinks}**`);
-  summaryParts.push(`- Broken links: **${broken.length}** across **${perFile.size}** file(s)`);
-  summaryParts.push("");
-  summaryParts.push(`### Top ${ranked.length} failing files`);
-  summaryParts.push("");
-  summaryParts.push("| Broken | File |");
-  summaryParts.push("|-------:|------|");
-  for (const [src, count] of ranked) {
-    summaryParts.push(`| ${count} | \`${src}\` |`);
+function buildSummaryMarkdown({ files, checkedLinks, autoResolved, unresolved, ranked = [] }) {
+  const parts = [];
+  if (unresolved.length === 0 && autoResolved.length === 0) {
+    parts.push(`## ✅ Spec links`);
+    parts.push(`\n- Files scanned: **${files.length}**`);
+    parts.push(`- Relative links checked: **${checkedLinks}**`);
+    parts.push(`- Broken links: **0**`);
+    return parts.join("\n");
   }
-  summaryParts.push("");
-  summaryParts.push(`### First ${Math.min(broken.length, MAX_DETAIL_LINKS)} broken link(s)`);
-  summaryParts.push("");
-  summaryParts.push("| Source | Line | Link | Missing target |");
-  summaryParts.push("|--------|-----:|------|----------------|");
-  for (const b of broken.slice(0, MAX_DETAIL_LINKS)) {
+  if (unresolved.length === 0) {
+    parts.push(`## ⚠️ Spec links — ${autoResolved.length} auto-resolvable`);
+    parts.push(`\n- Files scanned: **${files.length}**`);
+    parts.push(`- Relative links checked: **${checkedLinks}**`);
+    parts.push(`- Auto-resolved (warning): **${autoResolved.length}**`);
+    parts.push(`- Hard-failed: **0**`);
+    parts.push(`\nRun \`pnpm check:spec-links:rewrite:apply\` to commit the suggested fixes.`);
+    return parts.join("\n");
+  }
+  parts.push(`## ❌ Spec links — ${unresolved.length} broken`);
+  parts.push(`\n- Files scanned: **${files.length}**`);
+  parts.push(`- Relative links checked: **${checkedLinks}**`);
+  if (autoResolved.length > 0) {
+    parts.push(`- Auto-resolved (warning): **${autoResolved.length}**`);
+  }
+  parts.push(`- Hard-failed: **${unresolved.length}** across **${new Set(unresolved.map((u) => u.source)).size}** file(s)`);
+  parts.push("");
+  parts.push(`### Top ${ranked.length} failing files`);
+  parts.push("\n| Broken | File |\n|-------:|------|");
+  for (const [src, count] of ranked) parts.push(`| ${count} | \`${src}\` |`);
+  parts.push("");
+  parts.push(`### First ${Math.min(unresolved.length, MAX_DETAIL_LINKS)} broken link(s)`);
+  parts.push("\n| Source | Line | Link | Missing target |\n|--------|-----:|------|----------------|");
+  for (const b of unresolved.slice(0, MAX_DETAIL_LINKS)) {
     const safeText = b.text.replace(/\|/g, "\\|");
     const safeTarget = b.target.replace(/\|/g, "\\|");
-    summaryParts.push(`| \`${b.source}\` | ${b.line} | \`[${safeText}](${safeTarget})\` | \`${b.resolved}\` |`);
+    parts.push(`| \`${b.source}\` | ${b.line} | \`[${safeText}](${safeTarget})\` | \`${b.resolved}\` |`);
   }
-  if (broken.length > MAX_DETAIL_LINKS) {
-    summaryParts.push("");
-    summaryParts.push(`_…and ${broken.length - MAX_DETAIL_LINKS} more — see the job log for the full list._`);
+  if (unresolved.length > MAX_DETAIL_LINKS) {
+    parts.push(`\n_…and ${unresolved.length - MAX_DETAIL_LINKS} more — see the job log._`);
   }
-  summaryParts.push("");
-  summaryParts.push("**How to fix:**");
-  summaryParts.push("");
-  summaryParts.push("```bash");
-  summaryParts.push("# Auto-rewrite confidently-resolvable links:");
-  summaryParts.push("pnpm check:spec-links:rewrite:apply");
-  summaryParts.push("");
-  summaryParts.push("# Re-verify locally:");
-  summaryParts.push("pnpm check:spec-links:strict");
-  summaryParts.push("```");
-  appendStepSummary(summaryParts.join("\n"));
-
-  process.exit(1);
+  parts.push("\n**How to fix:**\n");
+  parts.push("```bash\npnpm check:spec-links:rewrite:apply\npnpm check:spec-links:strict\n```");
+  return parts.join("\n");
 }
 
 main();

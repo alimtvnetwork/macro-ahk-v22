@@ -31,10 +31,14 @@ CLI:
 - `pnpm run repair:readme:audit` — dry-run plus an audit log file (default `.lovable/reports/readme-repair-audit-<ISO>.json`).
 - `pnpm run repair:readme:apply:audit` — apply mode plus the same audit log.
 - `pnpm run repair:readme:hero-only` / `repair:readme:license-only` / `repair:readme:author-only` — convenience wrappers around `--only=<id>` for running a single rule.
-- `--json` emits `{ version: 1, file, applied, dryRun, changedBytes, auditLog, repairs[] }` with each repair carrying `{ id, label, status, reason?, preview?, before?, after?, beforeRange?, afterRange? }` where status ∈ `applied | would-apply | skipped | not-needed`.
-- `--audit[=<path>]` writes a structured JSON audit log of every mutation. Default path is `.lovable/reports/readme-repair-audit-<ISO-timestamp>.json`; pass `--audit=<path>` to override. Audit logs are written for BOTH dry-run and apply modes.
+- `pnpm run repair:readme:all` — dry-run across **every** README in the repo via glob `**/readme.md,**/README.md` (skips `node_modules`, `dist`, `build`, `.release`, `skipped`, `.git`, `.cache`, `.next`, `.turbo`, `.lovable`, `coverage`, and `*.bak`). Emits a v2 multi envelope with per-file results and aggregate totals.
+- `pnpm run repair:readme:all:apply` — same glob, but applies repairs and writes a single bundled audit log.
+- `--json` emits `{ version: 1, file, applied, dryRun, changedBytes, auditLog, repairs[] }` for single-file runs, or `{ version: 2, multi: true, totals, auditLog, results[] }` when more than one file is processed (each entry inside `results[]` follows the v1 schema).
+- `--audit[=<path>]` writes a structured JSON audit log of every mutation. Default path is `.lovable/reports/readme-repair-audit-<ISO-timestamp>.json`; pass `--audit=<path>` to override. Audit logs are written for BOTH dry-run and apply modes. In multi-file mode the audit payload is `{ version: 2, kind: "readme-repair-audit-bundle", timestamp, mode, totals, files: [<v1 single-file audit>, …] }`.
 - `--only=<ids>` — comma-separated allowlist (`centered-hero`, `license-section`, `author-misorder`). Repairs not in the list are reported with status `skipped` and reason `disabled by --only flag`.
 - `--skip=<ids>` — comma-separated blocklist with the same id vocabulary. Disabled repairs report `disabled by --skip flag`. Mutually exclusive with `--only` (passing both fails fast). Unknown ids fail fast with the full valid-id list in the error message.
+- `--file=<path>` (repeatable) / `--files=<csv>` — explicit README paths, resolved relative to the repo root. May be combined with `--glob`.
+- `--glob=<pattern>` (repeatable, comma-separated) — glob of README files to repair, e.g. `--glob='**/README.md'` or `--glob='docs/**/readme.md,packages/*/readme.md'`. Default ignores: `node_modules`, `dist`, `build`, `.git`, `.release`, `skipped`, `coverage`, `.next`, `.cache`, `.turbo`, `.lovable`, plus all `*.bak` files. Pass `--no-default-ignores` to disable the exclusion list. Defaults to `./readme.md` when neither `--file` nor `--glob` is provided (full backwards compatibility with v1).
 
 ### Audit log schema
 

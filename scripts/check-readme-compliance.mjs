@@ -9,26 +9,37 @@
  * Failing exit code (1) when any rule is violated, 0 otherwise.
  *
  * Flags:
- *   --json    Emit a machine-readable JSON envelope (version: 1) to stdout
- *             instead of human-formatted output.
- *   --file=<path>  Override the README path (default: ./readme.md at repo root).
+ *   --json              Emit a machine-readable JSON envelope (version: 2) to
+ *                       stdout instead of human-formatted output.
+ *   --file=<path>       Override the README path (default: ./readme.md).
+ *   --report=<path>     Additionally write a human-readable Markdown
+ *                       compliance report to <path>. Includes per-check
+ *                       expected vs found for failures, plus a passed
+ *                       summary. Works alongside --json or default output.
  *
- * Schema (when --json):
+ * JSON schema (version 2 — additive over v1):
  *   {
- *     "version": 1,
+ *     "version": 2,
  *     "ok": boolean,
  *     "file": "<absolute-path>",
  *     "summary": { "passed": N, "failed": N, "total": N },
  *     "checks": [
- *       { "id": "...", "label": "...", "ok": true|false, "detail": "..." }
+ *       {
+ *         "id": "...",
+ *         "label": "...",
+ *         "ok": true|false,
+ *         "detail": "...",       // free-text human message (v1 compat)
+ *         "expected": "...",     // NEW in v2 — what the rule requires
+ *         "found": "..."         // NEW in v2 — what was actually present
+ *       }
  *     ]
  *   }
  *
  * Spec authority: spec/01-spec-authoring-guide/11-root-readme-conventions.md
  */
 
-import { readFileSync, existsSync } from "node:fs";
-import { resolve, dirname } from "node:path";
+import { readFileSync, existsSync, writeFileSync, mkdirSync } from "node:fs";
+import { resolve, dirname, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const __filename = fileURLToPath(import.meta.url);
@@ -39,9 +50,13 @@ const REPO_ROOT = resolve(__dirname, "..");
 const args = process.argv.slice(2);
 const JSON_MODE = args.includes("--json");
 const fileArg = args.find((a) => a.startsWith("--file="));
+const reportArg = args.find((a) => a.startsWith("--report="));
 const README_PATH = fileArg
     ? resolve(REPO_ROOT, fileArg.slice("--file=".length))
     : resolve(REPO_ROOT, "readme.md");
+const REPORT_PATH = reportArg
+    ? resolve(REPO_ROOT, reportArg.slice("--report=".length))
+    : null;
 
 // ─── Mandatory Inventory (from 11-root-readme-conventions.md) ────────────────
 const BADGE_GROUPS = [
@@ -83,7 +98,6 @@ const linesNoCode = (() => {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-/** Find the H1 line index (first `# ` heading at column 0, ignoring code blocks). */
 function findH1Index() {
     for (let i = 0; i < linesNoCode.length; i++) {
         if (/^# (?!#)/.test(linesNoCode[i])) return i;
@@ -91,21 +105,14 @@ function findH1Index() {
     return -1;
 }
 
-/** Count all H1 headings outside code fences — there must be exactly one. */
 function countH1() {
     return linesNoCode.filter((l) => /^# (?!#)/.test(l)).length;
 }
 
-/**
- * Slice the document between two `<!-- comment -->` markers, returning the
- * lines that fall inside. Used to scope badge counts per group.
- */
 function sectionBetween(commentLabel) {
-    // Match `<!-- Build & Release -->` (case-insensitive, leading text in label OK).
     const startRe = new RegExp(`<!--\\s*${escapeRe(commentLabel)}[^>]*-->`, "i");
     const startIdx = lines.findIndex((l) => startRe.test(l));
     if (startIdx < 0) return null;
-    // Find the next HTML comment after this one (any comment terminates the group).
     const nextCommentIdx = lines.findIndex(
         (l, i) => i > startIdx && /<!--[^]*?-->/.test(l),
     );
@@ -117,7 +124,6 @@ function escapeRe(s) {
     return s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
-/** Count shields.io / badge-style markdown images: `[![alt](...)](...)` or `![alt](...)`. */
 function countBadges(body) {
     if (!body) return 0;
     const re = /!\[[^\]]*\]\([^)]+\)/g;
@@ -127,8 +133,19 @@ function countBadges(body) {
 // ─── Checks ──────────────────────────────────────────────────────────────────
 const checks = [];
 
-function record(id, label, ok, detail) {
-    checks.push({ id, label, ok, detail });
+/**
+ * Record a compliance check. `expected` and `found` are NEW in v2 and feed
+ * directly into the markdown report's "Expected vs Found" table.
+ *
+ * @param {string} id
+ * @param {string} label
+ * @param {boolean} ok
+ * @param {string} detail   - free-text human message (kept for v1 compat)
+ * @param {string} expected - one-line statement of what the rule requires
+ * @param {string} found    - one-line statement of what was actually present
+ */
+function record(id, label, ok, detail, expected = "", found = "") {
+    checks.push({ id, label, ok, detail, expected, found });
 }
 
 // 1. Single H1
@@ -139,6 +156,8 @@ function record(id, label, ok, detail) {
         "Exactly one H1 heading",
         count === 1,
         count === 1 ? "1 H1 found" : `Found ${count} H1 headings (expected exactly 1)`,
+        "exactly 1 '# ' heading at column 0 (outside code fences)",
+        `${count} '# ' heading(s) detected`,
     );
 }
 
@@ -154,6 +173,12 @@ function record(id, label, ok, detail) {
         ok
             ? `<div align="center"> opens at top, H1 at line ${h1Idx + 1}`
             : "Top of file must open with <div align=\"center\"> and the H1 must come AFTER it",
+        `<div align="center"> appears in the head block above the first \`# \` heading`,
+        h1Idx < 0
+            ? "no H1 detected, so hero ordering cannot be verified"
+            : ok
+                ? `<div align="center"> found above H1 (line ${h1Idx + 1})`
+                : `H1 at line ${h1Idx + 1}, but no <div align="center"> precedes it`,
     );
 }
 
@@ -169,6 +194,8 @@ function record(id, label, ok, detail) {
         "Logo image placed above the H1 title",
         ok,
         ok ? "Logo found in hero block above H1" : "No <img …logo…> or ![logo](…) found before the H1 heading",
+        `<img src="…logo|icon|brand…"> OR ![logo|icon …](…) above the H1`,
+        ok ? "logo image found in hero head" : "no logo/icon image present in the lines above the H1",
     );
 }
 
@@ -176,15 +203,22 @@ function record(id, label, ok, detail) {
 {
     const h1Idx = findH1Index();
     if (h1Idx < 0) {
-        record("tagline-blockquote", "Tagline blockquote under H1", false, "No H1 found, cannot validate tagline");
+        record(
+            "tagline-blockquote",
+            "Tagline blockquote under H1",
+            false,
+            "No H1 found, cannot validate tagline",
+            "`> tagline` blockquote within 5 lines after the H1",
+            "no H1 found, so the tagline cannot be located",
+        );
     } else {
-        // Look at the next 3 non-empty lines after the H1 for a `>` blockquote.
         let found = false;
+        let foundLine = "";
         for (let i = h1Idx + 1; i < Math.min(h1Idx + 6, lines.length); i++) {
             const l = lines[i];
             if (l.trim() === "") continue;
-            if (/^>\s+\S/.test(l)) { found = true; break; }
-            // First non-blank non-blockquote line ends the search.
+            if (/^>\s+\S/.test(l)) { found = true; foundLine = l.trim(); break; }
+            foundLine = l.trim();
             break;
         }
         record(
@@ -192,6 +226,12 @@ function record(id, label, ok, detail) {
             "Tagline blockquote (`> ...`) immediately under H1",
             found,
             found ? "Tagline blockquote present" : "Expected a `> tagline …` blockquote within 5 lines of the H1",
+            "`> tagline` blockquote within 5 lines after the H1",
+            found
+                ? `blockquote found: ${truncate(foundLine, 80)}`
+                : foundLine
+                    ? `first non-blank line after H1 was: ${truncate(foundLine, 80)}`
+                    : "no content found within 5 lines after the H1",
         );
     }
 }
@@ -205,6 +245,8 @@ for (const grp of BADGE_GROUPS) {
             `Badge group present: ${grp.label}`,
             false,
             `Missing <!-- ${grp.comment} --> comment marker before the badge block`,
+            `<!-- ${grp.comment} --> marker followed by ≥${grp.min} badges`,
+            `no <!-- ${grp.comment} --> comment marker found in the file`,
         );
         continue;
     }
@@ -214,6 +256,8 @@ for (const grp of BADGE_GROUPS) {
         `${grp.label} group has ≥${grp.min} badges`,
         count >= grp.min,
         `Found ${count} badge(s) in "${grp.label}" group (minimum ${grp.min})`,
+        `≥ ${grp.min} badges following the <!-- ${grp.comment} --> marker`,
+        `${count} badge(s) found in the "${grp.label}" group`,
     );
 }
 
@@ -225,12 +269,13 @@ for (const grp of BADGE_GROUPS) {
         `Total badge count ≥ ${TOTAL_BADGE_MIN}`,
         total >= TOTAL_BADGE_MIN,
         `Found ${total} badge images across the whole README (minimum ${TOTAL_BADGE_MIN})`,
+        `≥ ${TOTAL_BADGE_MIN} total badge images across the README`,
+        `${total} badge image(s) detected`,
     );
 }
 
 // 7. Hero centering div is closed
 {
-    // Count opening vs closing align-center divs in the head section (before any "## " heading).
     const firstH2 = linesNoCode.findIndex((l) => /^## /.test(l));
     const head = lines.slice(0, firstH2 > 0 ? firstH2 : lines.length).join("\n");
     const opens = (head.match(/<div\s+align=["']center["']\s*>/gi) ?? []).length;
@@ -243,6 +288,8 @@ for (const grp of BADGE_GROUPS) {
         ok
             ? `Hero head has ${opens} opening / ${closes} closing div(s)`
             : `Hero head has ${opens} opening but only ${closes} closing </div> (centering must be terminated before the first ## heading)`,
+        "every <div align=\"center\"> in the hero head is closed by a </div> before the first ## heading",
+        `${opens} opening <div align="center">, ${closes} closing </div> in the hero head`,
     );
 }
 
@@ -256,10 +303,14 @@ const authorHeadingIdx = linesNoCode.findIndex((l) => /^##\s+Author\b/i.test(l))
         authorHeadingIdx >= 0
             ? `Found "## Author" at line ${authorHeadingIdx + 1}`
             : "Missing required `## Author` heading",
+        "a `## Author` heading exists in the document",
+        authorHeadingIdx >= 0
+            ? `found at line ${authorHeadingIdx + 1}`
+            : "no `## Author` heading detected",
     );
 }
 
-// 9. Author block: centered name + role line
+// 9. Author block sub-checks
 if (authorHeadingIdx >= 0) {
     const authorBlockEnd = (() => {
         for (let i = authorHeadingIdx + 1; i < lines.length; i++) {
@@ -271,27 +322,33 @@ if (authorHeadingIdx >= 0) {
 
     // 9a. Centered div containing the H3 author name
     const nameDivRe = /<div\s+align=["']center["']\s*>[\s\S]*?###\s+\[[^\]]+\]\([^)]+\)[\s\S]*?<\/div>/i;
+    const nameOk = nameDivRe.test(authorBody);
     record(
         "author-centered-name",
         "Author name centered as ### linked heading",
-        nameDivRe.test(authorBody),
-        nameDivRe.test(authorBody)
-            ? "Centered ### [Name](url) found"
-            : "Expected <div align=\"center\"> containing `### [Full Name](url)`",
+        nameOk,
+        nameOk ? "Centered ### [Name](url) found" : "Expected <div align=\"center\"> containing `### [Full Name](url)`",
+        `<div align="center"> wrapping a \`### [Name](url)\` H3`,
+        nameOk
+            ? "centered linked H3 name found in Author section"
+            : "no centered `### [Name](url)` heading detected inside Author section",
     );
 
     // 9b. Role line: **[Primary](url)** | [Secondary](url), [Company](url)
     const roleLineRe = /\*\*\[[^\]]+\]\([^)]+\)\*\*\s*\|\s*\[[^\]]+\]\([^)]+\)\s*,\s*\[[^\]]+\]\([^)]+\)/;
+    const roleOk = roleLineRe.test(authorBody);
     record(
         "author-role-line",
         "Author role line follows mandated format",
-        roleLineRe.test(authorBody),
-        roleLineRe.test(authorBody)
+        roleOk,
+        roleOk
             ? "Role line matches `**[Primary](…)** | [Secondary](…), [Company](…)`"
             : "Role line must match: **[Primary Role](url)** | [Secondary Role](url), [Company](url)",
+        "`**[Primary](url)** | [Secondary](url), [Company](url)` line in Author section",
+        roleOk ? "role line matches the mandated pattern" : "no line matched the `**[…](…)** | […](…), […](…)` pattern",
     );
 
-    // 9c. Biography mentions years of experience and links a reputation profile
+    // 9c. Biography
     const yearsRe = /\b\d{1,2}\+?\s*years?\b/i;
     const reputationRe = /\b(stack\s*overflow|linkedin|github|crossover)\b/i;
     const yearsOk = yearsRe.test(authorBody);
@@ -301,33 +358,36 @@ if (authorHeadingIdx >= 0) {
         "Biography mentions years of experience + reputation source",
         yearsOk && repOk,
         `years-of-experience: ${yearsOk ? "✓" : "✗"}, reputation-link: ${repOk ? "✓" : "✗"}`,
+        "biography mentions \"<N> years\" AND links one of: Stack Overflow / LinkedIn / GitHub / Crossover",
+        `years-of-experience: ${yearsOk ? "present" : "MISSING"}; reputation source: ${repOk ? "present" : "MISSING"}`,
     );
 
-    // 9d. Author metadata table (2-col with empty header)
+    // 9d. Author metadata table
     const authorTableRe = /\|\s*\|\s*\|\s*\n\|\s*-+\s*\|\s*-+\s*\|/;
+    const tableOk = authorTableRe.test(authorBody);
     record(
         "author-metadata-table",
         "Author 2-column metadata table present",
-        authorTableRe.test(authorBody),
-        authorTableRe.test(authorBody)
-            ? "2-column table with empty header found"
-            : "Expected `|  |  |` header row + `|---|---|` separator",
+        tableOk,
+        tableOk ? "2-column table with empty header found" : "Expected `|  |  |` header row + `|---|---|` separator",
+        "`|  |  |` empty header row followed by `|---|---|` separator (2-col table)",
+        tableOk ? "2-column metadata table found" : "no 2-column table with empty header detected",
     );
 
     // 9e. ### <Company> subsection
-    const companyHeadingRe = /###\s+\S/;
     const subHeadings = (authorBody.match(/^###\s+.+$/gm) ?? []);
-    // Need at least 2 H3s (Author Name + Company Name)
+    const companyOk = subHeadings.length >= 2 && /###\s+\S/.test(subHeadings[1] ?? "");
     record(
         "company-subsection",
         "### <Company> subsection within Author section",
-        subHeadings.length >= 2 && companyHeadingRe.test(subHeadings[1] ?? ""),
+        companyOk,
         subHeadings.length >= 2
             ? `Found ${subHeadings.length} H3 headings in Author section`
             : `Expected at least 2 H3 headings in Author section, found ${subHeadings.length}`,
+        "≥ 2 H3 headings inside `## Author` (Author H3 + Company H3)",
+        `${subHeadings.length} H3 heading(s) inside Author section`,
     );
 } else {
-    // Skipped checks — all fail because the parent section is missing.
     for (const id of [
         "author-centered-name",
         "author-role-line",
@@ -335,7 +395,14 @@ if (authorHeadingIdx >= 0) {
         "author-metadata-table",
         "company-subsection",
     ]) {
-        record(id, `(skipped) ${id}`, false, "Author section missing — cannot validate sub-checks");
+        record(
+            id,
+            `(skipped) ${id}`,
+            false,
+            "Author section missing — cannot validate sub-checks",
+            "parent `## Author` section to exist before this sub-check can run",
+            "parent `## Author` section is missing — sub-check skipped",
+        );
     }
 }
 
@@ -343,7 +410,14 @@ if (authorHeadingIdx >= 0) {
 {
     const licIdx = linesNoCode.findIndex((l) => /^##\s+License\b/i.test(l));
     if (licIdx < 0) {
-        record("license-section", "## License section present", false, "Missing required `## License` heading at end of README");
+        record(
+            "license-section",
+            "## License section present",
+            false,
+            "Missing required `## License` heading at end of README",
+            "`## License` heading at end of file with non-empty body (>10 chars)",
+            "no `## License` heading detected",
+        );
     } else {
         const body = lines.slice(licIdx + 1).join("\n").trim();
         const ok = body.length > 10;
@@ -352,6 +426,10 @@ if (authorHeadingIdx >= 0) {
             "## License section present with body",
             ok,
             ok ? `License section starts at line ${licIdx + 1}` : "License section is empty",
+            "`## License` heading at end of file with non-empty body (>10 chars)",
+            ok
+                ? `License section starts at line ${licIdx + 1}, body length ${body.length} chars`
+                : `License section starts at line ${licIdx + 1}, but body is only ${body.length} char(s)`,
         );
     }
 }
@@ -361,9 +439,35 @@ const passed = checks.filter((c) => c.ok).length;
 const failed = checks.length - passed;
 const ok = failed === 0;
 
+// Optional markdown report
+if (REPORT_PATH) {
+    try {
+        mkdirSync(dirname(REPORT_PATH), { recursive: true });
+        writeFileSync(REPORT_PATH, renderMarkdownReport({ ok, passed, failed, checks }), "utf8");
+        if (!JSON_MODE) {
+            console.log(`[check-readme-compliance] markdown report → ${relative(REPO_ROOT, REPORT_PATH)}`);
+        }
+    } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        if (JSON_MODE) {
+            // Surface report failure in JSON envelope as a synthetic check.
+            checks.push({
+                id: "report-write",
+                label: "Write markdown report",
+                ok: false,
+                detail: msg,
+                expected: `writable file at ${REPORT_PATH}`,
+                found: `write failed: ${msg}`,
+            });
+        } else {
+            console.error(`[check-readme-compliance] WARN: failed to write report: ${msg}`);
+        }
+    }
+}
+
 if (JSON_MODE) {
     process.stdout.write(JSON.stringify({
-        version: 1,
+        version: 2,
         ok,
         file: README_PATH,
         summary: { passed, failed, total: checks.length },
@@ -400,14 +504,96 @@ process.exit(0);
 function fail(msg) {
     if (JSON_MODE) {
         process.stdout.write(JSON.stringify({
-            version: 1,
+            version: 2,
             ok: false,
             file: README_PATH,
             summary: { passed: 0, failed: 1, total: 1 },
-            checks: [{ id: "load", label: "Load README", ok: false, detail: msg }],
+            checks: [{ id: "load", label: "Load README", ok: false, detail: msg, expected: `readable file at ${README_PATH}`, found: msg }],
         }, null, 2) + "\n");
     } else {
         console.error(`[check-readme-compliance] FAIL: ${msg}`);
     }
     process.exit(1);
+}
+
+function truncate(s, n) {
+    if (!s) return "";
+    return s.length <= n ? s : `${s.slice(0, n - 1)}…`;
+}
+
+/** Escape pipe characters so values render inside markdown table cells. */
+function mdCell(v) {
+    return String(v ?? "").replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
+}
+
+function renderMarkdownReport({ ok, passed, failed, checks }) {
+    const now = new Date().toISOString();
+    const relFile = relative(REPO_ROOT, README_PATH);
+    const failures = checks.filter((c) => !c.ok);
+    const passes = checks.filter((c) => c.ok);
+
+    const lines = [];
+    lines.push(`# README Compliance Report`);
+    lines.push("");
+    lines.push(`- **File:** \`${relFile}\``);
+    lines.push(`- **Generated:** ${now}`);
+    lines.push(`- **Status:** ${ok ? "✅ **PASS**" : "❌ **FAIL**"}`);
+    lines.push(`- **Summary:** ${passed}/${checks.length} checks passed${failed > 0 ? `, ${failed} failed` : ""}`);
+    lines.push(`- **Spec authority:** [\`spec/01-spec-authoring-guide/11-root-readme-conventions.md\`](../spec/01-spec-authoring-guide/11-root-readme-conventions.md)`);
+    lines.push("");
+    lines.push(`---`);
+    lines.push("");
+
+    if (failures.length === 0) {
+        lines.push(`## ✅ All checks passed`);
+        lines.push("");
+        lines.push(`No failures to report. The README satisfies all ${checks.length} compliance rules.`);
+        lines.push("");
+    } else {
+        lines.push(`## ❌ Failed checks (${failures.length})`);
+        lines.push("");
+        lines.push(`Each failure below shows the **expected** rule and the **found** state, side-by-side, for fast remediation.`);
+        lines.push("");
+        for (const c of failures) {
+            lines.push(`### ❌ \`${c.id}\` — ${c.label}`);
+            lines.push("");
+            lines.push(`| Aspect | Value |`);
+            lines.push(`|--------|-------|`);
+            lines.push(`| **Expected** | ${mdCell(c.expected || "(rule definition not available)")} |`);
+            lines.push(`| **Found**    | ${mdCell(c.found || c.detail || "(no detail captured)")} |`);
+            lines.push(`| **Detail**   | ${mdCell(c.detail)} |`);
+            lines.push("");
+        }
+    }
+
+    lines.push(`---`);
+    lines.push("");
+    lines.push(`## Full check inventory`);
+    lines.push("");
+    lines.push(`| # | Status | Check ID | Label |`);
+    lines.push(`|---|--------|----------|-------|`);
+    checks.forEach((c, i) => {
+        lines.push(`| ${i + 1} | ${c.ok ? "✅" : "❌"} | \`${c.id}\` | ${mdCell(c.label)} |`);
+    });
+    lines.push("");
+
+    if (passes.length > 0 && failures.length > 0) {
+        lines.push(`---`);
+        lines.push("");
+        lines.push(`<details><summary>✅ Passed checks (${passes.length}) — expand for expected/found</summary>`);
+        lines.push("");
+        for (const c of passes) {
+            lines.push(`#### ✅ \`${c.id}\` — ${c.label}`);
+            lines.push("");
+            lines.push(`- **Expected:** ${mdCell(c.expected || "—")}`);
+            lines.push(`- **Found:**    ${mdCell(c.found || c.detail || "—")}`);
+            lines.push("");
+        }
+        lines.push(`</details>`);
+        lines.push("");
+    }
+
+    lines.push(`<sub>Generated by \`scripts/check-readme-compliance.mjs\` (schema v2). Re-run with \`pnpm run check:readme:report\` to refresh.</sub>`);
+    lines.push("");
+    return lines.join("\n");
 }

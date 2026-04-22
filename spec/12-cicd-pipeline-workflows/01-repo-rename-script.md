@@ -322,7 +322,7 @@ The Python helper is **internal** — users only ever invoke
 |-----------|----------|
 | CI/CD module overview | `./00-overview.md` |
 | Validation-script conventions | `../../pipeline/04-validation-scripts.md` |
-| Coding-guidelines linter pack (sibling pattern) | `../02-coding-guidelines/06-cicd-integration/00-overview.md` |
+| Coding-guidelines linter pack (sibling pattern) | `../02-coding-guidelines/12-cicd-integration/00-overview.md` |
 | Skipped/release folders policy | `mem://constraints/skipped-folders` |
 | Spec authoring guide v3.2.0 | `../01-spec-authoring-guide/00-overview.md` |
 

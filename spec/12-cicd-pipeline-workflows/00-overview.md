@@ -50,5 +50,5 @@ The existing `release-procedure.md` (at `spec/21-app/02-features/chrome-extensio
 | Folder structure rules | `../01-spec-authoring-guide/01-folder-structure.md` |
 | Release procedure | `../21-app/02-features/chrome-extension/release-procedure.md` |
 | Release-page RCA | `../22-app-issues/95-release-page-missing-built-assets-rca.md` |
-| Coding-guidelines linter pack (sibling pattern) | `../02-coding-guidelines/06-cicd-integration/00-overview.md` |
+| Coding-guidelines linter pack (sibling pattern) | `../02-coding-guidelines/12-cicd-integration/00-overview.md` |
 | Reorganization plan | `../../.lovable/spec-reorganization-plan-2026-04-22.md` |

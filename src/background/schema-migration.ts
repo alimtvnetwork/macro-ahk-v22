@@ -54,7 +54,7 @@ export interface MigrationResult {
 /* ------------------------------------------------------------------ */
 
 const SCHEMA_VERSION_KEY = "marco_schema_version";
-const CURRENT_SCHEMA_VERSION = 8;
+export const CURRENT_SCHEMA_VERSION = 8;
 
 /* ------------------------------------------------------------------ */
 /*  Migration Registry                                                 */
@@ -142,17 +142,17 @@ function applyV3Down(_logsDb: SqlJsDatabase, _errorsDb: SqlJsDatabase): void {
 
 function applyV4Up(logsDb: SqlJsDatabase, errorsDb: SqlJsDatabase): void {
     // Rename columns in logs.db tables
-    runIgnoringDuplicates(logsDb, V4_SESSIONS_RENAMES);
-    runIgnoringDuplicates(logsDb, V4_LOGS_RENAMES);
-    runIgnoringDuplicates(logsDb, V4_PROMPTS_RENAMES);
-    runIgnoringDuplicates(logsDb, V4_PROMPTS_CATEGORY_RENAMES);
-    runIgnoringDuplicates(logsDb, V4_PROMPTS_TO_CATEGORY_RENAMES);
-    runIgnoringDuplicates(logsDb, V4_PROJECT_KV_RENAMES);
-    runIgnoringDuplicates(logsDb, V4_PROJECT_FILES_RENAMES);
-    runIgnoringDuplicates(logsDb, V4_SCRIPTS_RENAMES);
+    runRenameStatementsIfSourceColumnsExist(logsDb, V4_SESSIONS_RENAMES);
+    runRenameStatementsIfSourceColumnsExist(logsDb, V4_LOGS_RENAMES);
+    runRenameStatementsIfSourceColumnsExist(logsDb, V4_PROMPTS_RENAMES);
+    runRenameStatementsIfSourceColumnsExist(logsDb, V4_PROMPTS_CATEGORY_RENAMES);
+    runRenameStatementsIfSourceColumnsExist(logsDb, V4_PROMPTS_TO_CATEGORY_RENAMES);
+    runRenameStatementsIfSourceColumnsExist(logsDb, V4_PROJECT_KV_RENAMES);
+    runRenameStatementsIfSourceColumnsExist(logsDb, V4_PROJECT_FILES_RENAMES);
+    runRenameStatementsIfSourceColumnsExist(logsDb, V4_SCRIPTS_RENAMES);
 
     // Rename columns in errors.db
-    runIgnoringDuplicates(errorsDb, V4_ERRORS_RENAMES);
+    runRenameStatementsIfSourceColumnsExist(errorsDb, V4_ERRORS_RENAMES);
 
     // Recreate PromptsDetails view with PascalCase column references
     runIgnoringDuplicates(logsDb, V4_RECREATE_PROMPTS_VIEW);
@@ -235,7 +235,7 @@ export async function migrateSchema(
     logsDb: SqlJsDatabase,
     errorsDb: SqlJsDatabase,
 ): Promise<MigrationResult> {
-    const fromVersion = await readSchemaVersion();
+    const fromVersion = await readSchemaVersion(logsDb, errorsDb);
     const isUpToDate = fromVersion >= CURRENT_SCHEMA_VERSION;
 
     if (isUpToDate) {
@@ -246,9 +246,27 @@ export async function migrateSchema(
     return applyMigrations(pending, logsDb, errorsDb, fromVersion);
 }
 
-async function readSchemaVersion(): Promise<number> {
+async function readSchemaVersion(
+    logsDb: SqlJsDatabase,
+    errorsDb: SqlJsDatabase,
+): Promise<number> {
     const stored = await chrome.storage.local.get(SCHEMA_VERSION_KEY);
-    return (stored[SCHEMA_VERSION_KEY] as number) ?? 1;
+    const storedVersion = stored[SCHEMA_VERSION_KEY];
+
+    if (typeof storedVersion === "number") {
+        return storedVersion;
+    }
+
+    const inferredVersion = inferSchemaVersion(logsDb, errorsDb);
+
+    if (inferredVersion > 1) {
+        await persistVersion(inferredVersion);
+        console.warn(
+            `[migration] Missing ${SCHEMA_VERSION_KEY}; inferred live schema as v${inferredVersion} and repaired version metadata`,
+        );
+    }
+
+    return inferredVersion;
 }
 
 function getPendingMigrations(currentVersion: number): Migration[] {
@@ -380,5 +398,89 @@ function runIgnoringDuplicates(db: SqlJsDatabase, statements: string[]): void {
             // lastAttemptedSql so the migration wrapper can tag it.
             throw err;
         }
+    }
+}
+
+function runRenameStatementsIfSourceColumnsExist(db: SqlJsDatabase, statements: string[]): void {
+    const pending = [...statements];
+
+    while (pending.length > 0) {
+        const sql = pending.shift()!;
+        const renameMatch = sql.match(/^ALTER TABLE\s+(\w+)\s+RENAME COLUMN\s+(\w+)\s+TO\s+(\w+)$/i);
+
+        if (!renameMatch) {
+            runIgnoringDuplicates(db, [sql]);
+            continue;
+        }
+
+        const [, tableName, sourceColumn, targetColumn] = renameMatch;
+        const existingColumns = getTableColumns(db, tableName);
+
+        if (existingColumns.has(targetColumn)) {
+            continue;
+        }
+
+        if (!existingColumns.has(sourceColumn)) {
+            console.warn(
+                `[migration] Skipping rename ${tableName}.${sourceColumn} → ${targetColumn} because source column is absent`,
+            );
+            continue;
+        }
+
+        runIgnoringDuplicates(db, [sql]);
+    }
+}
+
+function inferSchemaVersion(logsDb: SqlJsDatabase, errorsDb: SqlJsDatabase): number {
+    const logsTables = getExistingTables(logsDb);
+    const errorsTables = getExistingTables(errorsDb);
+    const sessionsColumns = getTableColumns(logsDb, "Sessions");
+
+    if (sessionsColumns.has("StartedAt")) {
+        if (logsTables.has("AssetVersion")) { return 8; }
+        if (logsTables.has("SharedAsset") || logsTables.has("ProjectGroup")) { return 7; }
+        if (logsTables.has("UpdateSettings")) { return 6; }
+        if (logsTables.has("UpdaterInfo")) { return 5; }
+        if (errorsTables.has("ErrorCodes")) { return 4; }
+        return 4;
+    }
+
+    if (sessionsHasTextPk(logsDb)) {
+        return 2;
+    }
+
+    return 3;
+}
+
+function getExistingTables(db: SqlJsDatabase): Set<string> {
+    try {
+        const result = db.exec("SELECT name FROM sqlite_master WHERE type='table'");
+
+        if (result.length === 0) {
+            return new Set<string>();
+        }
+
+        return new Set(result[0].values.map((row) => String(row[0])));
+    } catch {
+        return new Set<string>();
+    }
+}
+
+function getTableColumns(db: SqlJsDatabase, tableName: string): Set<string> {
+    try {
+        const result = db.exec(`PRAGMA table_info(${tableName})`);
+
+        if (result.length === 0) {
+            return new Set<string>();
+        }
+
+        const nameIndex = result[0].columns.indexOf("name");
+        if (nameIndex === -1) {
+            return new Set<string>();
+        }
+
+        return new Set(result[0].values.map((row) => String(row[nameIndex])));
+    } catch {
+        return new Set<string>();
     }
 }

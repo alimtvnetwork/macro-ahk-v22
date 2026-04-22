@@ -409,7 +409,7 @@ function initInMemory(): void {
     runSchemaWithIsolation(logsDb, FULL_LOGS_SCHEMA, "logs:memory");
 
     errorsDb = new SQL!.Database();
-    runSchemaWithIsolation(errorsDb, ERRORS_SCHEMA, "errors:memory");
+    runSchemaWithIsolation(errorsDb, FULL_ERRORS_SCHEMA, "errors:memory");
     persistenceMode = "memory";
 
     console.log("[db-manager] In-memory only (no persistence)");

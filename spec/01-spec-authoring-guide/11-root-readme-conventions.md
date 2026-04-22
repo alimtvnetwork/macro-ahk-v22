@@ -1,10 +1,11 @@
 # Root README Conventions
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Updated:** 2026-04-22
 **Status:** Active
 **AI Confidence:** Production-Ready
 **Ambiguity:** None
+**Enforced by:** [`scripts/check-readme-compliance.mjs`](../../scripts/check-readme-compliance.mjs) — `pnpm run check:readme`
 
 ---
 
@@ -18,93 +19,151 @@ These rules apply only to the **repository-root `readme.md`**. Module-level over
 
 ## Mandatory Structure (Top-of-File, In This Order)
 
-The first ~60 lines of `readme.md` MUST follow this exact skeleton:
+## Mandatory Hero Layout
+
+The first ~60 lines of `readme.md` MUST follow this **exact** skeleton, in this order. Any deviation is a compliance failure (the validator script reports `centered-hero`, `logo-above-title`, `tagline-blockquote`, or `hero-div-closed`):
 
 ```markdown
-<div align="center">
+<div align="center">                                  ← rule HL-01
 
-<img src="docs/assets/<project-logo>.png" alt="<Project> Logo" width="128" height="128" />
+<img src="docs/assets/<project-logo>.png"             ← rule HL-02
+     alt="<Project> Logo" width="128" height="128" />
 
-# <Project Name>
+# <Project Name>                                       ← rule HL-03 (single H1)
 
-> **<One-sentence value proposition>** — <stack/architecture qualifier>.
+> **<One-sentence value proposition>** — <stack qualifier>.   ← rule HL-04
 
-<!-- Build & Release -->
+<!-- Build & Release -->                               ← rule HL-05 (group order #1)
 [badges...]
 
-<!-- Repo activity -->
+<!-- Repo activity -->                                 ← rule HL-05 (group order #2)
 [badges...]
 
-<!-- Community -->
+<!-- Community -->                                     ← rule HL-05 (group order #3)
 [badges...]
 
-<!-- Code-quality report cards -->
+<!-- Code-quality report cards -->                     ← rule HL-05 (group order #4)
 [badges...]
 
-<!-- Stack & standards -->
+<!-- Stack & standards -->                             ← rule HL-05 (group order #5)
 [badges...]
 
-<img src="docs/assets/<hero-image>.png" alt="<Project> hero" width="820" />
+<img src="docs/assets/<hero-image>.png"                ← rule HL-06
+     alt="<Project> hero" width="820" />
 
-</div>
+</div>                                                 ← rule HL-07
 ```
 
-### Hard Rules
+### Hero Layout Hard Rules (enforced)
 
-1. **Wrap the entire hero block in `<div align="center">`** — title, logo, badges, and hero image must all be centered. Do **not** use the GitHub-only HTML `<h1 align="center">` shortcut; the `<div>` wrapper is portable across rendering surfaces.
-2. **Logo first, title second.** The `<img>` for the logo precedes the `# Title` H1 heading. Logo lives at `docs/assets/<project>-logo.png` and is sized **128×128**.
-3. **One H1 only.** The project name is the single H1 in the entire file (SEO + accessibility).
-4. **Tagline blockquote** directly under the H1, one sentence, em-dash-qualified.
-5. **Badges grouped by purpose**, each group prefixed with an HTML comment label. The five required groups are: **Build & Release**, **Repo activity**, **Community**, **Code-quality report cards**, **Stack & standards**.
-6. **Hero image** (UI screenshot or architecture diagram) is the last element inside the centering div, sized to **width=820**.
-7. **Close the centering div** before the first prose section.
+| Rule  | Requirement                                                                                                       | Validator check ID    |
+|-------|-------------------------------------------------------------------------------------------------------------------|-----------------------|
+| HL-01 | First non-blank line of the file is `<div align="center">`. Do **not** use `<h1 align="center">` (non-portable). | `centered-hero`       |
+| HL-02 | A `<img …logo…>` (or `![…logo…](…)`) appears above the H1, sized **128×128**, source ≥256×256 PNG.                | `logo-above-title`    |
+| HL-03 | Exactly one `# H1` heading exists in the entire file. The H1 sits inside the centering `<div>`.                   | `single-h1`           |
+| HL-04 | A `> blockquote` tagline appears within 5 lines of the H1, single sentence, em-dash-qualified.                    | `tagline-blockquote`  |
+| HL-05 | Five `<!-- … -->` HTML comment markers appear in the **exact order**: Build & Release → Repo activity → Community → Code-quality → Stack & standards. Each marker introduces a contiguous badge block (badges separated only by whitespace). | `group-build-release`, `group-repo-activity`, `group-community`, `group-code-quality`, `group-stack-stds` |
+| HL-06 | A hero `<img>` (UI screenshot or architecture diagram) is the **last** element inside the centering `<div>`, sized `width="820"`. | _(visual-only)_       |
+| HL-07 | The centering `<div>` is closed (`</div>`) **before** the first `## section` heading. Opens must equal closes.    | `hero-div-closed`     |
+
+> **Forbidden in the hero block:** `<table>`, `<details>`, raw HTML headings (`<h1>`–`<h6>`), inline `style="..."` attributes, or any element wider than 1920px. Keep the hero scannable in <2 seconds.
 
 ---
 
 ## Mandatory Badge Inventory
 
-Every root README must include **at least these badges**, organised into the five groups above. Use `style=flat-square` for visual consistency.
+## Mandatory Badge Inventory
 
-### Build & Release (5 badges minimum)
+Every root README must include **at least the badges listed below**, organised into the five groups in the **exact order** they appear in §HL-05. Per-group minimums and the aggregate minimum are enforced by `check-readme-compliance.mjs`. Every badge MUST use `style=flat-square` for visual consistency.
 
-| Badge | Source |
-|-------|--------|
-| CI workflow status | `img.shields.io/github/actions/workflow/status/<owner>/<repo>/ci.yml` |
-| Release workflow status | `img.shields.io/github/actions/workflow/status/<owner>/<repo>/release.yml` |
-| Latest release version | `img.shields.io/github/v/release/<owner>/<repo>` |
-| Release date | `img.shields.io/github/release-date/<owner>/<repo>` |
-| Total downloads | `img.shields.io/github/downloads/<owner>/<repo>/total` |
+> **Aggregate minimum:** **27 badges** (5 + 5 + 6 + 3 + 8). The validator reports `badge-total` if the file falls below this.
 
-### Repo Activity (5 badges minimum)
+### Group 1 — Build & Release (minimum **5** badges)
 
-| Badge | Source |
-|-------|--------|
-| Last commit | `img.shields.io/github/last-commit/<owner>/<repo>/main` |
-| Commit activity (monthly) | `img.shields.io/github/commit-activity/m/<owner>/<repo>` |
-| Open issues | `img.shields.io/github/issues/<owner>/<repo>` |
-| Open pull requests | `img.shields.io/github/issues-pr/<owner>/<repo>` |
-| Repo size | `img.shields.io/github/repo-size/<owner>/<repo>` |
+HTML comment marker: `<!-- Build & Release -->`
 
-### Community (6 badges minimum)
+| # | Badge                       | Source pattern                                                                              |
+|---|-----------------------------|---------------------------------------------------------------------------------------------|
+| 1 | CI workflow status          | `img.shields.io/github/actions/workflow/status/<owner>/<repo>/ci.yml?branch=main`           |
+| 2 | Release workflow status     | `img.shields.io/github/actions/workflow/status/<owner>/<repo>/release.yml`                  |
+| 3 | Latest release version      | `img.shields.io/github/v/release/<owner>/<repo>?include_prereleases&sort=semver`            |
+| 4 | Release date                | `img.shields.io/github/release-date/<owner>/<repo>`                                         |
+| 5 | Total downloads             | `img.shields.io/github/downloads/<owner>/<repo>/total`                                      |
 
-| Badge | Source |
-|-------|--------|
-| Stars | `img.shields.io/github/stars/<owner>/<repo>` (color: yellow) |
-| Forks | `img.shields.io/github/forks/<owner>/<repo>` |
-| Watchers | `img.shields.io/github/watchers/<owner>/<repo>` |
-| Contributors | `img.shields.io/github/contributors/<owner>/<repo>` |
-| PRs Welcome | `img.shields.io/badge/PRs-welcome-brightgreen` linking to `./contributing.md` |
-| Made with Love | `img.shields.io/badge/made%20with-%E2%99%A5-ff69b4` linking to the company site |
+### Group 2 — Repo Activity (minimum **5** badges)
 
-Discussions badge is optional but recommended when GitHub Discussions is enabled.
+HTML comment marker: `<!-- Repo activity -->`
 
-### Code-Quality Report Cards (3 badges minimum)
+| # | Badge                       | Source pattern                                                              |
+|---|-----------------------------|-----------------------------------------------------------------------------|
+| 1 | Last commit                 | `img.shields.io/github/last-commit/<owner>/<repo>/main`                     |
+| 2 | Commit activity (monthly)   | `img.shields.io/github/commit-activity/m/<owner>/<repo>`                    |
+| 3 | Open issues                 | `img.shields.io/github/issues/<owner>/<repo>`                               |
+| 4 | Open pull requests          | `img.shields.io/github/issues-pr/<owner>/<repo>`                            |
+| 5 | Repo size                   | `img.shields.io/github/repo-size/<owner>/<repo>`                            |
 
-CodeFactor, Codacy, Code Climate (or equivalent). Placeholder "activate" badges are acceptable until OAuth onboarding is complete; document the activation steps in a callout immediately under the badge block.
+A **Discussions** badge (`img.shields.io/github/discussions/<owner>/<repo>`) is **recommended** when GitHub Discussions is enabled and counts toward the group total.
 
-### Stack & Standards (8 badges minimum)
+### Group 3 — Community (minimum **6** badges)
 
-Cover language, runtime, package manager, build tool, primary framework, styling, lint, and test runner — one badge each, all with `flat-square` style. Always include a license badge as the final entry, linking to the `#license` anchor.
+HTML comment marker: `<!-- Community -->`
+
+| # | Badge                       | Source pattern                                                                          |
+|---|-----------------------------|-----------------------------------------------------------------------------------------|
+| 1 | Stars (yellow)              | `img.shields.io/github/stars/<owner>/<repo>?color=yellow`                              |
+| 2 | Forks                       | `img.shields.io/github/forks/<owner>/<repo>`                                           |
+| 3 | Watchers                    | `img.shields.io/github/watchers/<owner>/<repo>`                                        |
+| 4 | Contributors                | `img.shields.io/github/contributors/<owner>/<repo>`                                    |
+| 5 | PRs Welcome                 | `img.shields.io/badge/PRs-welcome-brightgreen` → links to `./contributing.md`          |
+| 6 | Made with Love              | `img.shields.io/badge/made%20with-%E2%99%A5-ff69b4` → links to the company site        |
+
+### Group 4 — Code-Quality Report Cards (minimum **3** badges; **12 recommended**)
+
+HTML comment marker: `<!-- Code-quality report cards -->`
+
+The minimum-viable set covers static analysis (CodeFactor / Codacy / Code Climate). Mature projects ship the full **12-tile** matrix below. Placeholder *"activate"* badges are acceptable for tiles that require OAuth onboarding — they MUST link to the activation page and MUST be documented in a callout immediately under the badge block (see §"Activation Callout" below).
+
+| # | Tile                | Type           | Source pattern                                                                                | Status when unowned |
+|---|---------------------|----------------|-----------------------------------------------------------------------------------------------|---------------------|
+| 1 | CodeFactor          | static-analysis| `img.shields.io/codefactor/grade/github/<owner>/<repo>/main`                                  | live (no signup)    |
+| 2 | Codacy              | static-analysis| `img.shields.io/badge/Codacy-activate-blue` → activation                                      | placeholder         |
+| 3 | Code Climate        | maintainability| `img.shields.io/badge/Code%20Climate-activate-blue` → activation                              | placeholder         |
+| 4 | CodeQL              | security       | `img.shields.io/github/actions/workflow/status/<owner>/<repo>/codeql.yml?label=CodeQL`        | live via CI         |
+| 5 | Snyk Vulnerabilities| security       | `img.shields.io/snyk/vulnerabilities/github/<owner>/<repo>`                                   | live (auto-poll)    |
+| 6 | npm audit           | dependency-sec | `img.shields.io/badge/dependencies-audited-success` → `…/security/dependabot`                 | live (CI gate)      |
+| 7 | Dependabot          | dependency-mgt | `img.shields.io/badge/Dependabot-active-025E8C` → `…/network/updates`                         | live via config     |
+| 8 | Renovate            | dependency-mgt | `img.shields.io/badge/Renovate-ready-1A1F6C` → docs                                           | placeholder         |
+| 9 | Coverage (local)    | tests          | `img.shields.io/badge/coverage-tracked-success` → `./vitest.config.ts`                        | live                |
+|10 | Codecov             | tests-uploaded | `img.shields.io/badge/Codecov-activate-F01F7A` → activation                                   | placeholder         |
+|11 | TypeScript Strict   | language-mode  | `img.shields.io/badge/TypeScript-strict-blue` → `./tsconfig.json`                             | informational       |
+|12 | Maintained          | meta           | `img.shields.io/badge/maintained-yes-brightgreen` → `…/commits/main`                          | informational       |
+
+#### Activation Callout (mandatory under the hero)
+
+When ANY tile in Group 4 ships as a placeholder, the README MUST include a `> Report cards — activation status` blockquote immediately under the closing `</div>` of the hero. Each placeholder line must specify: tile name, status icon (✅ live / ⏳ pending), the OAuth provider URL, and the **exact replacement badge URL pattern** for after activation.
+
+### Group 5 — Stack & Standards (minimum **8** badges)
+
+HTML comment marker: `<!-- Stack & standards -->`
+
+Cover the full delivery stack — one badge each. Order: language → runtime → package manager → build tool → primary framework → styling → lint → test runner → license. The license badge MUST be the **final** entry and MUST link to `#license`.
+
+| # | Badge                | Example source                                                                  |
+|---|----------------------|---------------------------------------------------------------------------------|
+| 1 | Language version     | `img.shields.io/badge/TypeScript-5-3178C6?logo=typescript`                      |
+| 2 | Runtime version      | `img.shields.io/badge/Node-20%2B-339933?logo=node.js`                           |
+| 3 | Package manager      | `img.shields.io/badge/pnpm-9-F69220?logo=pnpm`                                  |
+| 4 | Build tool           | `img.shields.io/badge/Vite-5-646CFF?logo=vite`                                  |
+| 5 | Primary framework    | `img.shields.io/badge/React-18-61DAFB?logo=react`                               |
+| 6 | Styling              | `img.shields.io/badge/Tailwind-3-38B2AC?logo=tailwindcss`                       |
+| 7 | Lint                 | `img.shields.io/badge/ESLint-…-4B32C3?logo=eslint`                              |
+| 8 | Test runner          | `img.shields.io/badge/tested%20with-Vitest-6E9F18?logo=vitest`                  |
+| 9 | E2E (recommended)    | `img.shields.io/badge/E2E-Playwright-2EAD33?logo=playwright`                    |
+|10 | License (mandatory final) | `img.shields.io/badge/license-<Type>-red` → `#license`                     |
+
+For Chrome-extension repos add a **Manifest V3** badge (`img.shields.io/badge/Manifest-V3-4285F4?logo=googlechrome`) as entry #1 to make the deployment target unambiguous.
+
+> **Style invariant:** every badge URL MUST contain `style=flat-square`. The validator does not enforce this directly, but reviewers should reject PRs that mix styles within the hero.
 
 ---
 
@@ -180,19 +239,59 @@ This project is proprietary software owned by <Company Name>. All rights reserve
 
 ## Validation Checklist
 
-A root README passes review only if every item below is true:
+A root README passes review only if **every** item below is true. Items mapped to a validator check ID will fail CI automatically; the rest are reviewer-enforced.
 
-- [ ] Logo image rendered above the H1 title, sized 128×128.
-- [ ] H1 title is centered (inside `<div align="center">`).
-- [ ] Tagline blockquote present directly under the H1.
-- [ ] All five badge groups present, each labeled with an HTML comment.
-- [ ] At least 27 badges total (5 + 5 + 6 + 3 + 8).
-- [ ] Hero screenshot rendered inside the centered div at width=820.
-- [ ] `## Author` section present with centered name, biography, and metadata table.
-- [ ] `### <Company>` subsection present with tagline and metadata table.
-- [ ] `## License` section present at the end.
-- [ ] Single H1 in the entire document.
-- [ ] Company name spelling matches `mem://branding/author-identity` exactly.
+### Hero Layout
+
+- [ ] HL-01 — File opens with `<div align="center">` (validator: `centered-hero`).
+- [ ] HL-02 — Logo image (`<img …logo…>` or `![…logo…](…)`) renders above the H1, 128×128 (validator: `logo-above-title`).
+- [ ] HL-03 — Exactly one `# H1` heading exists in the entire document (validator: `single-h1`).
+- [ ] HL-04 — Tagline `> blockquote` appears within 5 lines of the H1 (validator: `tagline-blockquote`).
+- [ ] HL-05 — All five badge group comment markers present, in order (validator: `group-build-release`, `group-repo-activity`, `group-community`, `group-code-quality`, `group-stack-stds`).
+- [ ] HL-06 — Hero screenshot at `width="820"` is the last element inside the centering div.
+- [ ] HL-07 — Centering `</div>` closes before the first `## section` heading (validator: `hero-div-closed`).
+
+### Badge Inventory
+
+- [ ] Group 1 (Build & Release) ≥ **5** badges.
+- [ ] Group 2 (Repo activity) ≥ **5** badges.
+- [ ] Group 3 (Community) ≥ **6** badges.
+- [ ] Group 4 (Code-quality) ≥ **3** badges (12 recommended; placeholders allowed if documented in activation callout).
+- [ ] Group 5 (Stack & standards) ≥ **8** badges, license badge last and linking to `#license`.
+- [ ] Aggregate badge count ≥ **27** (validator: `badge-total`).
+- [ ] Every badge URL contains `style=flat-square`.
+
+### Author + Footer
+
+- [ ] `## Author` section present with centered `### [Name](url)` (validator: `author-section`, `author-centered-name`).
+- [ ] Author role line follows `**[Primary](url)** | [Secondary](url), [Company](url)` format (validator: `author-role-line`).
+- [ ] Biography mentions years of experience + at least one reputation source (Stack Overflow / LinkedIn / GitHub) (validator: `author-bio`).
+- [ ] Two-column author metadata table with empty header (validator: `author-metadata-table`).
+- [ ] `### <Company>` subsection present with tagline and metadata table (validator: `company-subsection`).
+- [ ] `## License` section present at the end with a non-empty body (validator: `license-section`).
+- [ ] Company name spelling matches `mem://branding/author-identity` exactly (reviewer-enforced).
+
+---
+
+## Enforcement
+
+The script [`scripts/check-readme-compliance.mjs`](../../scripts/check-readme-compliance.mjs) is the single source of truth for compliance. It runs **18 checks** mapped 1-to-1 to the rules above and exits non-zero on any violation.
+
+Run locally:
+
+```bash
+pnpm run check:readme           # human-readable output
+pnpm run check:readme:json      # JSON envelope { version, ok, summary, checks[] } for CI
+```
+
+When you change anything in §"Mandatory Hero Layout" or §"Mandatory Badge Inventory", you MUST also:
+
+1. Update the validator's per-group `min` thresholds in `scripts/check-readme-compliance.mjs` → `BADGE_GROUPS` constant.
+2. Re-run `pnpm run check:readme` to confirm the live README still passes.
+3. Bump this spec's `**Version:**` header (semver — minor for adding rules, major for tightening any existing minimum).
+4. Update the spec memory entry at `mem://standards/readme-compliance-check` if the check ID set or output schema changes.
+
+The validator's check IDs are part of the public CI contract — renaming any ID is a breaking change and requires a major bump.
 
 ---
 

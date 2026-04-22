@@ -2,7 +2,7 @@
 
 **Date**: 2026-03-23  
 **Status**: Implemented  
-**Spec**: `spec/11-chrome-extension/63-rise-up-macro-sdk.md`
+**Spec**: `spec/21-app/02-features/chrome-extension/63-rise-up-macro-sdk.md`
 
 ---
 
@@ -120,10 +120,10 @@ The extension Vite config (`chrome-extension/vite.config.ts`) includes a pre-bui
 | `chrome-extension/vite.config.ts` | Extension build (copyProjectScripts) |
 | `src/lib/slug-utils.ts` | Slug generation + codeName + namespace derivation |
 | `src/components/options/DevGuideSection.tsx` | Inline developer docs component |
-| `spec/12-devtools-and-injection/developer-guide/04-sdk-namespace.md` | User-facing stub vs full distinction |
+| `spec/21-app/02-features/devtools-and-injection/developer-guide/04-sdk-namespace.md` | User-facing stub vs full distinction |
 
 ## Dependencies
 
-- Spec 50: Script Dependency System (`spec/11-chrome-extension/50-script-dependency-system.md`)
-- Spec 43: Macro Controller Extension Bridge (`spec/11-chrome-extension/43-macro-controller-extension-bridge.md`)
-- Spec 58: Updater System (`spec/11-chrome-extension/58-updater-system.md`)
+- Spec 50: Script Dependency System (`spec/21-app/02-features/chrome-extension/50-script-dependency-system.md`)
+- Spec 43: Macro Controller Extension Bridge (`spec/21-app/02-features/chrome-extension/43-macro-controller-extension-bridge.md`)
+- Spec 58: Updater System (`spec/21-app/02-features/chrome-extension/58-updater-system.md`)

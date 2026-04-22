@@ -4,7 +4,7 @@
  * Standardized structure for capturing and displaying runtime errors
  * across the extension (database, storage, namespace operations, etc.).
  *
- * @see spec/11-chrome-extension/55-storage-ui-redesign.md
+ * @see spec/21-app/02-features/chrome-extension/55-storage-ui-redesign.md
  */
 
 export interface ErrorModel {

@@ -2,7 +2,7 @@
 
 > **Audience:** Operators, reviewers, future maintainers.
 > **Purpose:** A single document combining the live `manifest.json`, the permission validator's current output, and the content-script injection strategy audit. Read this before approving any permission change, content-script change, or Chrome Web Store submission.
-> **Generated from:** `manifest.json` (v2.170.0), `scripts/check-manifest-permissions.mjs`, `spec/11-chrome-extension/91-content-script-injection-strategy-audit.md`.
+> **Generated from:** `manifest.json` (v2.170.0), `scripts/check-manifest-permissions.mjs`, `spec/21-app/02-features/chrome-extension/91-content-script-injection-strategy-audit.md`.
 > **Last updated:** 2026-04-20
 
 ---

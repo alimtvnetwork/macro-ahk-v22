@@ -212,4 +212,4 @@ export function getRenamePresetStore(): RenamePresetStore {
 
 ## Spec Reference
 
-Full design specification: `spec/10-macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md`
+Full design specification: `spec/21-app/02-features/macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md`

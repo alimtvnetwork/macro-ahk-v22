@@ -5,7 +5,7 @@
  * instead of falling back to entries[0] (the regression that caused Start Prompt
  * to be injected as the next-task content).
  *
- * @see spec/16-tasks/next-feature.md
+ * @see spec/21-app/06-tasks/next-feature.md
  */
 
 import { describe, it, expect } from 'vitest';

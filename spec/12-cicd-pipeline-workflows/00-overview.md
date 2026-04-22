@@ -12,7 +12,7 @@
 
 This module is a **planned stub** reserved by the new spec authoring guide (v3.2.0) at slot `12`. It will hold specifications for CI/CD pipeline workflows, deployment automation, GitHub Actions workflows, release procedures, and tag-push strategies.
 
-In Phase 7 of the reorganization, the existing `release-procedure.md` (currently at `spec/11-chrome-extension/release-procedure.md`) and the RCA `spec/17-app-issues/95-release-page-missing-built-assets-rca.md` will be cross-referenced from here.
+In Phase 7 of the reorganization, the existing `release-procedure.md` (currently at `spec/21-app/02-features/chrome-extension/release-procedure.md`) and the RCA `spec/22-app-issues/95-release-page-missing-built-assets-rca.md` will be cross-referenced from here.
 
 No content has been authored in this folder yet. Created on 2026-04-22 as part of Phase 2 of the spec reorganization (`.lovable/spec-reorganization-plan-2026-04-22.md`).
 

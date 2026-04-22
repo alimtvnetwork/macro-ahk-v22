@@ -93,7 +93,7 @@ async function resolveProjectEntryScripts(
     // ✅ Self-heal: reseed missing built-in scripts before resolving
     // Without this, the popup "Run Scripts" path skips the guard that
     // the auto-injector applies, causing "script not found in store".
-    // See: spec/17-app-issues/check-button/11-popup-injection-missing-guard.md
+    // See: spec/22-app-issues/check-button/11-popup-injection-missing-guard.md
     const projects = await readAllProjects();
     await ensureBuiltinScriptsExist(projects);
 

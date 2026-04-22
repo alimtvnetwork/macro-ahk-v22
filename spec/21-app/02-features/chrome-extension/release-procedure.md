@@ -1,6 +1,6 @@
 # Release Procedure (Chrome Extension)
 
-> See also: `spec/17-app-issues/95-release-page-missing-built-assets-rca.md` for the
+> See also: `spec/22-app-issues/95-release-page-missing-built-assets-rca.md` for the
 > RCA that motivated this document.
 
 This document is the authoritative procedure for publishing a Marco Extension

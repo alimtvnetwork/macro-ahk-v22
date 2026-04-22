@@ -365,8 +365,8 @@ The **Rise Up Macro SDK** is registered as the first UpdaterInfo entry:
 
 ## Cross-References
 
-- `spec/07-data-and-api/db-join-specs/01-category-join-pattern.md` — Join pattern used
-- `spec/07-data-and-api/data-models.md` — Full schema registry
-- `spec/12-devtools-and-injection/sdk-convention.md` — SDK architecture
-- `spec/11-chrome-extension/56-extension-update-mechanism.md` — Earlier update URL concept
+- `spec/21-app/03-data-and-api/db-join-specs/01-category-join-pattern.md` — Join pattern used
+- `spec/21-app/03-data-and-api/data-models.md` — Full schema registry
+- `spec/21-app/02-features/devtools-and-injection/sdk-convention.md` — SDK architecture
+- `spec/21-app/02-features/chrome-extension/56-extension-update-mechanism.md` — Earlier update URL concept
 - `src/background/db-schemas.ts` — SQL implementation

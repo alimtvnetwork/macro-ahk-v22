@@ -319,7 +319,7 @@ Files use numbered prefixes: `01-name-of-file.md`.
 ## References
 
 - [Engineering Standards](spec/06-coding-guidelines/engineering-standards.md)
-- [Build Pipeline](spec/12-devtools-and-injection/developer-guide/03-build-pipeline.md)
+- [Build Pipeline](spec/21-app/02-features/devtools-and-injection/developer-guide/03-build-pipeline.md)
 - [Extension README](chrome-extension/readme.md)
 - [Root README](readme.md)
 - [CHANGELOG](changelog.md)

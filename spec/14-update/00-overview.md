@@ -12,7 +12,7 @@
 
 This module is a **planned stub** reserved by the new spec authoring guide (v3.2.0) at slot `14`. It will hold specifications for self-update blueprints: Chrome extension update mechanism, release distribution, version-bump policies, and rollback strategies.
 
-Existing related content (e.g., `spec/11-chrome-extension/56-extension-update-mechanism.md` and `58-updater-system.md`) will be referenced from here once migrated. No content has been authored in this folder yet. Created on 2026-04-22 as part of Phase 2 of the spec reorganization (`.lovable/spec-reorganization-plan-2026-04-22.md`).
+Existing related content (e.g., `spec/21-app/02-features/chrome-extension/56-extension-update-mechanism.md` and `58-updater-system.md`) will be referenced from here once migrated. No content has been authored in this folder yet. Created on 2026-04-22 as part of Phase 2 of the spec reorganization (`.lovable/spec-reorganization-plan-2026-04-22.md`).
 
 ---
 

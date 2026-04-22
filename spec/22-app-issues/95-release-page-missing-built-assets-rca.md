@@ -69,7 +69,7 @@ For v2.192.0:
 
 1. **No release-time guard.** Nothing fails loudly when a tag is created without the corresponding workflow firing. There is no scheduled job that audits "every `v*` tag has matching Release assets" and reports a regression.
 2. **`.gitmap/release/*.json` is not authoritative.** Every prior record stores `"assets": []`. It is metadata-only; it does not gate or trigger the workflow.
-3. **Documentation gap.** Neither `readme.md` nor any spec under `spec/11-chrome-extension/` documents the exact tag-push procedure that fires `release.yml` (i.e., `git push origin v2.192.0` from a workstation, not the GitHub web "Create release" button).
+3. **Documentation gap.** Neither `readme.md` nor any spec under `spec/21-app/02-features/chrome-extension/` documents the exact tag-push procedure that fires `release.yml` (i.e., `git push origin v2.192.0` from a workstation, not the GitHub web "Create release" button).
 4. **No fallback `workflow_dispatch`.** `release.yml` cannot be replayed manually for a tag whose original push event was missed — there is no `on: workflow_dispatch` with a `version` input.
 
 ### Triggering conditions
@@ -82,7 +82,7 @@ Any of the following will reproduce the gap:
 
 ### Why the existing spec did not prevent it
 
-- `spec/11-chrome-extension/` had no release-procedure document.
+- `spec/21-app/02-features/chrome-extension/` had no release-procedure document.
 - `.lovable/memory/workflow/versioning-policy.md` covers version *string* synchronization, not release-publication mechanics.
 - The release workflow itself is internally well-structured (parallel jobs, integrity checks, no-source-map guard) but its trigger surface is invisible to anyone reading the GitHub UI.
 
@@ -93,7 +93,7 @@ Any of the following will reproduce the gap:
 ### Immediate (this PR)
 
 1. **Add `workflow_dispatch` to `release.yml`** with a required `version` input. Lets the maintainer replay the release pipeline against an existing tag from the Actions tab without re-pushing the tag, fixing v2.192.0 (and any prior release) without rebasing history.
-2. **Add a release procedure spec** at `spec/11-chrome-extension/release-procedure.md` that documents the exact commands required to fire `release.yml` and explicitly forbids using the GitHub web UI's "Create release from tag" as the *only* publishing mechanism.
+2. **Add a release procedure spec** at `spec/21-app/02-features/chrome-extension/release-procedure.md` that documents the exact commands required to fire `release.yml` and explicitly forbids using the GitHub web UI's "Create release from tag" as the *only* publishing mechanism.
 3. **Update `.gitmap/release/v2.192.0.json`** with a `notes` field referencing this RCA so the historical record explains why `"assets": []` for that version.
 
 ### Preventive (follow-up tasks listed in this RCA)
@@ -139,8 +139,8 @@ Audit job writes a Step Summary table listing every `v*` tag and its asset state
 
 ### References to spec sections updated
 
-- New: `spec/11-chrome-extension/release-procedure.md` (added in the same PR as the workflow change)
-- This file: `spec/17-app-issues/95-release-page-missing-built-assets-rca.md`
+- New: `spec/21-app/02-features/chrome-extension/release-procedure.md` (added in the same PR as the workflow change)
+- This file: `spec/22-app-issues/95-release-page-missing-built-assets-rca.md`
 
 ---
 
@@ -149,7 +149,7 @@ Audit job writes a Step Summary table listing every `v*` tag and its asset state
 - [x] Root cause confirmed from workflow YAML + `.gitmap/release/*.json` + screenshots
 - [x] RCA spec written before code change
 - [x] `release.yml` updated with `workflow_dispatch` + `version` input
-- [x] `spec/11-chrome-extension/release-procedure.md` added
+- [x] `spec/21-app/02-features/chrome-extension/release-procedure.md` added
 - [x] `.gitmap/release/v2.192.0.json` annotated with rcaRef
 - [ ] Audit job + publish script (follow-up tasks tracked here)
 - [ ] v2.192.0 Release replayed via `workflow_dispatch` once the workflow change is merged

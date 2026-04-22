@@ -4,7 +4,7 @@
  * Shared asset library with AssetCard grid, SyncBadge status indicators,
  * and PromoteDialog for pushing local assets to the library.
  *
- * @see spec/13-features/cross-project-sync.md
+ * @see spec/21-app/02-features/misc-features/cross-project-sync.md
  */
 
 import { useState, useEffect, useCallback } from "react";

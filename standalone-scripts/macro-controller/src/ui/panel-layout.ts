@@ -11,7 +11,7 @@ import { PANEL_DEFAULT_WIDTH, PANEL_DEFAULT_HEIGHT } from '../shared-state';
 
 // ============================================
 // LocalStorage keys for panel state persistence
-// See: spec/17-app-issues/63-button-layout-collapse-reload.md
+// See: spec/22-app-issues/63-button-layout-collapse-reload.md
 // ============================================
 import { PANEL_EDGE_MARGIN, PANEL_MIN_VISIBLE_HEIGHT, PANEL_MIN_VISIBLE_WIDTH, DEFAULT_BACKDROP_OPACITY } from '../constants';
 import { DomId, StorageKey } from '../types';

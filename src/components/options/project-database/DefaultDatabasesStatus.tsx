@@ -5,7 +5,7 @@
  * status badges, entry counts, and quick actions. Allows expanding to browse
  * the KeyValueStore entries.
  *
- * @see spec/11-chrome-extension/90-namespace-database-creation.md
+ * @see spec/21-app/02-features/chrome-extension/90-namespace-database-creation.md
  */
 
 import { useState, useEffect, useCallback } from "react";

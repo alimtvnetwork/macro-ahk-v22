@@ -202,7 +202,7 @@ function applyV6Down(_logsDb: SqlJsDatabase, _errorsDb: SqlJsDatabase): void {
 
 /* ------------------------------------------------------------------ */
 /*  Migration v7 — Cross-Project Sync Tables                           */
-/*  See: spec/13-features/cross-project-sync.md                        */
+/*  See: spec/21-app/02-features/misc-features/cross-project-sync.md                        */
 /* ------------------------------------------------------------------ */
 
 function applyV7Up(logsDb: SqlJsDatabase, _errorsDb: SqlJsDatabase): void {

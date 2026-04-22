@@ -13,4 +13,4 @@ Reasons:
 
 `message-relay.js` MUST be static because it must establish the `window.postMessage` listener at `document_start` before any user script can talk to it. Pure forwarder — no DOM listeners, no API patching.
 
-Audit doc: `spec/11-chrome-extension/91-content-script-injection-strategy-audit.md`. Do NOT propose moving any of the three dynamic scripts into manifest content_scripts.
+Audit doc: `spec/21-app/02-features/chrome-extension/91-content-script-injection-strategy-audit.md`. Do NOT propose moving any of the three dynamic scripts into manifest content_scripts.

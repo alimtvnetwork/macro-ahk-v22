@@ -17,8 +17,8 @@ This document cross-references all E2E test specifications, regression checklist
 
 | Document | Path |
 |----------|------|
-| E2E Test Specification | [`spec/11-chrome-extension/testing/01-e2e-test-specification.md`](../11-chrome-extension/testing/01-e2e-test-specification.md) |
-| Pre-Release Regression Checklist | [`spec/11-chrome-extension/testing/02-pre-release-regression-checklist.md`](../11-chrome-extension/testing/02-pre-release-regression-checklist.md) |
+| E2E Test Specification | [`spec/21-app/02-features/chrome-extension/testing/01-e2e-test-specification.md`](../11-chrome-extension/testing/01-e2e-test-specification.md) |
+| Pre-Release Regression Checklist | [`spec/21-app/02-features/chrome-extension/testing/02-pre-release-regression-checklist.md`](../11-chrome-extension/testing/02-pre-release-regression-checklist.md) |
 
 ### Playwright Config
 
@@ -65,8 +65,8 @@ This document cross-references all E2E test specifications, regression checklist
 
 | Document | Path |
 |----------|------|
-| E2E Test Specification | [`spec/14-imported/wp-plugin-publish/04-testing/40-e2e-test-spec.md`](wp-plugin-publish/04-testing/40-e2e-test-spec.md) |
-| Pre-Release Regression Checklist | [`spec/14-imported/wp-plugin-publish/04-testing/41-pre-release-regression-checklist.md`](wp-plugin-publish/04-testing/41-pre-release-regression-checklist.md) |
+| E2E Test Specification | [`spec/99-archive/wordpress/wp-plugin-publish/04-testing/40-e2e-test-spec.md`](wp-plugin-publish/04-testing/40-e2e-test-spec.md) |
+| Pre-Release Regression Checklist | [`spec/99-archive/wordpress/wp-plugin-publish/04-testing/41-pre-release-regression-checklist.md`](wp-plugin-publish/04-testing/41-pre-release-regression-checklist.md) |
 
 ### Test Matrix (20 tests)
 

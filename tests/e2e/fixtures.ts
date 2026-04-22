@@ -1,5 +1,9 @@
 import { test as base, chromium, type BrowserContext, type Page } from '@playwright/test';
 import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /*
  * Chrome Extension E2E — Shared Fixtures

@@ -103,7 +103,7 @@ export async function handleDeletePromptChain(msg: MessageRequest): Promise<{ is
  * The standalone bundle (src/content-scripts/prompt-injector.ts) drains the
  * session-storage queue, runs the injection, and posts back the result.
  *
- * @see spec/11-chrome-extension/91-content-script-injection-strategy-audit.md
+ * @see spec/21-app/02-features/chrome-extension/91-content-script-injection-strategy-audit.md
  */
 const PROMPT_ARGS_KEY = "marco_prompt_args";
 const PROMPT_INJECT_RESULT = "PROMPT_INJECT_RESULT";

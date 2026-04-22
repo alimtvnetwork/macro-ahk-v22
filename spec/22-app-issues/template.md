@@ -112,8 +112,8 @@
 
 ## Done Checklist
 
-- [ ] Spec updated under `/spec/10-macro-controller/`
-- [ ] Issue write-up created under `/spec/17-app-issues/`
+- [ ] Spec updated under `/spec/21-app/02-features/macro-controller/`
+- [ ] Issue write-up created under `/spec/22-app-issues/`
 - [ ] Memory updated with summary and prevention rule
 - [ ] Acceptance criteria updated or added
 - [ ] Iterations recorded if applicable

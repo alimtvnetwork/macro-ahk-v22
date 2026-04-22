@@ -11,7 +11,7 @@
  * - `logConsole(fn, msg, ...args)` — General output → Logger.console()
  * - `logStackTrace(fn, msg, error?)` — Always captures stack → Logger.stackTrace()
  *
- * @see spec/10-macro-controller/ts-migration-v2/08-error-logging-and-type-safety.md
+ * @see spec/21-app/02-features/macro-controller/ts-migration-v2/08-error-logging-and-type-safety.md
  */
 
 /**

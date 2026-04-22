@@ -4,7 +4,7 @@
  * SHA-256 content hashing for SharedAsset diff detection.
  * Uses Web Crypto API (available in service workers).
  *
- * @see spec/13-features/cross-project-sync.md §7.3 — Content Hashing
+ * @see spec/21-app/02-features/misc-features/cross-project-sync.md §7.3 — Content Hashing
  */
 
 /**

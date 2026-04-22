@@ -4,8 +4,8 @@
  * Defines the common databases that every project should have by default.
  * The first required default is always a Key-Value database.
  *
- * @see spec/11-chrome-extension/55-storage-ui-redesign.md
- * @see spec/11-chrome-extension/90-namespace-database-creation.md
+ * @see spec/21-app/02-features/chrome-extension/55-storage-ui-redesign.md
+ * @see spec/21-app/02-features/chrome-extension/90-namespace-database-creation.md
  */
 
 /* ------------------------------------------------------------------ */
@@ -96,7 +96,7 @@ export const DEFAULT_PROJECT_DATABASES: DefaultDatabaseDef[] = [
 
 /* ------------------------------------------------------------------ */
 /*  Namespace Validation                                               */
-/*  @see spec/11-chrome-extension/90-namespace-database-creation.md    */
+/*  @see spec/21-app/02-features/chrome-extension/90-namespace-database-creation.md    */
 /* ------------------------------------------------------------------ */
 
 /** Reserved namespace prefixes that only the system can use. */

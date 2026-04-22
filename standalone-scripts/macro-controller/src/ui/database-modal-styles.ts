@@ -4,7 +4,7 @@
  * Scoped CSS injection for the database browser modal.
  * Extracted from database-modal.ts during Phase 5 module splitting.
  *
- * @see spec/06-coding-guidelines/01-code-quality-improvement.md — Rule CQ4
+ * @see spec/02-coding-guidelines/01-code-quality-improvement.md — Rule CQ4
  */
 
 import {

@@ -11,7 +11,7 @@
  *
  * Design: fixed-position bar at bottom-right, inline styles only (no CSS deps).
  *
- * @see spec/17-app-issues/89-chrome-extension-load-workspace-prompt-root-cause/03-rc02-missing-startup-toast.md
+ * @see spec/22-app-issues/89-chrome-extension-load-workspace-prompt-root-cause/03-rc02-missing-startup-toast.md
  */
 
 import { TOAST_AUTO_DISMISS_MS as AUTO_DISMISS_MS, TOAST_FADE_DURATION_MS as FADE_DURATION_MS } from './constants';

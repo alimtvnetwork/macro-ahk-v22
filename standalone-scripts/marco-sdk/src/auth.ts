@@ -3,7 +3,7 @@
  *
  * Provides marco.auth.* methods for token management.
  *
- * See: spec/12-devtools-and-injection/sdk-convention.md §marco.auth
+ * See: spec/21-app/02-features/devtools-and-injection/sdk-convention.md §marco.auth
  */
 
 import { sendMessage } from "./bridge";

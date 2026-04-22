@@ -60,7 +60,7 @@ Names are lowercase, hyphen-separated, 2-4 words (e.g. `feature/add-prompt-cachi
 
 ### 2. Write Code
 
-Follow the project coding standards (26 rules in `spec/06-coding-guidelines/engineering-standards.md`):
+Follow the project coding standards (26 rules in `spec/02-coding-guidelines/engineering-standards.md`):
 
 **TypeScript / React:**
 
@@ -100,7 +100,7 @@ Follow the project coding standards (26 rules in `spec/06-coding-guidelines/engi
 - Parameters with `[CmdletBinding()]` and typed params.
 - Verbose output behind `-Verbose` or project `-v` flag.
 
-See [`spec/06-coding-guidelines/`](spec/06-coding-guidelines) for the full ruleset.
+See [`spec/02-coding-guidelines/`](spec/02-coding-guidelines) for the full ruleset.
 
 ### 3. Run Checks Locally
 
@@ -318,8 +318,8 @@ Files use numbered prefixes: `01-name-of-file.md`.
 
 ## References
 
-- [Engineering Standards](spec/06-coding-guidelines/engineering-standards.md)
-- [Build Pipeline](spec/12-devtools-and-injection/developer-guide/03-build-pipeline.md)
+- [Engineering Standards](spec/02-coding-guidelines/engineering-standards.md)
+- [Build Pipeline](spec/21-app/02-features/devtools-and-injection/developer-guide/03-build-pipeline.md)
 - [Extension README](chrome-extension/readme.md)
 - [Root README](readme.md)
 - [CHANGELOG](changelog.md)

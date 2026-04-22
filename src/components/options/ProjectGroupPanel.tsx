@@ -4,7 +4,7 @@
  * CRUD for ProjectGroup + member management.
  * Renders as a tab inside LibraryView.
  *
- * @see spec/13-features/cross-project-sync.md §8 Groups
+ * @see spec/21-app/02-features/misc-features/cross-project-sync.md §8 Groups
  */
 
 import { useState, useCallback } from "react";

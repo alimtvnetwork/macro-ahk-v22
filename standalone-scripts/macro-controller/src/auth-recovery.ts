@@ -3,7 +3,7 @@
  * Phase 5B: Extracted from auth.ts
  * Phase 6: Refactored to class-based encapsulation (CQ11, CQ12, CQ16, CQ17, CQ18)
  *
- * @see spec/06-coding-guidelines/02-typescript-immutability-standards.md
+ * @see spec/02-coding-guidelines/02-typescript-immutability-standards.md
  *
  * Conversion (CQ10):
  *   Before: 4 module-level `let` vars, nested `finishRecovery()`, inline setTimeout retry,

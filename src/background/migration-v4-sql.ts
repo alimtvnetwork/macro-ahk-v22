@@ -7,7 +7,7 @@
  * All renames are wrapped in runIgnoringDuplicates — if a column was already
  * renamed (fresh install), the ALTER will fail harmlessly.
  *
- * See: spec/06-coding-guidelines/coding-guidelines/database-naming.md
+ * See: spec/02-coding-guidelines/coding-guidelines/database-naming.md
  */
 
 /* ------------------------------------------------------------------ */

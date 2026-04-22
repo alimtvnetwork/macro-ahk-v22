@@ -13,10 +13,10 @@
 | 1 | `00-overview.md` | ✅ Present |
 | 2 | `01-fundamentals.md` | ✅ Present |
 | 3 | `02-features/` | ✅ Present (with `00-overview.md`) |
-| 4 | `03-data-and-api/` | ✅ Present (migrated from `spec/07-data-and-api/`) |
-| 5 | `04-design-diagrams/` | ✅ Present (migrated from `spec/08-design-diagram/`) |
-| 6 | `05-prompts/` | ✅ Present (migrated from `spec/15-prompts/`) |
-| 7 | `06-tasks/` | ✅ Present (migrated from `spec/16-tasks/`) |
+| 4 | `03-data-and-api/` | ✅ Present (migrated from `spec/21-app/03-data-and-api/`) |
+| 5 | `04-design-diagrams/` | ✅ Present (migrated from `spec/21-app/04-design-diagrams/`) |
+| 6 | `05-prompts/` | ✅ Present (migrated from `spec/21-app/05-prompts/`) |
+| 7 | `06-tasks/` | ✅ Present (migrated from `spec/21-app/06-tasks/`) |
 | 8 | `99-consistency-report.md` | ✅ Present |
 
 ---

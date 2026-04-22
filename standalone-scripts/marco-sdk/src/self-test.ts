@@ -23,7 +23,7 @@
  * Each round-trip logs its own PASS / FAIL via NamespaceLogger so a backend
  * failure on one surface never masks success on another.
  *
- * See: spec/17-app-issues/66-sdk-global-object-missing.md
+ * See: spec/22-app-issues/66-sdk-global-object-missing.md
  */
 
 import { NamespaceLogger } from "./logger";

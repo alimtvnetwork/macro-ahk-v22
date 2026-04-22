@@ -5,8 +5,8 @@
 `standalone-scripts/macro-controller/src/ui/bulk-rename-fields.ts`,
 `standalone-scripts/macro-controller/src/rename-preset-store.ts`,
 `standalone-scripts/macro-controller/src/rename-template.ts`
-**Related**: `spec/10-macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md`,
-`spec/11-chrome-extension/41-bulk-workspace-rename.md`,
+**Related**: `spec/21-app/02-features/macro-controller/ts-migration-v2/07-rename-persistence-indexeddb.md`,
+`spec/21-app/02-features/chrome-extension/41-bulk-workspace-rename.md`,
 `.lovable/memory/features/macro-controller/rename-system.md`
 
 ---

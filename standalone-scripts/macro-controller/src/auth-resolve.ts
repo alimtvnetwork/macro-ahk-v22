@@ -5,7 +5,7 @@
  * Phase 7: Moved pure utilities to marco-sdk AuthTokenUtils (window.marco.authUtils).
  *          Fixed all swallowed errors, inverted nested ifs to guard clauses.
  *
- * @see spec/06-coding-guidelines/02-typescript-immutability-standards.md
+ * @see spec/02-coding-guidelines/02-typescript-immutability-standards.md
  * @see standalone-scripts/marco-sdk/src/auth-token-utils.ts — AuthTokenUtils class
  */
 

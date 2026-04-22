@@ -4,7 +4,7 @@
  * Creates AssetVersion table for version history tracking
  * of SharedAsset changes (content snapshots + rollback).
  *
- * See: spec/13-features/cross-project-sync.md §VersionHistory
+ * See: spec/21-app/02-features/misc-features/cross-project-sync.md §VersionHistory
  */
 
 import { ASSET_VERSION_SCHEMA } from "./db-schemas";

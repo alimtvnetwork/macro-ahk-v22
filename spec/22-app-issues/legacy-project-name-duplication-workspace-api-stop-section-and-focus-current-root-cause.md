@@ -3,7 +3,7 @@
 **Version**: v2.104.0
 **Date**: 2026-04-07
 **Status**: Fixed
-**Spec**: /spec/02-app-issues/project-name-duplication-workspace-api-stop-section-and-focus-current-root-cause
+**Spec**: /spec/22-app-issues/project-name-duplication-workspace-api-stop-section-and-focus-current-root-cause
 
 ---
 

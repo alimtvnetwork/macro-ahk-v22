@@ -9,7 +9,7 @@
  *
  * ID CONVENTION: All primary key `Id` columns use INTEGER PRIMARY KEY AUTOINCREMENT.
  * Original runtime IDs are stored in a separate `Uid` TEXT column for merge/diff matching.
- * See: spec/06-coding-guidelines/coding-guidelines/database-id-convention.md
+ * See: spec/02-coding-guidelines/coding-guidelines/database-id-convention.md
  */
 
 import type { SqlValue } from "@/background/handlers/handler-types";

@@ -4,7 +4,7 @@
  * Provides marco.xpath.* methods for XPath expression management and evaluation.
  * resolve/resolveAll are synchronous — they evaluate against a cached XPath map.
  *
- * See: spec/12-devtools-and-injection/sdk-convention.md §marco.xpath
+ * See: spec/21-app/02-features/devtools-and-injection/sdk-convention.md §marco.xpath
  */
 
 import { sendMessage } from "./bridge";

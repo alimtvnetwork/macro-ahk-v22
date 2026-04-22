@@ -1,7 +1,7 @@
 /**
  * Unit tests for pollUntil utility in async-utils.ts
  *
- * @see spec/06-coding-guidelines/02-typescript-immutability-standards.md — Rule CQ18
+ * @see spec/02-coding-guidelines/02-typescript-immutability-standards.md — Rule CQ18
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';

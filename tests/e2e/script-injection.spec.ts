@@ -1,6 +1,4 @@
-import { test, expect, EXTENSION_PATHS } from './fixtures';
-
-const POPUP_URL = (extensionId: string) => `chrome-extension://${extensionId}/${EXTENSION_PATHS.popup}`;
+import { test, expect, openPopupPage } from './fixtures';
 
 /**
  * Script Injection E2E Suite
@@ -17,9 +15,7 @@ test.describe('Script Injection', () => {
 
   test('injects a script that modifies the DOM on a test page', async ({ context, extensionId }) => {
     // 1. Wait for boot readiness
-    const extPage = await context.newPage();
-    await extPage.goto(POPUP_URL(extensionId));
-    await extPage.waitForLoadState('domcontentloaded');
+    const extPage = await openPopupPage(context, extensionId);
 
     const pong = await extPage.evaluate(async () => {
       return new Promise<unknown>((resolve) => {
@@ -110,9 +106,7 @@ test.describe('Script Injection', () => {
   });
 
   test('reports failure for a script with a syntax error', async ({ context, extensionId }) => {
-    const extPage = await context.newPage();
-    await extPage.goto(POPUP_URL(extensionId));
-    await extPage.waitForLoadState('domcontentloaded');
+    const extPage = await openPopupPage(context, extensionId);
 
     // Wait for readiness
     await extPage.evaluate(async () => {
@@ -180,9 +174,7 @@ test.describe('Script Injection', () => {
   });
 
   test('injected script does not leak console errors', async ({ context, extensionId }) => {
-    const extPage = await context.newPage();
-    await extPage.goto(POPUP_URL(extensionId));
-    await extPage.waitForLoadState('domcontentloaded');
+    const extPage = await openPopupPage(context, extensionId);
 
     await extPage.evaluate(async () => {
       return new Promise<void>((resolve) => {

@@ -18,7 +18,7 @@ test.describe('Script Injection', () => {
   test('injects a script that modifies the DOM on a test page', async ({ context, extensionId }) => {
     // 1. Wait for boot readiness
     const extPage = await context.newPage();
-    await extPage.goto(`chrome-extension://${extensionId}/popup.html`);
+    await extPage.goto(POPUP_URL(extensionId));
     await extPage.waitForLoadState('domcontentloaded');
 
     const pong = await extPage.evaluate(async () => {
@@ -111,7 +111,7 @@ test.describe('Script Injection', () => {
 
   test('reports failure for a script with a syntax error', async ({ context, extensionId }) => {
     const extPage = await context.newPage();
-    await extPage.goto(`chrome-extension://${extensionId}/popup.html`);
+    await extPage.goto(POPUP_URL(extensionId));
     await extPage.waitForLoadState('domcontentloaded');
 
     // Wait for readiness
@@ -181,7 +181,7 @@ test.describe('Script Injection', () => {
 
   test('injected script does not leak console errors', async ({ context, extensionId }) => {
     const extPage = await context.newPage();
-    await extPage.goto(`chrome-extension://${extensionId}/popup.html`);
+    await extPage.goto(POPUP_URL(extensionId));
     await extPage.waitForLoadState('domcontentloaded');
 
     await extPage.evaluate(async () => {

@@ -14,7 +14,7 @@ const POPUP_URL = (extensionId: string) => `chrome-extension://${extensionId}/${
 test.describe('Cold Start', () => {
   test('service worker responds to __PING__ after boot', async ({ context, extensionId }) => {
     const page = await context.newPage();
-    await page.goto(`chrome-extension://${extensionId}/popup.html`);
+    await page.goto(POPUP_URL(extensionId));
     await page.waitForLoadState('domcontentloaded');
 
     // Send __PING__ and expect __PONG__
@@ -37,7 +37,7 @@ test.describe('Cold Start', () => {
 
   test('boot completes without fatal errors', async ({ context, extensionId }) => {
     const page = await context.newPage();
-    await page.goto(`chrome-extension://${extensionId}/popup.html`);
+    await page.goto(POPUP_URL(extensionId));
     await page.waitForLoadState('domcontentloaded');
 
     // Query boot diagnostics via GET_BOOT_DIAGNOSTICS or health ping
@@ -77,7 +77,7 @@ test.describe('Cold Start', () => {
       consoleErrors.push(err.message);
     });
 
-    await page.goto(`chrome-extension://${extensionId}/popup.html`);
+    await page.goto(POPUP_URL(extensionId));
     await page.waitForLoadState('domcontentloaded');
 
     // Give the popup time to complete its init messaging

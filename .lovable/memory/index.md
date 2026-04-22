@@ -1,5 +1,5 @@
 # Memory: index.md
-Updated: 2026-04-21 (session: `check-no-pnpm-dlx-less` hardening — 67/67 fixtures, JSON schema README)
+Updated: 2026-04-22 (session: spec reorganization v3.2.0 — Phases 1–9 complete)
 
 # Project Memory
 
@@ -10,7 +10,7 @@ Never modify `.release/` folder — keep out of reach.
 Version bump (at least minor) on every code change across all version files (manifest, constants.ts, every standalone-script instruction.ts + shared-state.ts + SDK index.ts literals). CI tooling under `scripts/` is excluded.
 Suggestions: canonical single file at `.lovable/suggestions.md`. Historical archive: `.lovable/memory/suggestions/01-suggestions-tracker.md` (S-001…S-055).
 Plans: canonical single file at `.lovable/plan.md`.
-Engineering standards: 26 rules in `spec/06-coding-guidelines/engineering-standards.md`.
+Engineering standards: 26 rules in `spec/02-coding-guidelines/engineering-standards.md` (canonical core slot 02). Spec tree v3.2.0 — see `spec/00-overview.md` for the master index.
 ESLint SonarJS: zero warnings, zero errors enforced.
 Any bg module using BgLogTag MUST explicitly import it from bg-logger — never rely on implicit availability.
 All ERROR logs MUST include exact file path, what was missing, and reasoning — meaningful enough for AI to diagnose.

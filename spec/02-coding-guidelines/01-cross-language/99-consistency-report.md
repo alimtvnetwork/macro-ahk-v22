@@ -26,7 +26,7 @@
 | 14 | `13-strict-typing.md` | ✅ Present |
 | 15 | `14-test-naming-and-structure.md` | ✅ Present |
 | 16 | `15-master-coding-guidelines/00-overview.md` | ✅ Present |
-| 17 | `16-lazy-evaluation-patterns.md` | ✅ Present |
+| 17 | `29-lazy-evaluation-patterns.md` | ✅ Present |
 | 18 | `17-regex-usage-guidelines.md` | ✅ Present |
 | 19 | `18-code-mutation-avoidance.md` | ✅ Present |
 | 20 | `19-null-pointer-safety.md` | ✅ Present |

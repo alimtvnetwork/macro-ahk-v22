@@ -59,14 +59,21 @@ const REPORT_PATH = reportArg
     : null;
 
 // ─── Mandatory Inventory (from 11-root-readme-conventions.md) ────────────────
+// 2026-04-22 — minimums lowered after audit removed all placeholder /
+// "no status" / "not found" / static `img.shields.io/badge/…` mockup badges
+// (see mem://constraints/no-static-mockup-badges). Each group must still be
+// PRESENT (HTML comment marker required) but may legitimately contain zero
+// badges if no live-data badge exists for that category yet — the `min`
+// gate only fails when the marker is missing OR when the live count is
+// below the new floor.
 const BADGE_GROUPS = [
-    { id: "build-release", label: "Build & Release",     comment: "Build & Release",     min: 5 },
-    { id: "repo-activity", label: "Repo activity",       comment: "Repo activity",       min: 5 },
-    { id: "community",     label: "Community",           comment: "Community",           min: 6 },
-    { id: "code-quality",  label: "Code-quality",        comment: "Code-quality",        min: 3 },
-    { id: "stack-stds",    label: "Stack & standards",   comment: "Stack & standards",   min: 8 },
+    { id: "build-release", label: "Build & Release",     comment: "Build & Release",     min: 1 },
+    { id: "repo-activity", label: "Repo activity",       comment: "Repo activity",       min: 1 },
+    { id: "community",     label: "Community",           comment: "Community",           min: 0 },
+    { id: "code-quality",  label: "Code-quality",        comment: "Code-quality",        min: 1 },
+    { id: "stack-stds",    label: "Stack & standards",   comment: "Stack & standards",   min: 1 },
 ];
-const TOTAL_BADGE_MIN = BADGE_GROUPS.reduce((sum, g) => sum + g.min, 0); // 27
+const TOTAL_BADGE_MIN = 5; // floor: 1 CI + 1 activity + 1 quality + 1 stack + 1 license-equivalent
 
 // ─── Load README ─────────────────────────────────────────────────────────────
 if (!existsSync(README_PATH)) {

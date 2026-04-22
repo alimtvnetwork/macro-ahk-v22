@@ -1,6 +1,6 @@
 # Root README Conventions
 
-**Version:** 1.0.0
+**Version:** 2.0.0
 **Updated:** 2026-04-22
 **Status:** Active
 **AI Confidence:** Production-Ready
@@ -10,15 +10,17 @@
 
 ## Overview
 
-The repository's root `readme.md` is the first artifact every visitor (human or AI) sees on GitHub. It must be **center-aligned, icon-led, badge-rich, and brand-consistent**. This document defines the **mandatory** structure so any contributor (or AI agent) can produce a compliant root README from scratch — no guessing, no drift across versions.
+The repository's root `readme.md` is the first artifact every visitor (human or AI) sees on GitHub. It must be **center-aligned, icon-led, badge-rich (only with LIVE data), and brand-consistent**. This document defines the **mandatory** structure so any contributor (or AI agent) can produce a compliant root README from scratch — no guessing, no drift across versions.
 
 These rules apply only to the **repository-root `readme.md`**. Module-level overviews remain governed by `03-required-files.md`.
+
+> **2026-04-22 amendment:** All static `img.shields.io/badge/…` mockup badges, all "activate" placeholders (Codacy / Code Climate / Codecov / Snyk activation pages), and all badges that resolve to `no status` / `not found` / `404` on shields.io are **forbidden in the hero block**. Per-group minimums were lowered accordingly. See `mem://constraints/no-static-mockup-badges`.
 
 ---
 
 ## Mandatory Structure (Top-of-File, In This Order)
 
-The first ~60 lines of `readme.md` MUST follow this exact skeleton:
+The first ~30 lines of `readme.md` MUST follow this exact skeleton:
 
 ```markdown
 <div align="center">
@@ -30,19 +32,19 @@ The first ~60 lines of `readme.md` MUST follow this exact skeleton:
 > **<One-sentence value proposition>** — <stack/architecture qualifier>.
 
 <!-- Build & Release -->
-[badges...]
+[live-data badges only…]
 
 <!-- Repo activity -->
-[badges...]
+[live-data badges only…]
 
 <!-- Community -->
-[badges...]
+[live-data badges only — group may be empty if none exist yet]
 
-<!-- Code-quality report cards -->
-[badges...]
+<!-- Code-quality -->
+[live-data badges only…]
 
 <!-- Stack & standards -->
-[badges...]
+[license badge + any further live-data stack badges…]
 
 <img src="docs/assets/<hero-image>.png" alt="<Project> hero" width="820" />
 
@@ -55,56 +57,56 @@ The first ~60 lines of `readme.md` MUST follow this exact skeleton:
 2. **Logo first, title second.** The `<img>` for the logo precedes the `# Title` H1 heading. Logo lives at `docs/assets/<project>-logo.png` and is sized **128×128**.
 3. **One H1 only.** The project name is the single H1 in the entire file (SEO + accessibility).
 4. **Tagline blockquote** directly under the H1, one sentence, em-dash-qualified.
-5. **Badges grouped by purpose**, each group prefixed with an HTML comment label. The five required groups are: **Build & Release**, **Repo activity**, **Community**, **Code-quality report cards**, **Stack & standards**.
+5. **All five group HTML comment markers must appear**, even when a group is empty. The five required markers are: **Build & Release**, **Repo activity**, **Community**, **Code-quality**, **Stack & standards**. An empty group is acceptable if no live-data badge exists for it; never insert placeholder badges to fill a group.
 6. **Hero image** (UI screenshot or architecture diagram) is the last element inside the centering div, sized to **width=820**.
 7. **Close the centering div** before the first prose section.
 
 ---
 
-## Mandatory Badge Inventory
+## Forbidden Badge Patterns
 
-Every root README must include **at least these badges**, organised into the five groups above. Use `style=flat-square` for visual consistency.
+The following badge URLs and patterns **MUST NOT** appear in the hero block:
 
-### Build & Release (5 badges minimum)
+| Pattern | Why forbidden |
+|---------|---------------|
+| `img.shields.io/badge/<text>-<text>-<color>` | Static mockup badge — encodes hard-coded text, not live data. Lies about project state. |
+| Any URL whose rendered shield text reads `activate`, `no status`, `not found`, `repo not found`, `no releases found`, `404`, `badge not found` | The badge resolved to a fail state on shields.io. Visually crossed out / broken. |
+| `Codacy` / `Code Climate` / `Codecov` / `Snyk` activation-link badges with placeholder text | Require OAuth onboarding by the repo owner. Do not list until activated; once activated, swap in the real Grade/Coverage URL containing the project UUID. |
+| Stack-version badges hand-encoded as `img.shields.io/badge/<lib>-<ver>-<color>` | Drifts the moment dependencies update. If a live alternative exists (e.g. `img.shields.io/github/package-json/dependency-version/...`), use it; otherwise omit. |
+| `made-with-love` / `PRs-welcome` / "informational" decorative badges | Pure decoration with no live state. Omit. |
 
-| Badge | Source |
-|-------|--------|
-| CI workflow status | `img.shields.io/github/actions/workflow/status/<owner>/<repo>/ci.yml` |
-| Release workflow status | `img.shields.io/github/actions/workflow/status/<owner>/<repo>/release.yml` |
-| Latest release version | `img.shields.io/github/v/release/<owner>/<repo>` |
-| Release date | `img.shields.io/github/release-date/<owner>/<repo>` |
-| Total downloads | `img.shields.io/github/downloads/<owner>/<repo>/total` |
+### Acceptable Live-Data Badge Sources
 
-### Repo Activity (5 badges minimum)
+| Domain | Use for |
+|--------|---------|
+| `img.shields.io/github/actions/workflow/status/<owner>/<repo>/<workflow>.yml` | CI / Release / CodeQL workflow status |
+| `img.shields.io/github/issues(-pr)?/<owner>/<repo>` | Open issues / PRs |
+| `img.shields.io/github/repo-size/<owner>/<repo>` | Repo size |
+| `img.shields.io/github/license/<owner>/<repo>` | License (auto-detected from repo) |
+| `img.shields.io/github/v/release/<owner>/<repo>` | Latest release (only after first release exists) |
+| `img.shields.io/github/stars\|forks\|watchers\|contributors/<owner>/<repo>` | Community metrics (only after the repo has non-trivial counts) |
+| `img.shields.io/codecov/c/github/<owner>/<repo>` | Coverage (only after Codecov is activated and the project UUID is known) |
+| `img.shields.io/codefactor/grade/github/<owner>/<repo>/main` | Code quality (CodeFactor — no signup required) |
 
-| Badge | Source |
-|-------|--------|
-| Last commit | `img.shields.io/github/last-commit/<owner>/<repo>/main` |
-| Commit activity (monthly) | `img.shields.io/github/commit-activity/m/<owner>/<repo>` |
-| Open issues | `img.shields.io/github/issues/<owner>/<repo>` |
-| Open pull requests | `img.shields.io/github/issues-pr/<owner>/<repo>` |
-| Repo size | `img.shields.io/github/repo-size/<owner>/<repo>` |
+---
 
-### Community (6 badges minimum)
+## Mandatory Badge Inventory (post-amendment minimums)
 
-| Badge | Source |
-|-------|--------|
-| Stars | `img.shields.io/github/stars/<owner>/<repo>` (color: yellow) |
-| Forks | `img.shields.io/github/forks/<owner>/<repo>` |
-| Watchers | `img.shields.io/github/watchers/<owner>/<repo>` |
-| Contributors | `img.shields.io/github/contributors/<owner>/<repo>` |
-| PRs Welcome | `img.shields.io/badge/PRs-welcome-brightgreen` linking to `./contributing.md` |
-| Made with Love | `img.shields.io/badge/made%20with-%E2%99%A5-ff69b4` linking to the company site |
+| Group | HTML comment marker | Live-data badge floor | Notes |
+|-------|---------------------|------------------------|-------|
+| Build & Release | `<!-- Build & Release -->` | **≥1** | Typically the CI workflow status. Add release/version/downloads only AFTER the first release exists. |
+| Repo activity | `<!-- Repo activity -->` | **≥1** | Open issues, open PRs, repo size, last commit — at least one. |
+| Community | `<!-- Community -->` | **≥0** | May be empty until the repo has real stars/forks/contributors. Do NOT pad with `PRs-welcome` decoration. |
+| Code-quality | `<!-- Code-quality -->` | **≥1** | E.g. CodeFactor, Dependabot/Renovate live PR counts, security-issue counts. No "activate" placeholders. |
+| Stack & standards | `<!-- Stack & standards -->` | **≥1** | License badge from `img.shields.io/github/license/<owner>/<repo>` is the most reliable single entry. Add language/runtime ONLY when a live-data source exists. |
+| **Aggregate total** | — | **≥5** badge images across the README | |
 
-Discussions badge is optional but recommended when GitHub Discussions is enabled.
+When a category genuinely has no live-data badge available, **leave the comment marker in place with an explanatory HTML comment underneath** so future contributors know the group was intentionally left empty:
 
-### Code-Quality Report Cards (3 badges minimum)
-
-CodeFactor, Codacy, Code Climate (or equivalent). Placeholder "activate" badges are acceptable until OAuth onboarding is complete; document the activation steps in a callout immediately under the badge block.
-
-### Stack & Standards (8 badges minimum)
-
-Cover language, runtime, package manager, build tool, primary framework, styling, lint, and test runner — one badge each, all with `flat-square` style. Always include a license badge as the final entry, linking to the `#license` anchor.
+```markdown
+<!-- Community -->
+<!-- (intentionally empty — see mem://constraints/no-static-mockup-badges) -->
+```
 
 ---
 
@@ -185,8 +187,11 @@ A root README passes review only if every item below is true:
 - [ ] Logo image rendered above the H1 title, sized 128×128.
 - [ ] H1 title is centered (inside `<div align="center">`).
 - [ ] Tagline blockquote present directly under the H1.
-- [ ] All five badge groups present, each labeled with an HTML comment.
-- [ ] At least 27 badges total (5 + 5 + 6 + 3 + 8).
+- [ ] All five badge group HTML comment markers present (`<!-- Build & Release -->`, `<!-- Repo activity -->`, `<!-- Community -->`, `<!-- Code-quality -->`, `<!-- Stack & standards -->`).
+- [ ] Each group meets the per-group floor in the inventory table above (≥1 / ≥1 / ≥0 / ≥1 / ≥1).
+- [ ] At least 5 live-data badges total.
+- [ ] **Zero** `img.shields.io/badge/...-...-<color>` static mockup badges.
+- [ ] **Zero** badges showing `activate`, `no status`, `not found`, `404`, or `repo not found`.
 - [ ] Hero screenshot rendered inside the centered div at width=820.
 - [ ] `## Author` section present with centered name, biography, and metadata table.
 - [ ] `### <Company>` subsection present with tagline and metadata table.
@@ -200,7 +205,9 @@ A root README passes review only if every item below is true:
 
 | Reference | Location |
 |-----------|----------|
+| Read/write procedure for the root readme | [`./12-root-readme-read-write-spec.md`](./12-root-readme-read-write-spec.md) |
 | Required Files (module-level) | [`./03-required-files.md`](./03-required-files.md) |
 | Author identity (single source of truth) | `mem://branding/author-identity` |
+| Static mockup badge ban | `mem://constraints/no-static-mockup-badges` |
 | Documentation standards | `mem://workflow/documentation-standards` |
 | Spec Authoring Guide overview | [`./00-overview.md`](./00-overview.md) |

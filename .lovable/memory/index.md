@@ -1,5 +1,5 @@
 # Memory: index.md
-Updated: 2026-04-21 (session: `check-no-pnpm-dlx-less` hardening — 67/67 fixtures, JSON schema README)
+Updated: 2026-04-22 (session: spec reorganization v3.2.0 — Phases 1–9 complete)
 
 # Project Memory
 
@@ -10,7 +10,7 @@ Never modify `.release/` folder — keep out of reach.
 Version bump (at least minor) on every code change across all version files (manifest, constants.ts, every standalone-script instruction.ts + shared-state.ts + SDK index.ts literals). CI tooling under `scripts/` is excluded.
 Suggestions: canonical single file at `.lovable/suggestions.md`. Historical archive: `.lovable/memory/suggestions/01-suggestions-tracker.md` (S-001…S-055).
 Plans: canonical single file at `.lovable/plan.md`.
-Engineering standards: 26 rules in `spec/06-coding-guidelines/engineering-standards.md`.
+Engineering standards: 26 rules in `spec/02-coding-guidelines/engineering-standards.md` (canonical core slot 02). Spec tree v3.2.0 — see `spec/00-overview.md` for the master index.
 ESLint SonarJS: zero warnings, zero errors enforced.
 Any bg module using BgLogTag MUST explicitly import it from bg-logger — never rely on implicit availability.
 All ERROR logs MUST include exact file path, what was missing, and reasoning — meaningful enough for AI to diagnose.
@@ -24,6 +24,7 @@ Extension build output lives at `./chrome-extension/` at repo root (powershell.j
 CI preflight `scripts/check-no-pnpm-dlx-less.mjs` blocks the broken `pnpm dlx --package=less` invocation. JSON envelope is `version: 1` (additive-only). Exit codes: 0 clean / 1 hits / 2 usage error. 67/67 fixtures passing.
 
 ## Memories
+- [Spec tree v3.2.0 layout](mem://architecture/spec-tree-v3.2.0-layout) — Authoritative folder map after the 2026-04-22 reorganization (core 01–17, app 21+, archive 99). Includes old→new migration table.
 - [Reliability report v4](mem://workflow/07-reliability-risk-report-v4) — AI handoff success at 93%, 1,079 tests, all 8 TS migration phases complete, cross-project sync Phase 1 done
 - [Versioning policy](mem://workflow/version-synchronization-v3) — Unified v2.131.0 across manifest, constants.ts, standalone scripts, xpath
 - [Release installer (unified)](mem://features/release-installer) — Single `install.{ps1,sh}` auto-derives version from release-asset URL, falls back to GitHub `latest` API; no build-time stamping

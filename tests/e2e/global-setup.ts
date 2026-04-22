@@ -10,14 +10,27 @@ const __dirname = path.dirname(__filename);
  * Playwright Global Setup — Chrome Extension
  *
  * Runs once before all tests:
- *   1. Builds the extension into dist/
+ *   1. Builds the extension into chrome-extension/ (vite.config.extension.ts DIST_DIR)
  *   2. Validates manifest.json structure
  *
  * Enable in playwright.config.ts:
  *   globalSetup: './tests/e2e/global-setup.ts'
  */
 
-const EXTENSION_DIR = path.resolve(__dirname, '../../dist');
+// IMPORTANT: this MUST stay in sync with vite.config.extension.ts (`DIST_DIR`).
+// We probe both `chrome-extension/` (current) and `dist/` (legacy) so the setup
+// keeps working through any future rename — first match wins.
+const EXTENSION_CANDIDATES = [
+  path.resolve(__dirname, '../../chrome-extension'),
+  path.resolve(__dirname, '../../dist'),
+];
+function pickExtensionDir(): string {
+  for (const dir of EXTENSION_CANDIDATES) {
+    if (existsSync(path.join(dir, 'manifest.json'))) return dir;
+  }
+  return EXTENSION_CANDIDATES[0];
+}
+const EXTENSION_DIR = pickExtensionDir();
 const MANIFEST_PATH = path.join(EXTENSION_DIR, 'manifest.json');
 
 const REQUIRED_MANIFEST_KEYS = [
@@ -78,21 +91,22 @@ async function globalSetup() {
     }
   }
 
-  // Step 2: Verify dist/ exists
-  if (!existsSync(EXTENSION_DIR)) {
-    throw new Error(`Build output not found at ${EXTENSION_DIR}`);
-  }
-
-  // Step 3: Validate manifest.json
-  if (!existsSync(MANIFEST_PATH)) {
-    throw new Error(`manifest.json not found at ${MANIFEST_PATH}`);
+  // Step 2: Re-resolve extension dir AFTER the build (build:extension may have created it).
+  const builtDir = pickExtensionDir();
+  const builtManifest = path.join(builtDir, 'manifest.json');
+  if (!existsSync(builtDir) || !existsSync(builtManifest)) {
+    throw new Error(
+      `Build output missing.\n` +
+      `Expected manifest.json at one of: ${EXTENSION_CANDIDATES.map(d => path.join(d, 'manifest.json')).join(', ')}.\n` +
+      `Reason: vite.config.extension.ts emits to chrome-extension/; ensure DIST_DIR matches.`
+    );
   }
 
   console.log('📋 Validating manifest.json…');
 
   let manifest: Record<string, unknown>;
   try {
-    const raw = readFileSync(MANIFEST_PATH, 'utf-8');
+    const raw = readFileSync(builtManifest, 'utf-8');
     manifest = JSON.parse(raw);
   } catch (err) {
     throw new Error(`manifest.json is not valid JSON: ${err}`);

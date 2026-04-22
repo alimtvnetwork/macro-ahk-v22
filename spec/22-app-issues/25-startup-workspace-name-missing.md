@@ -1,4 +1,4 @@
-# Issue #11 — Startup Workspace Name Missing on Controller Load
+# Issue #25 — Startup Workspace Name Missing on Controller Load (originally filed as #11)
 
 **Component**: `standalone-scripts/macro-controller/src/macro-looping.ts` (startup flow)
 **Version affected**: v1.56.0

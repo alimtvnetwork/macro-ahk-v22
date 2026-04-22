@@ -31,11 +31,11 @@
 | 09 | ✅ | P1 | Credit Refresh Overwrites Name | fetchLoopCredits() pipeline re-triggered stale XPath detection | [09](09-post-move-credit-refresh-overwrites-workspace.md) |
 | 10 | ✅ | P2 | Unreachable Alt+Up/Down Handler | Force-move handler placed after early-return guard in combo.js | [10](10-unreachable-alt-handler-combo.md) |
 | 11a | ✅ | P0 | DevTools Toggle-Close Bug | Ctrl+Shift+J toggled DevTools closed, breaking injection | [11a](11-devtools-toggle-close-bug.md) |
-| 11b | ✅ | P1 | Startup Workspace Name Missing | Controller loaded before workspace name was resolved | [11b](11-startup-workspace-name-missing.md) |
+| 25 | ✅ | P1 | Startup Workspace Name Missing | Controller loaded before workspace name was resolved | [25](25-startup-workspace-name-missing.md) |
 | 12 | ✅ | P0 | Ctrl+Shift+J Injection Failure | Toggle-close when Console already open prevented script injection | [12](12-ctrl-shift-j-toggle-close.md) |
 | 13 | ✅ | P0 | DevTools/Address Bar Injection | WinActivate targeted detached DevTools; probe pasted into URL bar | [13](13-devtools-window-activation.md) |
 | 14a | ✅ | P0 | Silent Injection Failure | Zero logs exported; scripts appeared ON but never loaded | [14a](14-empty-session-logs-and-silent-injection.md) |
-| 14b | ✅ | P1 | Probe-On-Return Failure | Probe failed after tab switch; force up/down lacked UI feedback | [14b](14-probe-return-failure-v6.55.md) |
+| 26 | ✅ | P1 | Probe-On-Return Failure | Probe failed after tab switch; force up/down lacked UI feedback | [26](26-probe-return-failure-v6.55.md) |
 | 15a | ✅ | P1 | Deploy No Auto-Reload | run.ps1 -d didn't reload extension when browser was running | [15a](15-deploy-no-auto-reload.md) |
 | 15b | ✅ | P2 | Force Delegation Slow (~42s) | Each force up/down took ~42s due to serial dialog waits | [15b](15-force-delegation-speed-v6.56.md) |
 | 16 | ✅ | P0 | ComboSwitch Broken | v6.56 fast-path optimization broke combo controller entirely | [16](16-comboswitch-broken-v7.0.md) |

@@ -1,4 +1,4 @@
-# Issue 14: Probe-On-Return Failure & Force Up/Down UI Feedback
+# Issue 26: Probe-On-Return Failure & Force Up/Down UI Feedback (originally filed as #14)
 
 **Version**: v6.55
 **Date**: 2026-02-19

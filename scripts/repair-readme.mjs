@@ -225,6 +225,8 @@ function recordDisabled(id, label) {
 {
     const id = "license-section";
     const label = "Append `## License` section if missing";
+    if (!enabled(id)) { recordDisabled(id, label); }
+    else {
     const linesNoCode = stripCodeFences(working).split(/\r?\n/);
     const hasLicenseHeading = linesNoCode.some((l) => /^##\s+License\b/i.test(l));
 

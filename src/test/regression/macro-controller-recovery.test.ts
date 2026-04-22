@@ -10,7 +10,7 @@
  *   RiseupAsiaMacroExt.Projects.MacroController.api.mc
  * but the code stopped registering it, causing silent recovery failures.
  *
- * @see spec/22-app-issues/91-injection-false-positive-and-sessions-db-root-cause.md
+ * @see spec/22-app-issues/97-injection-false-positive-and-sessions-db-root-cause.md (formerly 91b)
  */
 
 import { describe, it, expect } from "vitest";

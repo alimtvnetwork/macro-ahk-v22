@@ -1,4 +1,6 @@
-# Issue 15: Force Up/Down Extremely Slow (~42s per delegation)
+# Issue 28: Force Up/Down Extremely Slow (~42s per delegation)
+
+> Originally filed as Issue #15b — renumbered to slot 28 on 2026-04-22 to remove duplicate `15-` prefix collision.
 
 **Version**: v6.56
 **Date**: 2026-02-19

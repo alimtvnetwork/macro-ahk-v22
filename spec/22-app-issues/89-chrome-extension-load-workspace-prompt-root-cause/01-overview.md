@@ -125,7 +125,7 @@ The following sequence describes the **actual current flow** from user click to 
 - [Issue #87 — Injection Pipeline Performance](../87-injection-pipeline-performance/)
 - [Issue #84 — Check Button & Workspace Load Fixes](../84-check-button-and-workspace-load-fixes.md)
 - [Issue #54 — Startup Workspace Load Regression](../54-startup-workspace-load-and-loop-button-regression.md)
-- [Issue #50 — Prompt Loading Breaking Issues](../50-prompt-loading-breaking-issues.md)
+- [Issue #33 — Prompt Loading Breaking Issues](../33-prompt-loading-breaking-issues.md) (formerly #50b)
 - [Issue #64 — Prompts Loading When Cached](../64-prompts-loading-when-cached.md)
 - [Spec 52 — Prompt Caching IndexedDB](../../11-chrome-extension/52-prompt-caching-indexeddb.md)
 - [Spec 45 — Prompt Manager CRUD](../../11-chrome-extension/45-prompt-manager-crud.md)

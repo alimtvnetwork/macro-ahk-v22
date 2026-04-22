@@ -37,7 +37,7 @@
 | 14a | ✅ | P0 | Silent Injection Failure | Zero logs exported; scripts appeared ON but never loaded | [14a](14-empty-session-logs-and-silent-injection.md) |
 | 26 | ✅ | P1 | Probe-On-Return Failure | Probe failed after tab switch; force up/down lacked UI feedback | [26](26-probe-return-failure-v6.55.md) |
 | 15a | ✅ | P1 | Deploy No Auto-Reload | run.ps1 -d didn't reload extension when browser was running | [15a](15-deploy-no-auto-reload.md) |
-| 15b | ✅ | P2 | Force Delegation Slow (~42s) | Each force up/down took ~42s due to serial dialog waits | [15b](15-force-delegation-speed-v6.56.md) |
+| 28 | ✅ | P2 | Force Delegation Slow (~42s) | Each force up/down took ~42s due to serial dialog waits | [28](28-force-delegation-speed-v6.56.md) |
 | 16 | ✅ | P0 | ComboSwitch Broken | v6.56 fast-path optimization broke combo controller entirely | [16](16-comboswitch-broken-v7.0.md) |
 | 17 | ✅ | P0 | HandleDelegate Crashes | Tab detection failures caused unhandled exceptions in delegation | [17](17-handledelegate-crashes-v7.1.md) |
 | 18 | ✅ | P1 | Bearer Token False Positive | Confirm button showed success even when token validation failed | [18](18-bearer-token-confirm-button-v7.4.md) |
@@ -52,7 +52,7 @@
 | 30 | ✅ | P0 | ESM require() Build Failure | Dynamic require('fs') in vite.config.ts broke ESM production build | [30](30-esm-dynamic-require-build-failure.md) |
 | 31 | ✅ | P0 | HTML Path Mismatch | Vite output HTML under src/ but manifest expected different paths | [31](31-html-path-mismatch-and-deploy-method.md) |
 | 34 | ✅ | P2 | Version Mismatch + Toggle | Popup showed stale version; macro_controller.js missing toggle | [34](34-version-mismatch-and-missing-toggle.md) |
-| 35a | ✅ | P2 | Popup Buttons Explained | Documented popup button behavior and known edge cases | [35a](35-popup-buttons-explained-and-issues.md) |
+| 32 | ✅ | P2 | Popup Buttons Explained | Documented popup button behavior and known edge cases | [32](32-popup-buttons-explained-and-issues.md) |
 | 35b | ✅ | P2 | Single Script Architecture | Removed combo-switch.js; unified into single injection script | [35b](35-single-script-architecture.md) |
 | 36 | ✅ | P0 | Bearer Removal Broke Credits | Removing bearer token UI broke auth → credits → progress bar chain | [36](36-bearer-token-removal-broke-credit-bar.md) |
 | 37 | ✅ | P2 | Compact Mode Bar Missing | Compact progress bar rendered single color instead of segments | [37](37-compact-mode-bar-missing-segments.md) |
@@ -68,7 +68,7 @@
 | 48 | ✅ | P1 | TypeScript Migration | Macro controller rewritten from JS to TypeScript with build pipeline | [48](48-typescript-migration-standalone-scripts.md) |
 | 49 | ✅ | P1 | SQLite-First Storage | Prompts, configs, KV, files migrated from chrome.storage to SQLite | [49](49-sqlite-first-storage-migration.md) |
 | 50a | ✅ | P2 | Project KV API + File Drops | ProjectKv + ProjectFiles tables with CRUD message handlers | [50a](50-project-key-value-api-and-file-drops.md) |
-| 50b | ✅ | P1 | Prompt Loading Failures | Historical analysis of 4 prompt loading root causes and fixes | [50b](50-prompt-loading-breaking-issues.md) |
+| 33 | ✅ | P1 | Prompt Loading Failures | Historical analysis of 4 prompt loading root causes and fixes | [33](33-prompt-loading-breaking-issues.md) |
 | 51 | ✅ | P3 | Activity Log Download | Download button added to General tab; exports timestamped .txt | [51](51-activity-log-download-button.md) |
 | 52 | ✅ | P0 | Prompt Click No-Op | Overly restrictive click whitelist + missing postMessage relay | [52](52-prompt-click-does-nothing.md) |
 | 53 | ✅ | P0 | Prompt Click 2nd Only | First item skipped due to DOM append timing; simplified to direct append | [53](53-prompt-click-simplified-dom-append.md) |

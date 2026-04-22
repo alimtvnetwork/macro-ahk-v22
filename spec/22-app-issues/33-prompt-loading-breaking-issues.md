@@ -1,4 +1,6 @@
-# Issue 50: Prompt Loading Breaking Issues — Historical Analysis
+# Issue 33: Prompt Loading Breaking Issues — Historical Analysis
+
+> Originally filed as Issue #50b — renumbered to slot 33 on 2026-04-22 to remove duplicate `50-` prefix collision.
 
 **Created**: 2026-03-21  
 **Status**: Resolved (documenting for prevention)  

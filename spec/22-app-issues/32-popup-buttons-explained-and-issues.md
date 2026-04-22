@@ -1,4 +1,6 @@
-# Issue 35: Popup Buttons — Explained & Known Issues
+# Issue 32: Popup Buttons — Explained & Known Issues
+
+> Originally filed as Issue #35a — renumbered to slot 32 on 2026-04-22 to remove duplicate `35-` prefix collision.
 
 **Version**: v1.0.5
 **Date**: 2026-03-12

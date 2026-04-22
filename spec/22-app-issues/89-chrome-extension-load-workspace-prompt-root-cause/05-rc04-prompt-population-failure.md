@@ -13,7 +13,7 @@ Prompts are not populating in the macro controller dropdown. This has been repor
 
 | Issue | Version | Summary | Status |
 |-------|---------|---------|--------|
-| [#50](../50-prompt-loading-breaking-issues.md) | v1.49.0 | First-click race, paste failure, storage quota, category filter | ✅ Fixed |
+| [#33](../33-prompt-loading-breaking-issues.md) | v1.49.0 | First-click race, paste failure, storage quota, category filter | ✅ Fixed |
 | [#52](../52-prompt-click-does-nothing.md) | — | Prompt click does nothing | — |
 | [#53](../53-prompt-click-simplified-dom-append.md) | — | Simplified DOM append for prompt injection | — |
 | [#45](../45-first-prompt-injection-empty.md) | — | First prompt injection empty | — |

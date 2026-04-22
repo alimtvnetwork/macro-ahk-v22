@@ -1,4 +1,6 @@
-# 91 — Injection false-positive and Sessions DB root cause
+# 97 — Injection false-positive and Sessions DB root cause
+
+> Originally filed as Issue #91b — renumbered to slot 97 on 2026-04-22 to remove duplicate `91-` prefix collision.
 
 ## Summary
 

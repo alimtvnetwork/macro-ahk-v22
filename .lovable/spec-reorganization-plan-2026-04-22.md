@@ -220,8 +220,8 @@ If any default is wrong, tell me before Phase 1; otherwise reply **"next"** and 
 | 1 — Eliminate duplicates & stale copies | ✅ done (2026-04-22) | Archived `01-overview/`, `02-spec-authoring-guide/`, `03-coding-guidelines/`, `04-error-manage-spec/` to `99-archive/`. |
 | 2 — Create new core stubs | ✅ done (2026-04-22) | 6 stubs created. **Note:** all 6 were silently pruned by Lovable's auto-cleanup between Phase 2 and Phase 3 (likely because empty-looking new dirs aren't tracked). Re-created in Phase 3 and verified present. |
 | 3 — Rename core folders to new numbering | ✅ done (2026-04-22) | `09-design-system/` → `07-design-system/` (16 files preserved). Bonus: pre-emptively moved `07-data-and-api/` → `21-app/03-data-and-api/` (7 entries) to free slot 07. |
-| 4 — Redistribute `14-imported/` | ⏳ next | |
-| 5 — Create `21-app/` and migrate | ⏳ pending | `21-app/03-data-and-api/` already done in Phase 3 as a bonus |
+| 4 — Redistribute `14-imported/` | ✅ done (2026-04-22) | WordPress + misc → `99-archive/`. Imported error-management & powershell duplicates archived (canonical versions already exist at `03-error-manage/` and `11-powershell-integration/`). Loose files moved to `02-coding-guidelines/imported/`. `14-imported/` deleted. Slot 14 freed. |
+| 5 — Create `21-app/` and migrate | ⏳ next | `21-app/03-data-and-api/` already done in Phase 3 as a bonus |
 | 6 — Consolidate `22-app-issues/` | ⏳ pending | |
 | 7 — Root cleanup & governance files | ⏳ pending | |
 | 8 — Cross-reference repair | ⏳ pending | |

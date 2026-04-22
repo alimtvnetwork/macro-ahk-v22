@@ -1,10 +1,11 @@
 # Root README Conventions
 
-**Version:** 1.0.0
+**Version:** 1.1.0
 **Updated:** 2026-04-22
 **Status:** Active
 **AI Confidence:** Production-Ready
 **Ambiguity:** None
+**Enforced by:** [`scripts/check-readme-compliance.mjs`](../../scripts/check-readme-compliance.mjs) — `pnpm run check:readme`
 
 ---
 

@@ -200,7 +200,17 @@ const repairs = [];
         ].join("\n");
         const trimmed = working.replace(/\s+$/, "");
         const next = `${trimmed}\n${stub}`;
-        repairs.push({ id, label, status: APPLY ? "applied" : "would-apply", preview: `+ append 7-line "## License" section at end of file` });
+        const workingLines = working.split(/\r?\n/);
+        const nextLines = next.split(/\r?\n/);
+        const beforeSnip = snippetFromLines(workingLines, Math.max(0, workingLines.length - 4), workingLines.length, 0);
+        const afterSnip = snippetFromLines(nextLines, Math.max(0, workingLines.length - 4), nextLines.length, 0);
+        repairs.push({
+            id, label,
+            status: APPLY ? "applied" : "would-apply",
+            preview: `+ append 7-line "## License" section at end of file`,
+            before: beforeSnip.text, beforeRange: beforeSnip.range,
+            after: afterSnip.text, afterRange: afterSnip.range,
+        });
         working = next;
     }
 }

@@ -92,7 +92,7 @@ spec/
 
 ---
 
-> **Canonical folder rules**: See [`spec/01-overview/11-folder-policy.md`](01-overview/11-folder-policy.md#rule-spec-folder-creation--numbering).
+> **Canonical folder rules**: See [`spec/01-overview/11-folder-policy.md`](../01-overview-legacy/11-folder-policy.md#rule-spec-folder-creation--numbering).
 
 ---
 

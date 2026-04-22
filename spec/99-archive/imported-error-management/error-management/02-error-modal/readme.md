@@ -1287,7 +1287,7 @@ const phpStackFrames: PHPStackFrame[] = (() => {
 - [Envelope Configurability](../05-response-envelope/configurability.md) — DelegatedRequestServer presence rules
 - [Session-Based Logging](../04-logging-and-diagnostics/session-based-logging.md) — Backend session system
 - [React Execution Logger](../04-logging-and-diagnostics/react-execution-logger.md) — Frontend debug logger
-- [TypeScript Standards](../../../03-coding-guidelines/03-coding-guidelines-spec/02-typescript/08-typescript-standards-reference.md) — Type safety rules
+- [TypeScript Standards](../../../duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/02-typescript/08-typescript-standards-reference.md) — Type safety rules
 
 ---
 

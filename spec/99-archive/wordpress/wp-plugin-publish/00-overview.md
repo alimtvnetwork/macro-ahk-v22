@@ -109,7 +109,7 @@
 | # | Document | Description |
 |---|----------|-------------|
 | 00 | [Overview](./00-overview.md) | This document |
-| — | [Unified Testing Index](../00-testing-index.md) | Cross-reference of all E2E tests across Chrome Extension and WP Plugin Publish |
+| — | [Unified Testing Index](../../../02-coding-guidelines/imported/00-testing-index.md) | Cross-reference of all E2E tests across Chrome Extension and WP Plugin Publish |
 | **Backend Specs** | | |
 | 01 | [Plugin Structure](./01-backend/01-plugin-structure.md) | Go project layout and conventions |
 | 02 | [Database Schema](./01-backend/02-database-schema.md) | SQLite tables and migrations |

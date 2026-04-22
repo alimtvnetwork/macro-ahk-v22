@@ -251,6 +251,6 @@ Each guide covers ONLY the language-specific **mechanism** (syntax, idioms, limi
 
 ## 9. Related Specifications
 
-- [Type Safety Rules](../../03-coding-guidelines/03-coding-guidelines-spec/02-typescript/08-typescript-standards-reference.md)
-- [DRY Principles](../../03-coding-guidelines/03-coding-guidelines-spec/01-cross-language/08-dry-principles.md)
-- [Golang Standards](../../03-coding-guidelines/03-coding-guidelines-spec/03-golang/04-golang-standards-reference/00-overview.md)
+- [Type Safety Rules](../../duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/02-typescript/08-typescript-standards-reference.md)
+- [DRY Principles](../../duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/01-cross-language/08-dry-principles.md)
+- [Golang Standards](../../duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/03-golang/04-golang-standards-reference/00-overview.md)

@@ -30,8 +30,8 @@ Central hub for all coding standards and guidelines across Go, TypeScript, PHP, 
 
 ## Cross-References
 
-- [Spec Authoring Guide](../02-spec-authoring-guide/00-overview.md)
-- [Error Management Spec](../04-error-manage-spec/04-error-manage-spec/00-overview.md)
+- [Spec Authoring Guide](../../../01-spec-authoring-guide/00-overview.md)
+- [Error Management Spec](../04-error-manage-spec-stale/04-error-manage-spec/00-overview.md)
 
 ---
 

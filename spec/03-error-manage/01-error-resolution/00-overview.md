@@ -37,7 +37,7 @@ Error resolution patterns, debugging guides, retrospectives, and verification pr
 
 | # | File | Purpose |
 |---|------|---------|
-| 00 | [00-error-documentation-guideline.md](./00-error-documentation-guideline.md) | Mandatory process for documenting errors, root causes, and fixes |
+| 00 | [00-error-documentation-guideline.md](../../99-archive/duplicates/04-error-manage-spec-stale/04-error-manage-spec/01-error-resolution/00-error-documentation-guideline.md) | Mandatory process for documenting errors, root causes, and fixes |
 | 01 | [01-cross-reference-diagram.md](./01-cross-reference-diagram.md) | Visual architecture of all connected specs |
 | 02 | [02-debugging-cheat-sheet.md](./02-debugging-cheat-sheet.md) | Quick reference for PHP, Go, TypeScript debugging |
 | — | 99-consistency-report.md | — |

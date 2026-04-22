@@ -290,7 +290,7 @@ func (a *Adapter) GetById(ctx context.Context, id int64) (*models.Plugin, error)
 }
 ```
 
-> **Full examples with PHP/Go/TypeScript:** see [apperror § Result Guard Rule](../../../04-error-manage-spec/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/00-overview.md#12-result-guard-rule-mandatory-error-check-before-value-access)
+> **Full examples with PHP/Go/TypeScript:** see [apperror § Result Guard Rule](../../../04-error-manage-spec-stale/04-error-manage-spec/02-error-architecture/06-apperror-package/01-apperror-reference/00-overview.md#12-result-guard-rule-mandatory-error-check-before-value-access)
 
 ### Enforcement Checklist
 

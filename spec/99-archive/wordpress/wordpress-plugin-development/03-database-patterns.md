@@ -527,7 +527,7 @@ $this->pdo->exec("
 
 ## Database Naming Convention — PascalCase
 
-> **Canonical source:** [Database Naming Convention](../../03-coding-guidelines/03-coding-guidelines-spec/10-database-conventions/00-overview.md)
+> **Canonical source:** [Database Naming Convention](../../duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/10-database-conventions/00-overview.md)
 
 All custom SQLite table names, column names, and index names MUST use **PascalCase**. WordPress core tables remain `snake_case`.
 

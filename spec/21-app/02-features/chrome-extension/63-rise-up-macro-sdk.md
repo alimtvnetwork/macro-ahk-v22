@@ -21,7 +21,7 @@ The Rise Up Macro SDK is a standalone IIFE bundle that exposes `window.marco` (a
 
 Both flavours satisfy the same shape contract (`standalone-scripts/types/project-namespace-shape.d.ts`). A runtime self-test in the SDK IIFE (`self-test.ts`) validates `Projects.RiseupMacroSdk` on every page load and logs PASS/FAIL via `NamespaceLogger`.
 
-See: [Developer Guide §04 — SDK Namespace](../12-devtools-and-injection/developer-guide/04-sdk-namespace.md) for the user-facing explanation of the stub vs full distinction.
+See: [Developer Guide §04 — SDK Namespace](../devtools-and-injection/developer-guide/04-sdk-namespace.md) for the user-facing explanation of the stub vs full distinction.
 
 
 ## Architecture

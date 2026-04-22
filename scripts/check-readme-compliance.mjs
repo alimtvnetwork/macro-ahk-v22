@@ -156,8 +156,8 @@ function record(id, label, ok, detail, expected = "", found = "") {
         "Exactly one H1 heading",
         count === 1,
         count === 1 ? "1 H1 found" : `Found ${count} H1 headings (expected exactly 1)`,
-        "exactly 1 `# ` heading at column 0 (outside code fences)",
-        `${count} `# ` heading(s) detected`,
+        "exactly 1 '# ' heading at column 0 (outside code fences)",
+        `${count} '# ' heading(s) detected`,
     );
 }
 

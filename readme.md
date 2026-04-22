@@ -346,10 +346,12 @@ The `run.ps1` orchestrator is modular — 8 dot-sourced modules in `build/ps-mod
 | `browser.ps1` | Profile detection, extension deployment |
 | `watch.ps1` | FileSystemWatcher with debounce |
 
-### Extension dist Layout
+### Built Extension Layout (`chrome-extension/`)
+
+The build pipeline emits the load-unpacked artifact directly to `./chrome-extension/` at the repo root (per `powershell.json → distDir = "chrome-extension"`). This is the folder you point Chrome's **Load unpacked** at — *not* `dist/`, which is reserved for the Lovable preview / web-app build.
 
 ```
-chrome-extension/dist/
+chrome-extension/
 ├── projects/
 │   ├── scripts/
 │   │   ├── marco-sdk/
@@ -368,6 +370,7 @@ chrome-extension/dist/
 │   └── seed-manifest.json
 ├── prompts/
 │   └── macro-prompts.json
+├── manifest.json                 # Built MV3 manifest (CSP-validated post-build)
 ├── readme.md
 ├── VERSION
 └── ...

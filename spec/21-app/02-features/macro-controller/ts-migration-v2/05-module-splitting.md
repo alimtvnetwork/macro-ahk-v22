@@ -1,11 +1,12 @@
 # Phase 5: Module Splitting
 
-**Status**: In Progress
+**Status**: ✅ Complete (2026-04-09)
 **Started**: 2026-03-28
+**Completed**: 2026-04-09
 
 ## Goal
 
-Split all monolithic files (>200 lines) in `standalone-scripts/macro-controller/src/` into focused sub-modules following the [200-line file limit](../../03-coding-guidelines/03-coding-guidelines-spec/00-overview.md) (Rule ORG1). Each extraction uses a barrel re-export in the original file to preserve backward compatibility.
+Split all monolithic files (>200 lines) in `standalone-scripts/macro-controller/src/` into focused sub-modules following the [200-line file limit](../../../../02-coding-guidelines/00-overview.md) (Rule ORG1). Each extraction uses a barrel re-export in the original file to preserve backward compatibility.
 
 ---
 

@@ -24,7 +24,7 @@ _Nothing currently in progress — last session closed v2.169.0._
 
 | # | Item | Reference | Priority | Blocker |
 |---|---|---|---|---|
-| C1 | E2E Verification — React UI (Step 10) | `.lovable/pending-issues/02-e2e-verification-react-ui.md` | High | Manual Chrome testing |
+| C1 | ✅ ~~E2E Verification — React UI (Step 10)~~ — closed 2026-04-22 (74 Playwright tests wired to CI; report `spec/validation-reports/2026-04-22-e2e-verification-react-ui.md`) | — | — | — |
 | C2 | Prompt Click E2E Verification (Issues 52/53) | `.lovable/pending-issues/05-future-pending-work.md` | Medium | Manual Chrome testing |
 | C3 | React Component Tests (target 900+) | S-021 | Medium | None — ready |
 | C4 | P Store Marketplace | `spec/05-chrome-extension/82-pstore-project-store/` | High | Owner spec pending |

@@ -24,8 +24,10 @@ Extension build output lives at `./chrome-extension/` at repo root (powershell.j
 CI preflight `scripts/check-no-pnpm-dlx-less.mjs` blocks the broken `pnpm dlx --package=less` invocation. JSON envelope is `version: 1` (additive-only). Exit codes: 0 clean / 1 hits / 2 usage error. 67/67 fixtures passing.
 
 ## Memories
+- [Documentation hierarchy](mem://project/documentation-hierarchy) — Canonical v3.2.0 spec tree layout: core (01–17), app (21+), archive (99). Includes old→new path map for legacy references.
 - [Spec folder auto-cleanup safeguard](mem://architecture/spec-folder-auto-cleanup-safeguard) — Sentinels + registry + guard script protect sparse spec dirs from auto-cleanup; npm: `check:spec-folders[:repair]`
 - [Spec tree v3.2.0 layout](mem://architecture/spec-tree-v3.2.0-layout) — Authoritative folder map after the 2026-04-22 reorganization (core 01–17, app 21+, archive 99). Includes old→new migration table.
+- [Reorganization audit 2026-04-22](spec/validation-reports/2026-04-22-reorganization-audit.md) — Final health report (94/100 A); permanent migration record at `spec/99-archive/governance-history/2026-04-22-reorganization-plan.md`.
 - [Reliability report v4](mem://workflow/07-reliability-risk-report-v4) — AI handoff success at 93%, 1,079 tests, all 8 TS migration phases complete, cross-project sync Phase 1 done
 - [Versioning policy](mem://workflow/version-synchronization-v3) — Unified v2.131.0 across manifest, constants.ts, standalone scripts, xpath
 - [Release installer (unified)](mem://features/release-installer) — Single `install.{ps1,sh}` auto-derives version from release-asset URL, falls back to GitHub `latest` API; no build-time stamping

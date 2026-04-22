@@ -68,3 +68,4 @@ CI preflight `scripts/check-no-pnpm-dlx-less.mjs` blocks the broken `pnpm dlx --
 - [Session 2026-04-21 — preflight hardening](mem://workflow/12-session-2026-04-21-preflight-no-pnpm-dlx-less) — Iteration log + final state for the `check-no-pnpm-dlx-less` session (--json, --scan-dir, offendingCommand, 15 new fixtures, JSON-schema README).
 - [Root README conventions](mem://standards/root-readme-conventions) — Centered icon-led title, 5 badge groups (≥27 badges), Author + Company sections, single H1
 - [README compliance check](mem://standards/readme-compliance-check) — scripts/check-readme-compliance.mjs validator + pnpm check:readme[:json] for the root README
+- [E2E manifest-derived paths](mem://standards/e2e-manifest-derived-paths) — Specs must use fixtures.ts popupUrl/optionsUrl/openPopupPage; lint enforced by check-no-hardcoded-extension-paths.mjs

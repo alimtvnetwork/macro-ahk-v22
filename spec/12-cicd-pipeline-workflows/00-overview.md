@@ -1,26 +1,24 @@
 # CI/CD Pipeline Workflows
 
-**Version:** 0.1.0
+**Version:** 0.2.0
 **Updated:** 2026-04-22
-**Status:** Planned
-**AI Confidence:** Low
-**Ambiguity:** High
+**Status:** Active (first spec landed)
+**AI Confidence:** High
+**Ambiguity:** Low
 
 ---
 
 ## Overview
 
-This module is a **planned stub** reserved by the new spec authoring guide (v3.2.0) at slot `12`. It will hold specifications for CI/CD pipeline workflows, deployment automation, GitHub Actions workflows, release procedures, and tag-push strategies.
+This module holds specifications for CI/CD pipeline workflows, deployment automation, GitHub Actions workflows, release procedures, tag-push strategies, and **release-time helper scripts** (e.g. versioned-fork repo rename).
 
-In Phase 7 of the reorganization, the existing `release-procedure.md` (currently at `spec/21-app/02-features/chrome-extension/release-procedure.md`) and the RCA `spec/22-app-issues/95-release-page-missing-built-assets-rca.md` will be cross-referenced from here.
-
-No content has been authored in this folder yet. Created on 2026-04-22 as part of Phase 2 of the spec reorganization (`.lovable/spec-reorganization-plan-2026-04-22.md`).
+The existing `release-procedure.md` (at `spec/21-app/02-features/chrome-extension/release-procedure.md`) and the RCA `spec/22-app-issues/95-release-page-missing-built-assets-rca.md` are cross-referenced from here.
 
 ---
 
 ## Keywords
 
-`cicd` · `github-actions` · `release-workflow` · `deployment` · `tag-push` · `pipeline` · `planned`
+`cicd` · `github-actions` · `release-workflow` · `deployment` · `tag-push` · `pipeline` · `repo-rename` · `versioned-fork`
 
 ---
 
@@ -28,9 +26,9 @@ No content has been authored in this folder yet. Created on 2026-04-22 as part o
 
 | Metric | Value |
 |--------|-------|
-| AI Confidence | Low |
-| Ambiguity | High |
-| Health Score | 100/100 (structural compliance only — no content yet) |
+| AI Confidence | High |
+| Ambiguity | Low |
+| Health Score | 100/100 |
 
 ---
 
@@ -39,6 +37,7 @@ No content has been authored in this folder yet. Created on 2026-04-22 as part o
 | # | File | Description |
 |---|------|-------------|
 | 00 | [00-overview.md](./00-overview.md) | This file |
+| 01 | [01-repo-rename-script.md](./01-repo-rename-script.md) | Generic shell script that rewrites the previous repo name to the current one across all tracked text files (auto-detected from `git remote`). |
 | 99 | [99-consistency-report.md](./99-consistency-report.md) | Structural health report |
 
 ---
@@ -49,6 +48,7 @@ No content has been authored in this folder yet. Created on 2026-04-22 as part o
 |-----------|----------|
 | Spec authoring guide | `../01-spec-authoring-guide/00-overview.md` |
 | Folder structure rules | `../01-spec-authoring-guide/01-folder-structure.md` |
-| Release procedure (to be migrated) | `../11-chrome-extension/release-procedure.md` |
-| Release-page RCA (to be migrated) | `../17-app-issues/95-release-page-missing-built-assets-rca.md` |
+| Release procedure | `../21-app/02-features/chrome-extension/release-procedure.md` |
+| Release-page RCA | `../22-app-issues/95-release-page-missing-built-assets-rca.md` |
+| Coding-guidelines linter pack (sibling pattern) | `../02-coding-guidelines/06-cicd-integration/00-overview.md` |
 | Reorganization plan | `../../.lovable/spec-reorganization-plan-2026-04-22.md` |

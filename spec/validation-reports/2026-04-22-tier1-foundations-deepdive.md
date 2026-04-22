@@ -54,16 +54,16 @@ Each one needs the same playbook proven on `22-app-issues`: pick the keeper, mov
 
 ---
 
-### F2 — `spec/02-coding-guidelines/` slot 06
+### F2 — `spec/02-coding-guidelines/` slot 06 ✅ RESOLVED 2026-04-22
 
 ```
 06-ai-optimization/      (directory)
 06-cicd-integration/     (directory)
 ```
 
-**Suggested fix:** Both are active subfolders with internal content + heavy inbound references. Move `06-cicd-integration/` → next vacant slot (likely `07-cicd-integration/` or higher). The `cicd-integration` folder is referenced from `spec/12-cicd-pipeline-workflows/01-repo-rename-script.md` and the master overview.
+**Resolution:** Kept `06-ai-optimization/` at slot 06 (heavy inbound refs across active and archived specs). Moved `06-cicd-integration/` → **`12-cicd-integration/`** (next vacant slot in the folder; 07–11 occupied; 13–20 also free but 12 chosen as lowest). Updated 2 active inbound references in `spec/12-cicd-pipeline-workflows/00-overview.md` and `01-repo-rename-script.md`. Validation-report mentions of the old path retained as historical record.
 
-**Risk:** MEDIUM-HIGH. ~6 inbound references to audit. Recommend doing this one with explicit approval, separately.
+**Risk:** MEDIUM-HIGH (resolved cleanly, all active refs updated).
 
 ---
 

@@ -50,6 +50,17 @@
  *                       Audit logs are written for BOTH dry-run and apply
  *                       modes so handoffs can review proposed changes.
  *
+ *   --only=<ids>        Comma-separated allowlist of repair ids to run. Any
+ *                       repair not in the list is reported with status
+ *                       "skipped" and reason "disabled by --only flag".
+ *                       Valid ids: centered-hero, license-section,
+ *                       author-misorder. Mutually exclusive with --skip.
+ *
+ *   --skip=<ids>        Comma-separated blocklist of repair ids to disable.
+ *                       Disabled repairs are reported with status "skipped"
+ *                       and reason "disabled by --skip flag". Mutually
+ *                       exclusive with --only.
+ *
  * Safety contract:
  *   - The script never edits content INSIDE existing badge blocks, code
  *     fences, or the author biography paragraphs.

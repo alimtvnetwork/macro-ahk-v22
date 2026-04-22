@@ -131,7 +131,15 @@ const repairs = [];
             const newLines = [...lines];
             newLines.splice(insertAt, 0, "</div>", "");
             const next = newLines.join("\n");
-            repairs.push({ id, label, status: APPLY ? "applied" : "would-apply", preview: `+ insert </div> at line ${insertAt + 1} (before first ## heading) — close unbalanced opening` });
+            const beforeSnip = snippetFromLines(lines, insertAt - 1, insertAt, 3);
+            const afterSnip = snippetFromLines(newLines, insertAt - 1, insertAt + 2, 3);
+            repairs.push({
+                id, label,
+                status: APPLY ? "applied" : "would-apply",
+                preview: `+ insert </div> at line ${insertAt + 1} (before first ## heading) — close unbalanced opening`,
+                before: beforeSnip.text, beforeRange: beforeSnip.range,
+                after: afterSnip.text, afterRange: afterSnip.range,
+            });
             working = next;
         } else {
             repairs.push({ id, label, status: "skipped", reason: `more closing </div> than opening (${opens} open / ${closes} close) — manual review required` });

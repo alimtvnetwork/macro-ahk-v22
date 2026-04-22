@@ -231,7 +231,7 @@ for (const grp of BADGE_GROUPS) {
 // 7. Hero centering div is closed
 {
     // Count opening vs closing align-center divs in the head section (before any "## " heading).
-    const firstH2 = lines.findIndex((l) => /^## /.test(l));
+    const firstH2 = linesNoCode.findIndex((l) => /^## /.test(l));
     const head = lines.slice(0, firstH2 > 0 ? firstH2 : lines.length).join("\n");
     const opens = (head.match(/<div\s+align=["']center["']\s*>/gi) ?? []).length;
     const closes = (head.match(/<\/div>/gi) ?? []).length;
@@ -247,7 +247,7 @@ for (const grp of BADGE_GROUPS) {
 }
 
 // 8. ## Author section exists
-const authorHeadingIdx = lines.findIndex((l) => /^##\s+Author\b/i.test(l));
+const authorHeadingIdx = linesNoCode.findIndex((l) => /^##\s+Author\b/i.test(l));
 {
     record(
         "author-section",
@@ -263,7 +263,7 @@ const authorHeadingIdx = lines.findIndex((l) => /^##\s+Author\b/i.test(l));
 if (authorHeadingIdx >= 0) {
     const authorBlockEnd = (() => {
         for (let i = authorHeadingIdx + 1; i < lines.length; i++) {
-            if (/^##\s+/.test(lines[i])) return i;
+            if (/^##\s+/.test(linesNoCode[i])) return i;
         }
         return lines.length;
     })();
@@ -341,7 +341,7 @@ if (authorHeadingIdx >= 0) {
 
 // 10. ## License section present + non-empty body
 {
-    const licIdx = lines.findIndex((l) => /^##\s+License\b/i.test(l));
+    const licIdx = linesNoCode.findIndex((l) => /^##\s+License\b/i.test(l));
     if (licIdx < 0) {
         record("license-section", "## License section present", false, "Missing required `## License` heading at end of README");
     } else {

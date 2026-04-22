@@ -217,8 +217,8 @@ If any default is wrong, tell me before Phase 1; otherwise reply **"next"** and 
 
 | Phase | Status | Notes |
 |-------|--------|-------|
-| 1 — Eliminate duplicates & stale copies | ✅ done (2026-04-22) | Archived `01-overview/`, `02-spec-authoring-guide/`, `03-coding-guidelines/`, `04-error-manage-spec/` to `99-archive/`. Created `spec/99-archive/readme.md`. Remaining `02-` and `11-` duplicates are scheduled for Phases 5 & 6. |
-| 2 — Create new core stubs | ⏳ pending | Next up |
+| 1 — Eliminate duplicates & stale copies | ✅ done (2026-04-22) | Archived `01-overview/`, `02-spec-authoring-guide/`, `03-coding-guidelines/`, `04-error-manage-spec/` to `99-archive/`. |
+| 2 — Create new core stubs | ✅ done (2026-04-22) | Created 6 stubs (`08-docs-viewer-ui`, `09-code-block-system`, `10-research`, `12-cicd-pipeline-workflows`, `14-update`, `17-consolidated-guidelines`), each with `00-overview.md` (Status: Planned) and `99-consistency-report.md`. 8 temporary duplicate-prefix collisions created — all scheduled for resolution in Phases 3–6. |
 | 3 — Rename core folders to new numbering | ⏳ pending | |
 | 4 — Redistribute `14-imported/` | ⏳ pending | |
 | 5 — Create `21-app/` and migrate | ⏳ pending | |

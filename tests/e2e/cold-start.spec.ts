@@ -1,6 +1,4 @@
-import { test, expect, EXTENSION_PATHS } from './fixtures';
-
-const POPUP_URL = (extensionId: string) => `chrome-extension://${extensionId}/${EXTENSION_PATHS.popup}`;
+import { test, expect, openPopupPage, popupUrl } from './fixtures';
 
 /**
  * Cold Start E2E Suite

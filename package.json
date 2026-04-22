@@ -42,6 +42,8 @@
     "check:spec-folders": "node scripts/spec-folder-guard.mjs --check",
     "check:spec-folders:repair": "node scripts/spec-folder-guard.mjs",
     "check:spec-folders:verbose": "node scripts/spec-folder-guard.mjs --verbose",
+    "check:readme": "node scripts/check-readme-compliance.mjs",
+    "check:readme:json": "node scripts/check-readme-compliance.mjs --json",
     "lint:no-bun": "node scripts/no-bun-in-scripts.mjs",
     "lint:no-bg-dynamic-import": "node scripts/check-no-bg-dynamic-import.mjs",
     "lint:no-bg-dynamic-import:update-baseline": "node scripts/check-no-bg-dynamic-import.mjs --update-baseline",

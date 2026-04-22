@@ -1,0 +1,11 @@
+---
+name: README compliance check
+description: Standalone validator scripts/check-readme-compliance.mjs enforces the root README structure mandated by spec/01-spec-authoring-guide/11-root-readme-conventions.md
+type: standard
+---
+
+`scripts/check-readme-compliance.mjs` validates the repository-root `readme.md` against the rules in `spec/01-spec-authoring-guide/11-root-readme-conventions.md`. It enforces all 18 checks: single H1 (code-fence aware), centered hero `<div>` opened above the H1 with logo image, tagline blockquote under H1, hero `<div>` closed before the first `## section`, all five badge groups (Build & Release ≥5, Repo activity ≥5, Community ≥6, Code-quality ≥3, Stack & standards ≥8) detected by `<!-- comment -->` markers with per-group counts plus an aggregate ≥27 minimum, `## Author` section with centered `### [Name](url)` H3 + role line `**[Primary](url)** | [Secondary](url), [Company](url)` + biography mentioning years-of-experience and a reputation source + 2-column metadata table with empty header, `### <Company>` subsection, and `## License` section with body.
+
+Code fences are stripped before heading detection so example markdown inside ` ```markdown ` blocks does not trigger false positives.
+
+CLI: `pnpm run check:readme` (human output) or `pnpm run check:readme:json` (JSON envelope `{ version: 1, ok, file, summary, checks[] }` for CI consumption). Override the file with `--file=<path>`. Exit code 1 on any failure. The script intentionally has zero npm dependencies.

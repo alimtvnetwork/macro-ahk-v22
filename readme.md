@@ -600,7 +600,7 @@ A monorepo with three primary trees: **runtime code** (extension + standalone sc
 │   ├── aggregate-prompts.mjs       # Prompt .md → macro-prompts.json
 │   ├── check-version-sync.mjs      # Version consistency validation
 │   ├── check-axios-version.mjs     # Pin axios to safe-list versions
-│   ├── check-no-pnpm-dlx-less.mjs  # CI preflight (blocks broken pnpm dlx --package=less)
+│   ├── check-no-pnpm-dlx-less.mjs  # CI preflight (blocks the broken pnpm-dlx-less invocation) <!-- preflight-allow-line -->
 │   ├── spec-folder-guard.mjs       # Spec auto-cleanup safeguard (npm: check:spec-folders)
 │   └── ... (validators, repo-rename, etc.)
 │

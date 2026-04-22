@@ -8,4 +8,11 @@ type: standard
 
 Code fences are stripped before heading detection so example markdown inside ` ```markdown ` blocks does not trigger false positives.
 
-CLI: `pnpm run check:readme` (human output) or `pnpm run check:readme:json` (JSON envelope `{ version: 1, ok, file, summary, checks[] }` for CI consumption). Override the file with `--file=<path>`. Exit code 1 on any failure. The script intentionally has zero npm dependencies.
+CLI:
+- `pnpm run check:readme` — human output
+- `pnpm run check:readme:json` — JSON envelope `{ version: 2, ok, file, summary, checks[] }` for CI consumption
+- `pnpm run check:readme:report` — additionally writes a Markdown report to `.lovable/reports/readme-compliance.md`
+
+Flags: `--file=<path>` overrides the README path; `--report=<path>` writes a Markdown compliance report (works alongside `--json`). Exit code 1 on any failure. The script intentionally has zero npm dependencies.
+
+**Schema v2 (current):** each check carries `{ id, label, ok, detail, expected, found }`. The `expected` field states the rule in one line; `found` states the actual observed state. The Markdown report renders failed checks first as side-by-side tables, then a full status inventory, then a collapsible passed-checks section. v1 consumers reading only `id/label/ok/detail` remain compatible — the new fields are additive.

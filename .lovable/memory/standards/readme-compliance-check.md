@@ -58,4 +58,4 @@ Snippets are exact line-range slices (1-indexed, inclusive) capturing the affect
 
 All repairs are idempotent: re-running `--apply` on an already-compliant file produces zero changes (and an audit log with `mutations: []`). Repairs that cannot be performed safely (ambiguous structure, missing parent section) are reported with status `skipped` and a `reason` field — they are never silently skipped. The script never edits content inside existing badge blocks, code fences, or biography paragraphs.
 
-**Recommended workflow:** run `check:readme` first to discover violations → run `repair:readme` (dry-run) to preview the auto-fixes → run `repair:readme:apply` to write them → re-run `check:readme` to confirm 18/18.
+**Recommended workflow:** run `check:readme` first to discover violations → run `repair:readme:audit` (dry-run + audit log) to preview the auto-fixes with full before/after snippets → run `repair:readme:apply:audit` to write them while persisting the audit log for hand-off → re-run `check:readme` to confirm 18/18.

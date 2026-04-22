@@ -113,7 +113,34 @@ let working = original;
 /** @type {Array<{ id: string; label: string; status: "applied"|"would-apply"|"skipped"|"not-needed"; reason?: string; preview?: string; before?: string; after?: string; beforeRange?: { startLine: number; endLine: number }; afterRange?: { startLine: number; endLine: number } }>} */
 const repairs = [];
 
-// ─── Repair #1: centered-hero ────────────────────────────────────────────────
+// --only=<ids> / --skip=<ids> — toggle individual repair rules.
+const VALID_REPAIR_IDS = new Set(["centered-hero", "license-section", "author-misorder"]);
+const onlyArg = args.find((a) => a.startsWith("--only="));
+const skipArg = args.find((a) => a.startsWith("--skip="));
+if (onlyArg && skipArg) {
+    die("--only and --skip are mutually exclusive — pass only one");
+}
+function parseIdList(flag) {
+    const raw = flag.split("=")[1] ?? "";
+    const ids = raw.split(",").map((s) => s.trim()).filter(Boolean);
+    const invalid = ids.filter((id) => !VALID_REPAIR_IDS.has(id));
+    if (invalid.length > 0) {
+        die(`unknown repair id(s) in ${flag.split("=")[0]}: ${invalid.join(", ")} — valid: ${[...VALID_REPAIR_IDS].join(", ")}`);
+    }
+    return new Set(ids);
+}
+const ONLY_SET = onlyArg ? parseIdList(onlyArg) : null;
+const SKIP_SET = skipArg ? parseIdList(skipArg) : null;
+function enabled(id) {
+    if (ONLY_SET) return ONLY_SET.has(id);
+    if (SKIP_SET) return !SKIP_SET.has(id);
+    return true;
+}
+function recordDisabled(id, label) {
+    const reason = ONLY_SET ? "disabled by --only flag" : "disabled by --skip flag";
+    repairs.push({ id, label, status: "skipped", reason });
+}
+
 {
     const id = "centered-hero";
     const label = "Insert <div align=\"center\"> wrapper around hero block";

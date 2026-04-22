@@ -78,9 +78,9 @@ Nesting resolution, lazy evaluation, regex usage.
 
 | # | File | Description |
 |---|------|-------------|
-| 16 | `16-lazy-evaluation-patterns.md` | Defer computation until needed |
 | 17 | `17-regex-usage-guidelines.md` | Compile once, named groups, readability |
 | 20 | `20-nesting-resolution-patterns.md` | Flatten nested code, avoid else after return |
+| 29 | `29-lazy-evaluation-patterns.md` | Defer computation until needed |
 
 ### 🧪 Testing
 Test naming and structure conventions.

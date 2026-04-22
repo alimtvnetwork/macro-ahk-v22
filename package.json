@@ -60,7 +60,10 @@
     "repair:readme": "node scripts/repair-readme.mjs",
     "repair:readme:apply": "node scripts/repair-readme.mjs --apply",
     "repair:readme:audit": "node scripts/repair-readme.mjs --audit",
-    "repair:readme:apply:audit": "node scripts/repair-readme.mjs --apply --audit"
+    "repair:readme:apply:audit": "node scripts/repair-readme.mjs --apply --audit",
+    "repair:readme:hero-only": "node scripts/repair-readme.mjs --only=centered-hero",
+    "repair:readme:license-only": "node scripts/repair-readme.mjs --only=license-section",
+    "repair:readme:author-only": "node scripts/repair-readme.mjs --only=author-misorder"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

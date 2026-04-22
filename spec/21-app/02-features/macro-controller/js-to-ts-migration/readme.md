@@ -1,8 +1,8 @@
 # MacroController JS → TS Migration
 
-**Total Lines**: ~9,113
-**Chunk Size**: ~500 lines per iteration
-**Estimated Segments**: ~18
+**Original JS Lines**: ~9,113 (single file: `01-macro-looping.js`)
+**Final TS LOC**: ~29,585 across 60+ modules
+**Status**: ✅ COMPLETE (2026-04-22)
 
 ## Migration Steps
 
@@ -35,6 +35,23 @@
 | 04c | Remove @ts-nocheck from macro-looping.ts (main controller) | ✅ Complete — 0 tsc errors |
 | 05a | Create controller-registry.ts (late-binding function registry) | ✅ Complete |
 | 05b | Extract workspace-rename.ts (~318 lines) using registry pattern | ✅ Complete |
+| 06  | Decompose remaining controller into focused modules | ✅ Complete — 60+ modules in src/, src/ui/, src/core/ |
+| 07  | Class-based architecture (V2) — MacroController + sub-managers | ✅ Complete — see ts-migration-v2/ |
+| 08  | Reduce macro-looping.ts to thin orchestrator | ✅ Complete — **177 lines** (down from 9,113) |
+| 09  | Achieve full type safety across all modules | ✅ Complete — zero `@ts-nocheck`, zero ESLint errors |
+
+## Status: ✅ MIGRATION COMPLETE (2026-04-22)
+
+The original 9,113-line `01-macro-looping.js` is fully decomposed. Current state:
+- **Total TS LOC**: ~29,585 across 60+ modules
+- **Orchestrator** (`macro-looping.ts`): 177 lines — pure wiring, no logic
+- **Core managers** (`src/core/`): MacroController, AuthManager, CreditManager, LoopEngine, UIManager, WorkspaceManager
+- **UI modules** (`src/ui/`): 39 focused files (panel, prompts, workspace selection, settings, etc.)
+- **Domain modules** (`src/`): auth, credit, workspace, rename, logging, startup, etc.
+- **Type safety**: 100% — `@ts-nocheck` removed everywhere; strict mode enforced
+- **Class architecture v2**: documented in `../ts-migration-v2/`
+
+Future work (post-migration) tracked separately under `../ts-migration-v2/` and individual feature specs.
 
 ## Folder Structure
 

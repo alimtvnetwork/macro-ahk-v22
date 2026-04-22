@@ -3,7 +3,7 @@
 **Version:** 1.0.0  
 **Created:** 2026-04-20  
 **Status:** Active  
-**Purpose:** Register the `Update.*` and `Storage.Backend` keys consumed by the update-check subsystem ([spec/14-update/24-update-check-mechanism](../../14-update/24-update-check-mechanism/00-overview.md))
+**Purpose:** Register the `Update.*` and `Storage.Backend` keys consumed by the update-check subsystem _(planned: `spec/14-update/24-update-check-mechanism/` — not yet authored)_
 
 ---
 
@@ -87,8 +87,8 @@ Do not collapse them into a single `UpdateChecksEnabled` flag.
 
 `Sqlite` (default) routes `UpdateCheckerService` to the host CLI's
 existing SQLite database. `JsonFile` routes it to
-`~/.<CliName>/data/UpdateChecker.json` per
-[09-json-fallback-store.md](../../14-update/24-update-check-mechanism/09-json-fallback-store.md).
+`~/.<CliName>/data/UpdateChecker.json` per the planned
+`spec/14-update/24-update-check-mechanism/09-json-fallback-store.md` _(not yet authored)_.
 
 The host CLI MAY override this at boot (e.g. a CLI with no DB at all
 hard-codes `JsonFile`). The seeded value is the user-visible default.
@@ -112,9 +112,9 @@ When upgrading a project that does not yet have these keys:
 
 | Reference | Description |
 |-----------|-------------|
-| [Update Check Mechanism — Overview](../../14-update/24-update-check-mechanism/00-overview.md) | Subsystem that consumes these keys |
-| [Pre-Command Hook](../../14-update/24-update-check-mechanism/07-pre-command-hook.md) | Reads both `Update.*` boolean switches |
-| [JSON Fallback Store](../../14-update/24-update-check-mechanism/09-json-fallback-store.md) | Activated when `Storage.Backend = "JsonFile"` |
+| Update Check Mechanism — Overview | _planned: `spec/14-update/24-update-check-mechanism/00-overview.md` (not yet authored)_ |
+| Pre-Command Hook | _planned: `spec/14-update/24-update-check-mechanism/07-pre-command-hook.md` (not yet authored)_ |
+| JSON Fallback Store | _planned: `spec/14-update/24-update-check-mechanism/09-json-fallback-store.md` (not yet authored)_ |
 | [Validation Helpers](./02-rag-validation-helpers.md) | Helper pattern these validators follow |
 
 ---

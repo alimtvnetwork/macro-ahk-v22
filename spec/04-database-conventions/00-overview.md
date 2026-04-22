@@ -113,7 +113,7 @@ Comprehensive database design and implementation conventions covering naming, sc
 | Coding Guidelines | [../02-coding-guidelines/00-overview.md](../02-coding-guidelines/00-overview.md) |
 | Cross-Language DB Naming | [../02-coding-guidelines/01-cross-language/07-database-naming.md](../02-coding-guidelines/01-cross-language/07-database-naming.md) |
 | Split DB Architecture | [../05-split-db-architecture/00-overview.md](../05-split-db-architecture/00-overview.md) |
-| Consolidated DB Conventions | [../17-consolidated-guidelines/18-database-conventions.md](../17-consolidated-guidelines/18-database-conventions.md) |
+| App Database Guideline | [../02-coding-guidelines/23-app-database/00-overview.md](../02-coding-guidelines/23-app-database/00-overview.md) |
 
 ---
 

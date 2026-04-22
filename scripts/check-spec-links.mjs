@@ -48,13 +48,24 @@ const argv = new Set(process.argv.slice(2));
 const UPDATE_BASELINE = argv.has("--update-baseline");
 const STRICT = argv.has("--strict"); // ignore baseline; fail on ANY broken link
 
-/** Recursively collect all .md files under a directory. */
+/**
+ * Directories whose contents are NEVER scanned for broken links.
+ * Kept in sync with scripts/report-spec-links-ci.mjs — see that file
+ * for the Code Red rationale.
+ */
+const SCAN_EXCLUDE_DIRS = new Set([
+  "99-archive",
+  "imported", // matches spec/02-coding-guidelines/imported/
+]);
+
+/** Recursively collect all .md files under a directory, skipping archives. */
 function collectMarkdownFiles(dir) {
   const out = [];
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     const st = statSync(full);
     if (st.isDirectory()) {
+      if (SCAN_EXCLUDE_DIRS.has(entry)) continue;
       out.push(...collectMarkdownFiles(full));
     } else if (st.isFile() && entry.toLowerCase().endsWith(".md")) {
       out.push(full);
@@ -62,6 +73,7 @@ function collectMarkdownFiles(dir) {
   }
   return out;
 }
+
 
 /** Strip fenced code blocks (``` ... ```) so we don't lint code samples. */
 function stripFencedBlocks(source) {

@@ -8,6 +8,6 @@ All application-level specification files live here.
 
 ## Related
 
-- Issue write-ups: [`/spec/22-app-issues/`](../02-app-issues/)
-- API response specs: [`/spec/21-app/03-data-and-api/api-response/`](../07-data-and-api/api-response)
-- AHK technical spec: [`marco-script-ahk-v7.latest/specs/spec.md`](../archive/ahk-v7.latest-specs/spec.md)
+- Issue write-ups: [`/spec/22-app-issues/`](../../../22-app-issues/)
+- API response specs: [`/spec/21-app/03-data-and-api/api-response/`](../../03-data-and-api/api-response/)
+- AHK technical spec: `marco-script-ahk-v7.latest/specs/spec.md` _(legacy AHK reference — archive not present in current repo)_

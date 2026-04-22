@@ -46,12 +46,33 @@ const NO_ANNOTATIONS = argv.has("--no-annotations");
 const TOP_N = 10; // top failing files to surface
 const MAX_DETAIL_LINKS = 50; // cap for full-detail Markdown summary
 
-/** Recursively collect all .md files under a directory. */
+/**
+ * Directories whose contents are NEVER scanned for broken links.
+ *
+ * Rationale (Code Red — file path errors require exact path + reason):
+ *   - `spec/99-archive/`   — frozen historical content; cross-links into
+ *     deleted/refactored siblings are intentional rot, not actionable bugs.
+ *   - `spec/02-coding-guidelines/imported/` — imported legacy WordPress /
+ *     PowerShell guidance preserved verbatim; same rationale as above.
+ *
+ * Active specs MUST resolve every relative link — these exclusions only
+ * suppress dead references inside the archive trees themselves.
+ *
+ * Update path: if an archive doc graduates back into active rotation,
+ * move it OUT of these directories first, then this guard stops applying.
+ */
+const SCAN_EXCLUDE_DIRS = new Set([
+  "99-archive",
+  "imported", // matches spec/02-coding-guidelines/imported/
+]);
+
+/** Recursively collect all .md files under a directory, skipping archives. */
 function collectMarkdownFiles(dir, out = []) {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     const st = statSync(full);
     if (st.isDirectory()) {
+      if (SCAN_EXCLUDE_DIRS.has(entry)) continue;
       collectMarkdownFiles(full, out);
     } else if (st.isFile() && entry.toLowerCase().endsWith(".md")) {
       out.push(full);
@@ -59,6 +80,7 @@ function collectMarkdownFiles(dir, out = []) {
   }
   return out;
 }
+
 
 /** Strip fenced code blocks so we don't lint code samples. */
 function stripFencedBlocks(source) {

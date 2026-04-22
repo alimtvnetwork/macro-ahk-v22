@@ -31,7 +31,7 @@
 ---
 
 - [Error Modal Reference](../03-error-modal-reference/00-overview.md)
-- [LogLevel Enum](../../../../../03-coding-guidelines/03-coding-guidelines-spec/02-typescript/10-log-level-enum.md)
+- [LogLevel Enum](../../../../../03-coding-guidelines-stale/03-coding-guidelines-spec/02-typescript/10-log-level-enum.md)
 
 ---
 

@@ -15,12 +15,12 @@ This document indexes all coding guideline sub-specs for the Chrome Extension. E
 
 | # | File | Scope |
 |---|------|-------|
-| 01 | [Naming Conventions](../03-coding-guidelines/03-coding-guidelines-spec/00-overview.md) | Variables, functions, constants, files |
-| 02 | [Function Standards](../03-coding-guidelines/03-coding-guidelines-spec/00-overview.md) | Size limits, parameter rules, single responsibility |
-| 03 | [Boolean & Condition Logic](../03-coding-guidelines/03-coding-guidelines-spec/01-cross-language/02-boolean-principles.md) | Positive-only conditions, named booleans, no negation in `if` |
-| 04 | [Formatting Rules](../03-coding-guidelines/03-coding-guidelines-spec/01-cross-language/04-code-style/00-overview.md) | Line-per-argument, object formatting, line length |
-| 05 | [File Organization](../03-coding-guidelines/03-coding-guidelines-spec/00-overview.md) | 200-line limit, module splitting, folder structure |
-| 06 | [Project Config Schema](../10-macro-controller/ts-migration-v2/05-json-config-pipeline.md) | JSON manifest for script loading order and config bindings |
+| 01 | [Naming Conventions](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/00-overview.md) | Variables, functions, constants, files |
+| 02 | [Function Standards](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/00-overview.md) | Size limits, parameter rules, single responsibility |
+| 03 | [Boolean & Condition Logic](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/01-cross-language/02-boolean-principles.md) | Positive-only conditions, named booleans, no negation in `if` |
+| 04 | [Formatting Rules](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/01-cross-language/04-code-style/00-overview.md) | Line-per-argument, object formatting, line length |
+| 05 | [File Organization](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/00-overview.md) | 200-line limit, module splitting, folder structure |
+| 06 | [Project Config Schema](../macro-controller/ts-migration-v2/05a-json-config-pipeline.md) | JSON manifest for script loading order and config bindings |
 
 ---
 
@@ -52,9 +52,9 @@ This document indexes all coding guideline sub-specs for the Chrome Extension. E
 
 ## Cross-References
 
-- [Engineering Standards](../03-coding-guidelines/00-overview.md) — Project-wide engineering rules
-- [Go Boolean Standards](../03-coding-guidelines/03-coding-guidelines-spec/01-cross-language/02-boolean-principles.md) — Parallel boolean rules for Go
-- [Go Readable Conditions](../03-coding-guidelines/03-coding-guidelines-spec/01-cross-language/02-boolean-principles/02-guards-and-extraction.md) — Named boolean patterns (RC1–RC4)
+- [Engineering Standards](../../../02-coding-guidelines/00-overview.md) — Project-wide engineering rules
+- [Go Boolean Standards](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/01-cross-language/02-boolean-principles.md) — Parallel boolean rules for Go
+- [Go Readable Conditions](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/01-cross-language/02-boolean-principles/02-guards-and-extraction.md) — Named boolean patterns (RC1–RC4)
 - [Build System (Spec 17)](17-build-system.md) — Vite config and project structure
 - [Message Protocol (Spec 18)](18-message-protocol.md) — Cross-layer communication types
 

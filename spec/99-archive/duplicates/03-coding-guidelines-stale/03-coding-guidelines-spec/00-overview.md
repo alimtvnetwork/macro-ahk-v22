@@ -78,8 +78,8 @@ Consolidated coding standards and conventions organized by category. This folder
 
 ## Cross-References
 
-- [Spec Authoring Guide](../../02-spec-authoring-guide/00-overview.md)
-- [Error Management Spec](../../04-error-manage-spec/04-error-manage-spec/00-overview.md)
-- [Consolidation Plan](../../../.lovable/memory/workflow/03-reliability-risk-report.md)
+- [Spec Authoring Guide](../../../../01-spec-authoring-guide/00-overview.md)
+- [Error Management Spec](../../04-error-manage-spec-stale/04-error-manage-spec/00-overview.md)
+- [Consolidation Plan](../../../../../.lovable/memory/workflow/03-reliability-risk-report.md)
 - [Consolidated Review Guide](../consolidated-review-guide.md)
 - [Condensed Review Checklist](../consolidated-review-guide-condensed.md)

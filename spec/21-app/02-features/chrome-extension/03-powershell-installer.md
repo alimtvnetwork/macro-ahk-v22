@@ -194,7 +194,7 @@ Release ZIP files **never contain source maps** (`.js.map` files). This is enfor
 2. **Source map removal step** deletes any `*.map` files from `dist/` before packaging
 3. The release workflow logs: `Removed N source map files`
 
-See: [Sourcemap Strategy](mem://architecture/sourcemap-strategy), [Release Workflow](../../pipeline/03-release-workflow.md)
+See: [Sourcemap Strategy](mem://architecture/sourcemap-strategy). _(Release Workflow doc planned at `spec/21-app/pipeline/03-release-workflow.md` — not yet authored.)_
 
 ---
 

@@ -96,7 +96,7 @@ Unless there is a specific legacy compatibility requirement, use **`1.14.0`** as
 |-----------|----------|
 | Security Guidelines | [../00-overview.md](../00-overview.md) |
 | Coding Guidelines | [../../00-overview.md](../../00-overview.md) |
-| Spec Authoring Guide | [../../../../01-spec-authoring-guide/00-overview.md](../../../../02-spec-authoring-guide/00-overview.md) |
+| Spec Authoring Guide | [../../../../01-spec-authoring-guide/00-overview.md](../../../../../../01-spec-authoring-guide/00-overview.md) |
 
 ---
 

@@ -166,7 +166,7 @@ This ensures the Go backend always receives structured metadata when a delegated
 
 ### Global Shutdown Handler (PHP Example)
 
-Use `ErrorChecker::isFatalError()` to centralize fatal error detection. `ErrorChecker` delegates to `ErrorTypeEnum::FATAL_TYPES` (see [PHP Enum Spec](../../../03-coding-guidelines/03-coding-guidelines-spec/04-php/01-enums.md) for full implementation). Other delegated languages should implement equivalent uncaught-exception handlers (e.g., Node.js `process.on('uncaughtException')`, Python `sys.excepthook`).
+Use `ErrorChecker::isFatalError()` to centralize fatal error detection. `ErrorChecker` delegates to `ErrorTypeEnum::FATAL_TYPES` (see [PHP Enum Spec](../../../duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/04-php/01-enums.md) for full implementation). Other delegated languages should implement equivalent uncaught-exception handlers (e.g., Node.js `process.on('uncaughtException')`, Python `sys.excepthook`).
 
 ```php
 register_shutdown_function(function() {
@@ -528,8 +528,8 @@ The Errors page implements a 3-tier fallback:
 - [Copy Format Samples](../02-error-modal/copy-formats.md)
 - [Response Envelope Schema](../05-response-envelope/envelope.schema.json)
 - [Envelope Configurability](../05-response-envelope/configurability.md)
-- [PHP Standards](../../../03-coding-guidelines/03-coding-guidelines-spec/04-php/07-php-standards-reference/00-overview.md)
-- [Golang Standards](../../../03-coding-guidelines/03-coding-guidelines-spec/03-golang/04-golang-standards-reference/00-overview.md)
+- [PHP Standards](../../../duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/04-php/07-php-standards-reference/00-overview.md)
+- [Golang Standards](../../../duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/03-golang/04-golang-standards-reference/00-overview.md)
 
 ---
 

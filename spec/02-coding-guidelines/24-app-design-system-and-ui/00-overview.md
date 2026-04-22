@@ -24,4 +24,4 @@ _No content yet. Add design system documents as numbered files within this folde
 | Reference | Location |
 |-----------|----------|
 | Coding Guidelines Overview | [../00-overview.md](../00-overview.md) |
-| Consolidated Summary | [../../17-consolidated-guidelines/16-app-design-system-and-ui.md](../../17-consolidated-guidelines/16-app-design-system-and-ui.md) |
+| Design System | [`spec/07-design-system/`](../../07-design-system/00-overview.md) |

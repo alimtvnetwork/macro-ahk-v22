@@ -632,7 +632,7 @@ The ecosystem uses **two complementary error code systems**:
 |-----------|----------|
 | Error Code Convention | [04-codes-and-policy.md](./04-codes-and-policy.md) |
 | Error Code Registry | [03-error-code-registry/01-registry.md](../../../03-error-code-registry/01-registry.md) |
-| Enum Specification | [03-golang/01-enum-specification](../../../../../03-coding-guidelines/03-coding-guidelines-spec/03-golang/01-enum-specification/00-overview.md) |
+| Enum Specification | [03-golang/01-enum-specification](../../../../../03-coding-guidelines-stale/03-coding-guidelines-spec/03-golang/01-enum-specification/00-overview.md) |
 | Lint Rule CODE-RED-008 | `scripts/validate-guidelines.go` |
 | Source Inspiration | [evatix-go/errorwrapper/errtype](https://gitlab.com/auk-go/errorwrapper/-/tree/develop/errtype) |
 

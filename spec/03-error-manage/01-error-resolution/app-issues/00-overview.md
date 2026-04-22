@@ -27,7 +27,7 @@
 
 ## Purpose
 
-Documented application errors with root cause analysis, solutions, and prevention steps. Each entry follows the [Error Documentation Guideline](../00-error-documentation-guideline.md) to prevent AI hallucination on previously solved problems.
+Documented application errors with root cause analysis, solutions, and prevention steps. Each entry follows the [Error Documentation Guideline](../../../99-archive/duplicates/04-error-manage-spec-stale/04-error-manage-spec/01-error-resolution/00-error-documentation-guideline.md) to prevent AI hallucination on previously solved problems.
 
 ---
 
@@ -42,7 +42,7 @@ Documented application errors with root cause analysis, solutions, and preventio
 
 ## Cross-References
 
-- [Error Documentation Guideline](../00-error-documentation-guideline.md) — Mandatory documentation process
+- [Error Documentation Guideline](../../../99-archive/duplicates/04-error-manage-spec-stale/04-error-manage-spec/01-error-resolution/00-error-documentation-guideline.md) — Mandatory documentation process
 - [Error Resolution Overview](../00-overview.md) — Parent folder
 
 ---

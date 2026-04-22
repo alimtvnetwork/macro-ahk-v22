@@ -116,8 +116,8 @@ This endpoint resolves the **workspace ID** needed by the credit-balance API:
 
 ## Cross-References
 
-- [Free Credit Detection Spec](../../17-app-issues/free-credits-detect/overview.md)
-- [Credit Balance Sample](../../17-app-issues/free-credits-detect/sample-response.json)
+- [Free Credit Detection Spec](../../../../22-app-issues/free-credits-detect/overview.md)
+- [Credit Balance Sample](../../../../22-app-issues/free-credits-detect/sample-response.json)
 - [Workspace Detection Protocol](../workspace-detection.md)
 
 ---

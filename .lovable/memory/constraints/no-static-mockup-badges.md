@@ -11,6 +11,7 @@ The repository-root `readme.md` hero block (everything inside the top `<div alig
 1. **Static mockup badges** with URL pattern `https://img.shields.io/badge/<text>-<text>-<color>` — these are hand-encoded labels, not live data. Examples that have already been removed and must never come back: `Manifest-V3`, `TypeScript-5`, `Node-20+`, `pnpm-9`, `Vite-5`, `React-18`, `Tailwind-3`, `SQLite-sql.js`, `ESLint-SonarJS`, `tested%20with-Vitest`, `E2E-Playwright`, `License-Proprietary`, `Codacy-activate`, `Code%20Climate-activate`, `Codecov-activate`, `Renovate-ready`, `Dependabot-active`, `dependencies-audited`, `coverage-tracked`, `TypeScript-strict`, `maintained-yes`, `PRs-welcome`, `made%20with-♥`.
 2. **Placeholder / fail-state badges** whose rendered text contains any of: `activate`, `no status`, `not found`, `repo not found`, `no releases found`, `404`, `badge not found`, `repo or branch not found`, `repo or workflow not found`. These appear visually crossed out in the GitHub render.
 3. **Decorative badges** with no live state (`PRs-welcome`, `made-with-love`, hand-rolled "Maintained: yes", etc.).
+4. **Stacked badge layout** where each `<!-- Group -->` marker sits on its own line with blank lines separating groups, producing 5+ visual rows of badges in the hero. The hero badge area MUST collapse to **1–2 visual lines** (one markdown paragraph, max two consecutive lines). See `spec/01-spec-authoring-guide/11-root-readme-conventions.md` §"Badge Layout Rules" for the grammar.
 
 ## Why
 

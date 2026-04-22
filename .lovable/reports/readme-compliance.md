@@ -1,7 +1,7 @@
 # README Compliance Report
 
 - **File:** `readme.md`
-- **Generated:** 2026-04-22T09:28:44.096Z
+- **Generated:** 2026-04-22T10:22:09.591Z
 - **Status:** ✅ **PASS**
 - **Summary:** 18/18 checks passed
 - **Spec authority:** [`spec/01-spec-authoring-guide/11-root-readme-conventions.md`](../spec/01-spec-authoring-guide/11-root-readme-conventions.md)
@@ -22,12 +22,12 @@ No failures to report. The README satisfies all 18 compliance rules.
 | 2 | ✅ | `centered-hero` | Hero wrapped in <div align="center"> before H1 |
 | 3 | ✅ | `logo-above-title` | Logo image placed above the H1 title |
 | 4 | ✅ | `tagline-blockquote` | Tagline blockquote (`> ...`) immediately under H1 |
-| 5 | ✅ | `group-build-release` | Build & Release group has ≥5 badges |
-| 6 | ✅ | `group-repo-activity` | Repo activity group has ≥5 badges |
-| 7 | ✅ | `group-community` | Community group has ≥6 badges |
-| 8 | ✅ | `group-code-quality` | Code-quality group has ≥3 badges |
-| 9 | ✅ | `group-stack-stds` | Stack & standards group has ≥8 badges |
-| 10 | ✅ | `badge-total` | Total badge count ≥ 27 |
+| 5 | ✅ | `group-build-release` | Build & Release group has ≥1 badges |
+| 6 | ✅ | `group-repo-activity` | Repo activity group has ≥1 badges |
+| 7 | ✅ | `group-community` | Community group has ≥0 badges |
+| 8 | ✅ | `group-code-quality` | Code-quality group has ≥1 badges |
+| 9 | ✅ | `group-stack-stds` | Stack & standards group has ≥1 badges |
+| 10 | ✅ | `badge-total` | Total badge count ≥ 5 |
 | 11 | ✅ | `hero-div-closed` | Centered hero <div> closed before first ## section |
 | 12 | ✅ | `author-section` | ## Author section present |
 | 13 | ✅ | `author-centered-name` | Author name centered as ### linked heading |

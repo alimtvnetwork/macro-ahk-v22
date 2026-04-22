@@ -400,3 +400,87 @@ function runIgnoringDuplicates(db: SqlJsDatabase, statements: string[]): void {
         }
     }
 }
+
+function runRenameStatementsIfSourceColumnsExist(db: SqlJsDatabase, statements: string[]): void {
+    const pending = [...statements];
+
+    while (pending.length > 0) {
+        const sql = pending.shift()!;
+        const renameMatch = sql.match(/^ALTER TABLE\s+(\w+)\s+RENAME COLUMN\s+(\w+)\s+TO\s+(\w+)$/i);
+
+        if (!renameMatch) {
+            runIgnoringDuplicates(db, [sql]);
+            continue;
+        }
+
+        const [, tableName, sourceColumn, targetColumn] = renameMatch;
+        const existingColumns = getTableColumns(db, tableName);
+
+        if (existingColumns.has(targetColumn)) {
+            continue;
+        }
+
+        if (!existingColumns.has(sourceColumn)) {
+            console.warn(
+                `[migration] Skipping rename ${tableName}.${sourceColumn} → ${targetColumn} because source column is absent`,
+            );
+            continue;
+        }
+
+        runIgnoringDuplicates(db, [sql]);
+    }
+}
+
+function inferSchemaVersion(logsDb: SqlJsDatabase, errorsDb: SqlJsDatabase): number {
+    const logsTables = getExistingTables(logsDb);
+    const errorsTables = getExistingTables(errorsDb);
+    const sessionsColumns = getTableColumns(logsDb, "Sessions");
+
+    if (sessionsColumns.has("StartedAt")) {
+        if (logsTables.has("AssetVersion")) { return 8; }
+        if (logsTables.has("SharedAsset") || logsTables.has("ProjectGroup")) { return 7; }
+        if (logsTables.has("UpdateSettings")) { return 6; }
+        if (logsTables.has("UpdaterInfo")) { return 5; }
+        if (errorsTables.has("ErrorCodes")) { return 4; }
+        return 4;
+    }
+
+    if (sessionsHasTextPk(logsDb)) {
+        return 2;
+    }
+
+    return 3;
+}
+
+function getExistingTables(db: SqlJsDatabase): Set<string> {
+    try {
+        const result = db.exec("SELECT name FROM sqlite_master WHERE type='table'");
+
+        if (result.length === 0) {
+            return new Set<string>();
+        }
+
+        return new Set(result[0].values.map((row) => String(row[0])));
+    } catch {
+        return new Set<string>();
+    }
+}
+
+function getTableColumns(db: SqlJsDatabase, tableName: string): Set<string> {
+    try {
+        const result = db.exec(`PRAGMA table_info(${tableName})`);
+
+        if (result.length === 0) {
+            return new Set<string>();
+        }
+
+        const nameIndex = result[0].columns.indexOf("name");
+        if (nameIndex === -1) {
+            return new Set<string>();
+        }
+
+        return new Set(result[0].values.map((row) => String(row[nameIndex])));
+    } catch {
+        return new Set<string>();
+    }
+}

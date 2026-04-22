@@ -803,7 +803,7 @@ User drags 4 files from desktop onto drop zone:
   - analytics.js (200 KB)
   - tracker.js (150 KB)
   - settings.json (3 KB)
-  - readme.txt (1 KB)
+  - notes.md (1 KB)
     │
     ▼
 Drop zone activates (cyan border, glow)
@@ -816,7 +816,7 @@ Validation:
   ✅ analytics.js — valid JS, 200 KB
   ✅ tracker.js — valid JS, 150 KB
   ✅ settings.json — valid JSON, 3 KB
-  ❌ readme.txt — unsupported file type
+  ❌ notes.md — unsupported file type
     │
     ▼
 Processing: hash check, metadata analysis

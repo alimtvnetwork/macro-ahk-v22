@@ -1,6 +1,6 @@
 # Consistency Report: Seedable Config Architecture
 
-**Version:** 3.0.0  
+**Version:** 3.2.0  
 **Generated:** 2026-04-03  
 **Health Score:** 100/100 (A+)
 

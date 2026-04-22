@@ -1,8 +1,8 @@
 # RAG Chunk Configuration Settings
 
-**Version:** 3.0.0  
+**Version:** 3.2.0  
 **Created:** 2026-02-02  
-**Updated:** 2026-04-02  
+**Updated:** 2026-04-16  
 **Status:** Active  
 **Parent:** [00-overview.md](../00-overview.md)
 
@@ -253,7 +253,7 @@ INSERT INTO Settings (Key, Value, ValueType, Source, Description) VALUES
 
 ```sql
 -- In data/{appName}/settings/config.db
-CREATE TABLE IF NOT EXISTS Settings (
+CREATE TABLE IF NOT EXISTS Setting (
     SettingsId INTEGER PRIMARY KEY AUTOINCREMENT,
     Key TEXT UNIQUE NOT NULL,
     Value TEXT NOT NULL,
@@ -352,4 +352,4 @@ POST /api/v1/rag/reindex
 | Seedable Config Overview | `../00-overview.md` |
 | AI Bridge Database | `../22-ai-bridge-cli/01-backend/12-database-architecture.md` |
 | RAG Reindexing | `../22-ai-bridge-cli/01-backend/11-rag-reindexing.md` |
-| Error Codes | `../03-error-manage-spec/04-error-manage-spec/03-error-code-registry/00-overview.md` |
+| Error Codes | `../03-error-manage/03-error-code-registry/00-overview.md` |

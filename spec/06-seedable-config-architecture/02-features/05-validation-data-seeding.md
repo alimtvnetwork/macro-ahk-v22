@@ -1,6 +1,6 @@
 # Validation Data Seeding Pattern
 
-**Version:** 3.0.0  
+**Version:** 3.2.0  
 **Created:** 2026-03-09  
 **Status:** Active  
 **Purpose:** Define pattern for loading validation arrays and lookup data from CW Config → Root DB
@@ -204,6 +204,7 @@ func validateTransitionDensity(content string, _ *SeoConfig) ValidationResult {
 
 ```sql
 -- Root DB (settings.db) stores validation data
+-- linter-waive: MISSING-DESC-001 reason="Seedable-config example; focus on config schema mechanics"
 CREATE TABLE ValidationData (
     ValidationDataId INTEGER PRIMARY KEY AUTOINCREMENT,
     Category TEXT NOT NULL,          -- 'Seo', 'Rag', 'Search'
@@ -562,7 +563,7 @@ threshold, _ := v.validationData.GetSeoNumber(SeoKeyTransitionDensityThreshold)
 │                          ↓                                               │
 │                                                                          │
 │  Update ConfigMeta.SeedVersion = '1.3.0'                               │
-│  Append to changelog.md                                                  │
+│  Append to CHANGELOG.md                                                  │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
 ```

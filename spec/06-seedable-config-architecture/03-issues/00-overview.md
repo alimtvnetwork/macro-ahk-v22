@@ -1,6 +1,6 @@
 # Seedable Config Architecture — Issues Index
 
-**Updated:** 2026-04-03
+**Updated:** 2026-04-16
 
 ---
 

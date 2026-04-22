@@ -1,6 +1,6 @@
 # Consistency Report: Seedable Config Features
 
-**Version:** 1.0.0  
+**Version:** 3.2.0  
 **Generated:** 2026-04-03
 
 ---

@@ -1,8 +1,8 @@
 # Seedable Config Architecture — Changelog
 
 
-**Version:** 1.0.0  
-**Last Updated:** 2026-03-20  
+**Version:** 3.2.0  
+**Last Updated:** 2026-04-16  
 
 All notable changes to the Seedable Config Architecture specification are documented here.
 
@@ -21,3 +21,16 @@ Project-wide major version increment (+1.0.0) applied to all specification files
 ---
 
 *Keep this file updated when specs change.*
+
+---
+
+## v3.4.0 — 2026-04-20
+
+### Repository Slug Migration
+
+Updated all references from `coding-guidelines-v14` to `coding-guidelines-v15` across distribution and CI/CD specifications.
+
+#### Changed
+- Install scripts, CI templates, and release pipelines now reference `coding-guidelines-v15` repository slug
+- Affected specs: Distribution & Runner (15), Generic Release (16), CI/CD Integration (02), Update Check Mechanism (14)
+- 42 files updated with 440 total reference replacements

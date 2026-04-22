@@ -1,8 +1,8 @@
 # RAG Configuration Validation Helpers
 
-**Version:** 3.0.0  
+**Version:** 3.2.0  
 **Created:** 2026-02-02  
-**Updated:** 2026-04-02  
+**Updated:** 2026-04-16  
 **Status:** Active  
 **Parent:** [02-rag-chunk-settings.md](./01-rag-chunk-settings.md)
 
@@ -592,6 +592,6 @@ func TestOverlapPercentageValidation(t *testing.T) {
 | Reference | Location |
 |-----------|----------|
 | RAG Chunk Settings | `./01-rag-chunk-settings.md` |
-| Error Code Registry | `../03-error-manage-spec/04-error-manage-spec/03-error-code-registry/00-overview.md` |
-| AI Bridge Error Codes | `../03-error-manage-spec/04-error-manage-spec/03-error-code-registry/00-overview.md` |
+| Error Code Registry | `../03-error-manage/03-error-code-registry/00-overview.md` |
+| AI Bridge Error Codes | `../03-error-manage/03-error-code-registry/00-overview.md` |
 | Seedable Config Overview | `../00-overview.md` |

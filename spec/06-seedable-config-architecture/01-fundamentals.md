@@ -1,7 +1,7 @@
 # Seedable Config Architecture — Fundamentals
 
-**Version:** 3.0.0  
-**Updated:** 2026-04-03  
+**Version:** 3.2.0  
+**Updated:** 2026-04-16  
 **Parent:** [00-overview.md](./00-overview.md)
 
 ---
@@ -36,7 +36,7 @@
 │                                  ▼                                        │
 │                          ┌───────────────┐                               │
 │                          │ Update        │                               │
-│                          │ changelog.md  │                               │
+│                          │ CHANGELOG.md  │                               │
 │                          └───────────────┘                               │
 │                                                                          │
 └─────────────────────────────────────────────────────────────────────────┘
@@ -178,7 +178,7 @@ JSON Schema for validation:
 }
 ```
 
-### changelog.md Format
+### CHANGELOG.md Format
 
 ```markdown
 # Changelog
@@ -211,6 +211,7 @@ All notable configuration changes are documented here.
 ### Table: ConfigMeta
 
 ```sql
+-- linter-waive: MISSING-DESC-001 reason="Seedable-config example; focus on config schema mechanics"
 CREATE TABLE ConfigMeta (
     ConfigMetaId INTEGER PRIMARY KEY AUTOINCREMENT,
     SeedVersion TEXT NOT NULL,
@@ -222,11 +223,12 @@ CREATE TABLE ConfigMeta (
 );
 ```
 
-### Table: Settings
+### Table: Setting
 
 ```sql
-CREATE TABLE Settings (
-    SettingsId INTEGER PRIMARY KEY AUTOINCREMENT,
+-- linter-waive: MISSING-DESC-001 reason="Seedable-config example; focus on config schema mechanics"
+CREATE TABLE Setting (
+    SettingId INTEGER PRIMARY KEY AUTOINCREMENT,
     Category TEXT NOT NULL,
     Key TEXT NOT NULL,
     Value TEXT NOT NULL,           -- JSON encoded
@@ -236,24 +238,24 @@ CREATE TABLE Settings (
     UNIQUE(Category, Key)
 );
 
-CREATE INDEX IdxSettingsCategory ON Settings(Category);
+CREATE INDEX IdxSettingsCategory ON Setting(Category);
 ```
 
-### Table: SettingsHistory
+### Table: SettingHistory
 
 ```sql
-CREATE TABLE SettingsHistory (
+CREATE TABLE SettingHistory (
     SettingsHistoryId INTEGER PRIMARY KEY AUTOINCREMENT,
-    SettingsId INTEGER NOT NULL,
+    SettingId INTEGER NOT NULL,
     OldValue TEXT,
     NewValue TEXT NOT NULL,
     ChangedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
     ChangedBy TEXT,               -- user, system, seed
     Version TEXT,                  -- Version at time of change
-    FOREIGN KEY (SettingsId) REFERENCES Settings(SettingsId)
+    FOREIGN KEY (SettingId) REFERENCES Setting(SettingId)
 );
 
-CREATE INDEX IdxHistorySetting ON SettingsHistory(SettingsId);
+CREATE INDEX IdxHistorySetting ON SettingsHistory(SettingId);
 CREATE INDEX IdxHistoryChanged ON SettingsHistory(ChangedAt);
 ```
 
@@ -405,7 +407,7 @@ func (s *ConfigService) mergeSeed(seed SeedConfig, previousVersion string) error
     return nil
 }
 
-// updateChangelog appends version entry to changelog.md
+// updateChangelog appends version entry to CHANGELOG.md
 func (s *ConfigService) updateChangelog(seed SeedConfig) error {
     if seed.Changelog == "" {
         return nil
@@ -724,7 +726,7 @@ See: `06-validation-data-seeding.md` for complete implementation guide.
 
 | Reference | Location |
 |-----------|----------|
-| Split DB Architecture | [04-split-db-architecture/00-overview.md](../05-split-db-architecture/00-overview.md) |
+| Split DB Architecture | [05-split-db-architecture/00-overview.md](../05-split-db-architecture/00-overview.md) |
 
 ---
 

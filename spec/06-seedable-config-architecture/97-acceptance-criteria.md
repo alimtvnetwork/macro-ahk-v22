@@ -1,7 +1,7 @@
 # Seedable Config Architecture — Acceptance Criteria
 
-**Version:** 1.0.0  
-**Last Updated:** 2026-03-20
+**Version:** 3.2.0  
+**Last Updated:** 2026-04-16
 
 ---
 

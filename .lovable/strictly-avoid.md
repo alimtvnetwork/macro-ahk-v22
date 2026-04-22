@@ -31,6 +31,10 @@
 
 - **Bumping one version file in isolation:** All of `chrome-extension/manifest.json`, `src/shared/constants.ts`, every `standalone-scripts/*/src/instruction.ts`, `macro-controller/src/shared-state.ts`, and the SDK `index.ts` literal must move together. See memory: `workflow/versioning-policy`.
 
+## File operations & prompts
+
+- **readme.txt:** Never create, regenerate, prompt for, or suggest this file in any form. Removed per explicit user request; do not re-introduce.
+
 ## Folder structure
 
 - **`.lovable/memories/` (with trailing `s`):** Wrong path. Canonical is `.lovable/memory/`.

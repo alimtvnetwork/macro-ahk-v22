@@ -22,6 +22,7 @@ SQLite bind safety: never pass raw `undefined` to db.run/db.exec/stmt.bind — u
 SDK self-test runs on every page load and now round-trips KV (set→get→verify→delete→verify-cleared); two PASS lines expected in DevTools.
 Extension build output lives at `./chrome-extension/` at repo root (powershell.json → distDir = "chrome-extension"). Load-unpacked target. `dist/` is reserved for the Lovable preview / web-app build only — never load it into Chrome.
 CI preflight `scripts/check-no-pnpm-dlx-less.mjs` blocks the broken `pnpm dlx --package=less` invocation. JSON envelope is `version: 1` (additive-only). Exit codes: 0 clean / 1 hits / 2 usage error. 67/67 fixtures passing.
+readme.txt: exactly 3 words + Malaysia timestamp via `scripts/generate-readme-txt.mjs`. Format: `let's start now {YYYY-MM-DD} {HH:mm:ss}`. NEVER suggest alternatives.
 
 ## Memories
 - [Spec slot rules (2026-04-22)](mem://architecture/spec-slot-rules) — **Foundations 01–20 strict** (no app content); 21-app/ kept as wrapper with chrome-extension renamed to `01-chrome-extension/`; macro-controller promoted to top-level `26-macro-controller/`. Supersedes prior 01–17 boundary.

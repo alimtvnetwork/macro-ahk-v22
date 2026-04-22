@@ -224,6 +224,6 @@ If any default is wrong, tell me before Phase 1; otherwise reply **"next"** and 
 | 5 — Create `21-app/` and migrate | ✅ done (2026-04-22) | Migrated 7 folders into `21-app/`. Created overview, fundamentals, features index, consistency report. Resolved `08-` collision. |
 | 6 — Consolidate `22-app-issues/` | ✅ done (2026-04-22) | Renamed `17-app-issues/` → `22-app-issues/` (99 files preserved). Merged 4 files from `02-app-issues/` with `legacy-` prefix. Created `00-overview.md` + `99-consistency-report.md`. |
 | 7 — Root cleanup & governance files | ⏳ next | |
-| 8 — Cross-reference repair | ⏳ pending | |
+| 8 — Cross-reference repair | ✅ done (2026-04-22) | Scanned 1568 files; rewrote **337 path references** across **199 files** via 22-entry migration map. Post-scan: zero old paths remain (excluding `99-archive/` and the plan file itself). Re-executed Phases 3/4/5/7 moves first since auto-cleanup had reverted them. |
 | 9 — Memory & policy sync | ⏳ pending | |
 | 10 — Final validation | ⏳ pending | |

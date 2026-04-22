@@ -50,6 +50,17 @@
  *                       Audit logs are written for BOTH dry-run and apply
  *                       modes so handoffs can review proposed changes.
  *
+ *   --only=<ids>        Comma-separated allowlist of repair ids to run. Any
+ *                       repair not in the list is reported with status
+ *                       "skipped" and reason "disabled by --only flag".
+ *                       Valid ids: centered-hero, license-section,
+ *                       author-misorder. Mutually exclusive with --skip.
+ *
+ *   --skip=<ids>        Comma-separated blocklist of repair ids to disable.
+ *                       Disabled repairs are reported with status "skipped"
+ *                       and reason "disabled by --skip flag". Mutually
+ *                       exclusive with --only.
+ *
  * Safety contract:
  *   - The script never edits content INSIDE existing badge blocks, code
  *     fences, or the author biography paragraphs.
@@ -102,10 +113,40 @@ let working = original;
 /** @type {Array<{ id: string; label: string; status: "applied"|"would-apply"|"skipped"|"not-needed"; reason?: string; preview?: string; before?: string; after?: string; beforeRange?: { startLine: number; endLine: number }; afterRange?: { startLine: number; endLine: number } }>} */
 const repairs = [];
 
+// --only=<ids> / --skip=<ids> — toggle individual repair rules.
+const VALID_REPAIR_IDS = new Set(["centered-hero", "license-section", "author-misorder"]);
+const onlyArg = args.find((a) => a.startsWith("--only="));
+const skipArg = args.find((a) => a.startsWith("--skip="));
+if (onlyArg && skipArg) {
+    die("--only and --skip are mutually exclusive — pass only one");
+}
+function parseIdList(flag) {
+    const raw = flag.split("=")[1] ?? "";
+    const ids = raw.split(",").map((s) => s.trim()).filter(Boolean);
+    const invalid = ids.filter((id) => !VALID_REPAIR_IDS.has(id));
+    if (invalid.length > 0) {
+        die(`unknown repair id(s) in ${flag.split("=")[0]}: ${invalid.join(", ")} — valid: ${[...VALID_REPAIR_IDS].join(", ")}`);
+    }
+    return new Set(ids);
+}
+const ONLY_SET = onlyArg ? parseIdList(onlyArg) : null;
+const SKIP_SET = skipArg ? parseIdList(skipArg) : null;
+function enabled(id) {
+    if (ONLY_SET) return ONLY_SET.has(id);
+    if (SKIP_SET) return !SKIP_SET.has(id);
+    return true;
+}
+function recordDisabled(id, label) {
+    const reason = ONLY_SET ? "disabled by --only flag" : "disabled by --skip flag";
+    repairs.push({ id, label, status: "skipped", reason });
+}
+
 // ─── Repair #1: centered-hero ────────────────────────────────────────────────
 {
     const id = "centered-hero";
     const label = "Insert <div align=\"center\"> wrapper around hero block";
+    if (!enabled(id)) { recordDisabled(id, label); }
+    else {
     const lines = working.split(/\r?\n/);
 
     // Already has centering div above the H1?
@@ -177,12 +218,15 @@ const repairs = [];
         });
         working = next;
     }
+    }
 }
 
 // ─── Repair #2: license-section ──────────────────────────────────────────────
 {
     const id = "license-section";
     const label = "Append `## License` section if missing";
+    if (!enabled(id)) { recordDisabled(id, label); }
+    else {
     const linesNoCode = stripCodeFences(working).split(/\r?\n/);
     const hasLicenseHeading = linesNoCode.some((l) => /^##\s+License\b/i.test(l));
 
@@ -213,12 +257,15 @@ const repairs = [];
         });
         working = next;
     }
+    }
 }
 
 // ─── Repair #3: author-misorder ──────────────────────────────────────────────
 {
     const id = "author-misorder";
     const label = "Reorder Author/Company H3 sub-sections (Author first)";
+    if (!enabled(id)) { recordDisabled(id, label); }
+    else {
     const linesNoCode = stripCodeFences(working).split(/\r?\n/);
     const authorIdx = linesNoCode.findIndex((l) => /^##\s+Author\b/i.test(l));
 
@@ -299,6 +346,7 @@ const repairs = [];
                 }
             }
         }
+    }
     }
 }
 

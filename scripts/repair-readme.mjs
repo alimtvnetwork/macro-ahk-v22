@@ -257,6 +257,7 @@ function recordDisabled(id, label) {
         });
         working = next;
     }
+    }
 }
 
 // ─── Repair #3: author-misorder ──────────────────────────────────────────────

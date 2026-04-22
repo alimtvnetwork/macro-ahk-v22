@@ -12,7 +12,7 @@
 import type { Database as SqlJsDatabase } from "sql.js";
 import initSqlJs from "./sqljs-loader";
 import { migrateSchema } from "./schema-migration";
-import { FULL_LOGS_SCHEMA, ERRORS_SCHEMA } from "./db-schemas";
+import { FULL_LOGS_SCHEMA, FULL_ERRORS_SCHEMA } from "./db-schemas";
 import {
     flushToStorage,
     loadFromStorage,
@@ -346,7 +346,7 @@ async function tryOpfsInit(): Promise<boolean> {
         const root = await navigator.storage.getDirectory();
 
         logsDb = await loadOrCreateFromOpfs(SQL!, root, DB_NAMES.logs, FULL_LOGS_SCHEMA);
-        errorsDb = await loadOrCreateFromOpfs(SQL!, root, DB_NAMES.errors, ERRORS_SCHEMA);
+        errorsDb = await loadOrCreateFromOpfs(SQL!, root, DB_NAMES.errors, FULL_ERRORS_SCHEMA);
         persistenceMode = "opfs";
 
         console.log("[db-manager] OPFS persistence active");
@@ -361,7 +361,7 @@ async function tryOpfsInit(): Promise<boolean> {
 async function tryStorageInit(): Promise<boolean> {
     try {
         logsDb = await loadFromStorage(SQL!, STORAGE_KEYS.logs, FULL_LOGS_SCHEMA);
-        errorsDb = await loadFromStorage(SQL!, STORAGE_KEYS.errors, ERRORS_SCHEMA);
+        errorsDb = await loadFromStorage(SQL!, STORAGE_KEYS.errors, FULL_ERRORS_SCHEMA);
         persistenceMode = "storage";
 
         console.log("[db-manager] storage.local persistence active");

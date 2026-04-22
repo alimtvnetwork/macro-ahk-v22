@@ -99,6 +99,10 @@ CREATE TABLE IF NOT EXISTS ErrorCodes (
 );
 `;
 
+export const FULL_ERRORS_SCHEMA =
+    ERRORS_SCHEMA +
+    ERROR_CODES_SCHEMA;
+
 /* ------------------------------------------------------------------ */
 /*  Prompts (logs.db)                                                  */
 /* ------------------------------------------------------------------ */

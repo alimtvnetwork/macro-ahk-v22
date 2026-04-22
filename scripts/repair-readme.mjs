@@ -218,6 +218,7 @@ function recordDisabled(id, label) {
         });
         working = next;
     }
+    }
 }
 
 // ─── Repair #2: license-section ──────────────────────────────────────────────

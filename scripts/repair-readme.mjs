@@ -165,7 +165,16 @@ const repairs = [];
             `+ insert <div align="center"> at line ${openAt + 1}`,
             `+ insert </div> at line ${closeAt + 3} (before first ## heading)`,
         ];
-        repairs.push({ id, label, status: APPLY ? "applied" : "would-apply", preview: previewParts.join("; ") });
+        // Snippet: capture the entire hero region (from openAt up to old closeAt).
+        const beforeSnip = snippetFromLines(lines, openAt, Math.min(closeAt, openAt + 12), 2);
+        const afterSnip = snippetFromLines(newLines, openAt, Math.min(closeAt + 2, openAt + 14), 2);
+        repairs.push({
+            id, label,
+            status: APPLY ? "applied" : "would-apply",
+            preview: previewParts.join("; "),
+            before: beforeSnip.text, beforeRange: beforeSnip.range,
+            after: afterSnip.text, afterRange: afterSnip.range,
+        });
         working = next;
     }
 }

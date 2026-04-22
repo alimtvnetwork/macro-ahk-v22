@@ -107,7 +107,7 @@ func (r *Receiver) SetValue(v string) {
 
 ## 5. Cross-References
 
-- [Lazy Evaluation Patterns](./29-lazy-evaluation-patterns.md) — Exempted mutation for caching
+- [Lazy Evaluation Patterns](./16-lazy-evaluation-patterns.md) — Exempted mutation for caching
 - [DRY Principles](./08-dry-principles.md) — Constructor-based initialization
 - [Master Coding Guidelines](./15-master-coding-guidelines/00-overview.md) — §7 Type Safety
 

@@ -78,9 +78,9 @@ Nesting resolution, lazy evaluation, regex usage.
 
 | # | File | Description |
 |---|------|-------------|
-| 29 | `29-lazy-evaluation-patterns.md` | Defer computation until needed |
 | 17 | `17-regex-usage-guidelines.md` | Compile once, named groups, readability |
 | 20 | `20-nesting-resolution-patterns.md` | Flatten nested code, avoid else after return |
+| 29 | `29-lazy-evaluation-patterns.md` | Defer computation until needed |
 
 ### 🧪 Testing
 Test naming and structure conventions.
@@ -156,7 +156,6 @@ Consolidated reference, audit logs, contradiction checks.
 | 13-strict-typing.md |
 | 14-test-naming-and-structure.md |
 | 15-master-coding-guidelines.md |
-| 29-lazy-evaluation-patterns.md |
 | 17-regex-usage-guidelines.md |
 | 18-code-mutation-avoidance.md |
 | 19-null-pointer-safety.md |
@@ -168,6 +167,7 @@ Consolidated reference, audit logs, contradiction checks.
 | 25-generic-return-types.md |
 | 26-magic-values-and-immutability.md |
 | 27-types-folder-convention.md |
+| 29-lazy-evaluation-patterns.md |
 | 97-acceptance-criteria.md |
 | 98-changelog.md |
 | 99-consistency-report.md |

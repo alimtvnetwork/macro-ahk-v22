@@ -28,11 +28,12 @@ React migration was evaluated and deferred (Phase 03).
 | 03 | `03-react-feasibility.md` | Medium | ✅ Evaluated & deferred |
 | 04 | `04-performance-logging.md` | High | ✅ Complete |
 | 05 | `05-module-splitting.md` | Medium | ✅ Complete |
+| 05a | `05a-json-config-pipeline.md` | Reference | ✅ Documentation of injection chain |
 | 06 | `06-http-to-sdk-migration.md` | High | ✅ Complete (v1.74.0) |
 | 07 | `07-rename-persistence-indexeddb.md` | Medium | ✅ Complete |
 | 08 | `08-error-logging-and-type-safety.md` | High | ✅ Complete |
 
-**All 8 phases complete.** No remaining migration work.
+**All 8 phases complete.** No remaining migration work. See `99-consistency-report.md` for spec health audit.
 
 ---
 

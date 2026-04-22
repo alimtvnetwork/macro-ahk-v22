@@ -239,19 +239,59 @@ This project is proprietary software owned by <Company Name>. All rights reserve
 
 ## Validation Checklist
 
-A root README passes review only if every item below is true:
+A root README passes review only if **every** item below is true. Items mapped to a validator check ID will fail CI automatically; the rest are reviewer-enforced.
 
-- [ ] Logo image rendered above the H1 title, sized 128×128.
-- [ ] H1 title is centered (inside `<div align="center">`).
-- [ ] Tagline blockquote present directly under the H1.
-- [ ] All five badge groups present, each labeled with an HTML comment.
-- [ ] At least 27 badges total (5 + 5 + 6 + 3 + 8).
-- [ ] Hero screenshot rendered inside the centered div at width=820.
-- [ ] `## Author` section present with centered name, biography, and metadata table.
-- [ ] `### <Company>` subsection present with tagline and metadata table.
-- [ ] `## License` section present at the end.
-- [ ] Single H1 in the entire document.
-- [ ] Company name spelling matches `mem://branding/author-identity` exactly.
+### Hero Layout
+
+- [ ] HL-01 — File opens with `<div align="center">` (validator: `centered-hero`).
+- [ ] HL-02 — Logo image (`<img …logo…>` or `![…logo…](…)`) renders above the H1, 128×128 (validator: `logo-above-title`).
+- [ ] HL-03 — Exactly one `# H1` heading exists in the entire document (validator: `single-h1`).
+- [ ] HL-04 — Tagline `> blockquote` appears within 5 lines of the H1 (validator: `tagline-blockquote`).
+- [ ] HL-05 — All five badge group comment markers present, in order (validator: `group-build-release`, `group-repo-activity`, `group-community`, `group-code-quality`, `group-stack-stds`).
+- [ ] HL-06 — Hero screenshot at `width="820"` is the last element inside the centering div.
+- [ ] HL-07 — Centering `</div>` closes before the first `## section` heading (validator: `hero-div-closed`).
+
+### Badge Inventory
+
+- [ ] Group 1 (Build & Release) ≥ **5** badges.
+- [ ] Group 2 (Repo activity) ≥ **5** badges.
+- [ ] Group 3 (Community) ≥ **6** badges.
+- [ ] Group 4 (Code-quality) ≥ **3** badges (12 recommended; placeholders allowed if documented in activation callout).
+- [ ] Group 5 (Stack & standards) ≥ **8** badges, license badge last and linking to `#license`.
+- [ ] Aggregate badge count ≥ **27** (validator: `badge-total`).
+- [ ] Every badge URL contains `style=flat-square`.
+
+### Author + Footer
+
+- [ ] `## Author` section present with centered `### [Name](url)` (validator: `author-section`, `author-centered-name`).
+- [ ] Author role line follows `**[Primary](url)** | [Secondary](url), [Company](url)` format (validator: `author-role-line`).
+- [ ] Biography mentions years of experience + at least one reputation source (Stack Overflow / LinkedIn / GitHub) (validator: `author-bio`).
+- [ ] Two-column author metadata table with empty header (validator: `author-metadata-table`).
+- [ ] `### <Company>` subsection present with tagline and metadata table (validator: `company-subsection`).
+- [ ] `## License` section present at the end with a non-empty body (validator: `license-section`).
+- [ ] Company name spelling matches `mem://branding/author-identity` exactly (reviewer-enforced).
+
+---
+
+## Enforcement
+
+The script [`scripts/check-readme-compliance.mjs`](../../scripts/check-readme-compliance.mjs) is the single source of truth for compliance. It runs **18 checks** mapped 1-to-1 to the rules above and exits non-zero on any violation.
+
+Run locally:
+
+```bash
+pnpm run check:readme           # human-readable output
+pnpm run check:readme:json      # JSON envelope { version, ok, summary, checks[] } for CI
+```
+
+When you change anything in §"Mandatory Hero Layout" or §"Mandatory Badge Inventory", you MUST also:
+
+1. Update the validator's per-group `min` thresholds in `scripts/check-readme-compliance.mjs` → `BADGE_GROUPS` constant.
+2. Re-run `pnpm run check:readme` to confirm the live README still passes.
+3. Bump this spec's `**Version:**` header (semver — minor for adding rules, major for tightening any existing minimum).
+4. Update the spec memory entry at `mem://standards/readme-compliance-check` if the check ID set or output schema changes.
+
+The validator's check IDs are part of the public CI contract — renaming any ID is a breaking change and requires a major bump.
 
 ---
 

@@ -59,7 +59,7 @@ When flagging issues in code review, use these labels:
 ## 5. Cross-References
 
 - [Null Pointer Safety](../01-cross-language/19-null-pointer-safety.md) — Common Code Red issues
-- [Lazy Evaluation](../01-cross-language/16-lazy-evaluation-patterns.md) — Dangerous: improper lazy
+- [Lazy Evaluation](../01-cross-language/29-lazy-evaluation-patterns.md) — Dangerous: improper lazy
 - [Code Mutation Avoidance](../01-cross-language/18-code-mutation-avoidance.md) — Code Red: unlocked mutation
 
 ---

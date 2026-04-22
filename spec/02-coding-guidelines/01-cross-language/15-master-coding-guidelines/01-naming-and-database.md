@@ -16,7 +16,7 @@ This is the **master reference**. Every rule here is enforced across all languag
 - [Boolean Principles](../02-boolean-principles/00-overview.md)
 - [No-Negatives](../12-no-negatives.md)
 - [Test Naming & Structure](../14-test-naming-and-structure.md)
-- [Lazy Evaluation Patterns](../16-lazy-evaluation-patterns.md)
+- [Lazy Evaluation Patterns](../29-lazy-evaluation-patterns.md)
 - [Regex Usage Guidelines](../17-regex-usage-guidelines.md)
 - [Code Mutation Avoidance](../18-code-mutation-avoidance.md)
 - [Null Pointer Safety](../19-null-pointer-safety.md)

@@ -90,6 +90,15 @@ CREATE INDEX IF NOT EXISTS IdxErrorsProject  ON Errors(ProjectId);
 CREATE INDEX IF NOT EXISTS IdxErrorsScript   ON Errors(ScriptId);
 `;
 
+export const ERROR_CODES_SCHEMA = `
+CREATE TABLE IF NOT EXISTS ErrorCodes (
+    Code        TEXT PRIMARY KEY,
+    Severity    TEXT NOT NULL,
+    Description TEXT NOT NULL,
+    Resolution  TEXT
+);
+`;
+
 /* ------------------------------------------------------------------ */
 /*  Prompts (logs.db)                                                  */
 /* ------------------------------------------------------------------ */

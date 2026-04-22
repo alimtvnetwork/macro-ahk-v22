@@ -31,10 +31,19 @@ export const V2_ERROR_COLUMNS = [
     "CREATE INDEX IF NOT EXISTS IdxErrorsScript ON Errors(ScriptId)",
 ];
 
+export const V2_ERROR_CODES_TABLE = [
+    `CREATE TABLE IF NOT EXISTS ErrorCodes (
+        Code TEXT PRIMARY KEY,
+        Severity TEXT NOT NULL,
+        Description TEXT NOT NULL,
+        Resolution TEXT
+    )`,
+];
+
 export const V2_ERROR_CODES = [
-    "INSERT OR IGNORE INTO error_codes VALUES ('USER_SCRIPT_ERROR','RECOVERABLE','User-uploaded script threw an error','Check script source and stack trace')",
-    "INSERT OR IGNORE INTO error_codes VALUES ('USER_SCRIPT_TIMEOUT','WARNING','User-uploaded script exceeded execution time','Optimize script or increase timeout')",
-    "INSERT OR IGNORE INTO error_codes VALUES ('CONFIG_INJECT_FAIL','RECOVERABLE','Failed to inject config into script','Check injection method and config validity')",
-    "INSERT OR IGNORE INTO error_codes VALUES ('PROJECT_MATCH_FAIL','WARNING','URL matched rule but injection failed','Check conditions and script bindings')",
-    "INSERT OR IGNORE INTO error_codes VALUES ('SCHEMA_MIGRATION','WARNING','Database schema migration applied','Normal on version upgrade')",
+    "INSERT OR IGNORE INTO ErrorCodes (Code, Severity, Description, Resolution) VALUES ('USER_SCRIPT_ERROR','RECOVERABLE','User-uploaded script threw an error','Check script source and stack trace')",
+    "INSERT OR IGNORE INTO ErrorCodes (Code, Severity, Description, Resolution) VALUES ('USER_SCRIPT_TIMEOUT','WARNING','User-uploaded script exceeded execution time','Optimize script or increase timeout')",
+    "INSERT OR IGNORE INTO ErrorCodes (Code, Severity, Description, Resolution) VALUES ('CONFIG_INJECT_FAIL','RECOVERABLE','Failed to inject config into script','Check injection method and config validity')",
+    "INSERT OR IGNORE INTO ErrorCodes (Code, Severity, Description, Resolution) VALUES ('PROJECT_MATCH_FAIL','WARNING','URL matched rule but injection failed','Check conditions and script bindings')",
+    "INSERT OR IGNORE INTO ErrorCodes (Code, Severity, Description, Resolution) VALUES ('SCHEMA_MIGRATION','WARNING','Database schema migration applied','Normal on version upgrade')",
 ];

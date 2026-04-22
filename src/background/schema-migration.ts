@@ -6,7 +6,7 @@
  */
 
 import type { Database as SqlJsDatabase } from "sql.js";
-import { V2_LOG_COLUMNS, V2_ERROR_COLUMNS, V2_ERROR_CODES } from "./migration-v2-sql";
+import { V2_LOG_COLUMNS, V2_ERROR_COLUMNS, V2_ERROR_CODES_TABLE, V2_ERROR_CODES } from "./migration-v2-sql";
 import {
     sessionsHasTextPk,
     migrateSessionsToIntegerPk,
@@ -112,6 +112,7 @@ const MIGRATIONS: Migration[] = [
 function applyV2Up(logsDb: SqlJsDatabase, errorsDb: SqlJsDatabase): void {
     runIgnoringDuplicates(logsDb, V2_LOG_COLUMNS);
     runIgnoringDuplicates(errorsDb, V2_ERROR_COLUMNS);
+    runIgnoringDuplicates(errorsDb, V2_ERROR_CODES_TABLE);
     runIgnoringDuplicates(errorsDb, V2_ERROR_CODES);
 }
 

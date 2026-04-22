@@ -10,7 +10,9 @@
 
 ## Overview
 
-Planned stub reserved at slot `08` by `spec/01-spec-authoring-guide/01-folder-structure.md` (v3.2.0). Will hold specs for the documentation viewer UI: spec markdown rendering, navigation, search, and cross-reference resolution. Created 2026-04-22 in Phase 2 of the spec reorganization.
+This module is a **planned stub** reserved by the new spec authoring guide (v3.2.0) at slot `08`. It will hold specifications for the documentation viewer UI — the in-app surface that renders spec markdown files with navigation, search, and cross-reference resolution.
+
+No content has been authored yet. Created on 2026-04-22 as part of the spec reorganization (`.lovable/spec-reorganization-plan-2026-04-22.md`, Phase 2) to satisfy the required-folder list in `spec/01-spec-authoring-guide/01-folder-structure.md`.
 
 ---
 
@@ -26,7 +28,7 @@ Planned stub reserved at slot `08` by `spec/01-spec-authoring-guide/01-folder-st
 |--------|-------|
 | AI Confidence | Low |
 | Ambiguity | High |
-| Health Score | 100/100 |
+| Health Score | 100/100 (structural compliance only — no content yet) |
 
 ---
 
@@ -43,6 +45,6 @@ Planned stub reserved at slot `08` by `spec/01-spec-authoring-guide/01-folder-st
 
 | Reference | Location |
 |-----------|----------|
-| Authoring guide | `../01-spec-authoring-guide/00-overview.md` |
-| Folder structure | `../01-spec-authoring-guide/01-folder-structure.md` |
+| Spec authoring guide | `../01-spec-authoring-guide/00-overview.md` |
+| Folder structure rules | `../01-spec-authoring-guide/01-folder-structure.md` |
 | Reorganization plan | `../../.lovable/spec-reorganization-plan-2026-04-22.md` |

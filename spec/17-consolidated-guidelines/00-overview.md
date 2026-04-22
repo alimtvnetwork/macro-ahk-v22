@@ -10,7 +10,9 @@
 
 ## Overview
 
-Planned stub reserved at slot `17` by `spec/01-spec-authoring-guide/01-folder-structure.md` (v3.2.0). Will hold AI-readable single-file summaries of every major spec module — condensed reference guides optimized for AI consumption. Existing `consolidated-review-guide.md` and `consolidated-review-guide-condensed.md` will eventually migrate here. Created 2026-04-22 in Phase 2 of the spec reorganization.
+This module is a **planned stub** reserved by the new spec authoring guide (v3.2.0) at slot `17`. It will hold AI-readable single-file summaries of every major spec module — condensed reference guides optimized for AI consumption (one summary per major module: coding guidelines, error management, database conventions, design system, etc.).
+
+The existing `spec/02-coding-guidelines/consolidated-review-guide.md` and `consolidated-review-guide-condensed.md` will be cross-referenced and eventually migrated here for unified discoverability. No content has been authored yet. Created on 2026-04-22 as part of Phase 2 of the spec reorganization (`.lovable/spec-reorganization-plan-2026-04-22.md`).
 
 ---
 
@@ -26,7 +28,7 @@ Planned stub reserved at slot `17` by `spec/01-spec-authoring-guide/01-folder-st
 |--------|-------|
 | AI Confidence | Low |
 | Ambiguity | High |
-| Health Score | 100/100 |
+| Health Score | 100/100 (structural compliance only — no content yet) |
 
 ---
 
@@ -43,8 +45,8 @@ Planned stub reserved at slot `17` by `spec/01-spec-authoring-guide/01-folder-st
 
 | Reference | Location |
 |-----------|----------|
-| Authoring guide | `../01-spec-authoring-guide/00-overview.md` |
-| Folder structure | `../01-spec-authoring-guide/01-folder-structure.md` |
+| Spec authoring guide | `../01-spec-authoring-guide/00-overview.md` |
+| Folder structure rules | `../01-spec-authoring-guide/01-folder-structure.md` |
 | Existing consolidated review guide | `../02-coding-guidelines/consolidated-review-guide.md` |
 | Existing condensed review guide | `../02-coding-guidelines/consolidated-review-guide-condensed.md` |
 | Reorganization plan | `../../.lovable/spec-reorganization-plan-2026-04-22.md` |

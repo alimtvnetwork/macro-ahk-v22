@@ -10,7 +10,9 @@
 
 ## Overview
 
-Planned stub reserved at slot `10` by `spec/01-spec-authoring-guide/01-folder-structure.md` (v3.2.0). Will hold comparative studies, technology evaluations, and exploratory notes (e.g., "SQLite vs IndexedDB for OPFS persistence", "MV3 service worker patterns survey"). Created 2026-04-22 in Phase 2 of the spec reorganization.
+This module is a **planned stub** reserved by the new spec authoring guide (v3.2.0) at slot `10`. It will hold comparative studies, technology evaluations, and exploratory notes — investigations that inform but do not directly specify product behavior (e.g., "SQLite vs IndexedDB for OPFS persistence", "Manifest V3 service worker patterns survey").
+
+No content has been authored yet. Created on 2026-04-22 as part of Phase 2 of the spec reorganization (`.lovable/spec-reorganization-plan-2026-04-22.md`).
 
 ---
 
@@ -26,7 +28,7 @@ Planned stub reserved at slot `10` by `spec/01-spec-authoring-guide/01-folder-st
 |--------|-------|
 | AI Confidence | Low |
 | Ambiguity | High |
-| Health Score | 100/100 |
+| Health Score | 100/100 (structural compliance only — no content yet) |
 
 ---
 
@@ -43,6 +45,6 @@ Planned stub reserved at slot `10` by `spec/01-spec-authoring-guide/01-folder-st
 
 | Reference | Location |
 |-----------|----------|
-| Authoring guide | `../01-spec-authoring-guide/00-overview.md` |
-| Folder structure | `../01-spec-authoring-guide/01-folder-structure.md` |
+| Spec authoring guide | `../01-spec-authoring-guide/00-overview.md` |
+| Folder structure rules | `../01-spec-authoring-guide/01-folder-structure.md` |
 | Reorganization plan | `../../.lovable/spec-reorganization-plan-2026-04-22.md` |

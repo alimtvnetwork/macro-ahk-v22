@@ -58,7 +58,7 @@ Built a full Chrome extension (Manifest V3) for Lovable workspace automation. 16
 
 ## Issues Resolved
 
-11 issues documented: #14b, #15b, #29, #30, #31, #34, #35a/b, #36, #37, #38, #39
+11 issues documented: #26 (formerly #14b — probe-return-failure-v6.55), #15b, #29, #30, #31, #34, #35a/b, #36, #37, #38, #39
 
 ## Architecture Decisions
 

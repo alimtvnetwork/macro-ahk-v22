@@ -72,7 +72,7 @@ const README_PATH = fileArg
     : resolve(REPO_ROOT, "readme.md");
 
 if (!existsSync(README_PATH)) {
-    return die(`readme.md not found at: ${README_PATH}`);
+    die(`readme.md not found at: ${README_PATH}`);
 }
 
 const original = readFileSync(README_PATH, "utf8");

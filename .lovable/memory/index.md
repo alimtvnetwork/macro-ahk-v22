@@ -24,6 +24,7 @@ Extension build output lives at `./chrome-extension/` at repo root (powershell.j
 CI preflight `scripts/check-no-pnpm-dlx-less.mjs` blocks the broken `pnpm dlx --package=less` invocation. JSON envelope is `version: 1` (additive-only). Exit codes: 0 clean / 1 hits / 2 usage error. 67/67 fixtures passing.
 
 ## Memories
+- [Spec slot rules (2026-04-22)](mem://architecture/spec-slot-rules) — **Foundations 01–20 strict** (no app content); 21-app/ kept as wrapper with chrome-extension renamed to `01-chrome-extension/`; macro-controller promoted to top-level `26-macro-controller/`. Supersedes prior 01–17 boundary.
 - [Repo-rename script (versioned-fork)](mem://features/repo-rename-script) — Spec for generic shell script that rewrites previous → current repo name across tracked files; auto-detects from git remote, URL-safe, dry-run by default. Lives at `spec/12-cicd-pipeline-workflows/01-repo-rename-script.md`.
 - [Documentation hierarchy](mem://project/documentation-hierarchy) — Canonical v3.2.0 spec tree layout: core (01–17), app (21+), archive (99). Includes old→new path map for legacy references.
 - [Spec folder auto-cleanup safeguard](mem://architecture/spec-folder-auto-cleanup-safeguard) — Sentinels + registry + guard script protect sparse spec dirs from auto-cleanup; npm: `check:spec-folders[:repair]`

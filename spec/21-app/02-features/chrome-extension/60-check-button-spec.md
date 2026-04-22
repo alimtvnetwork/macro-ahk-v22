@@ -174,7 +174,7 @@ See: [Issue #09](../../../22-app-issues/check-button/09-dialog-close-before-prog
 
 ## Cross-References
 
-- [Check Button Issue Bundle](../17-app-issues/check-button)
+- [Check Button Issue Bundle](../../../22-app-issues/check-button/)
 - [Issue #08: workspaceFromApi Race](../../../22-app-issues/check-button/08-workspace-detection-race.md)
 - [Issue #10: Runtime Seed Drift](../../../22-app-issues/check-button/10-runtime-seed-drift.md)
 - [Macro Controller Extension Bridge](43-macro-controller-extension-bridge.md)

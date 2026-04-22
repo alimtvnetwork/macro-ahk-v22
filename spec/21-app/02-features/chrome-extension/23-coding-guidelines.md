@@ -20,7 +20,7 @@ This document indexes all coding guideline sub-specs for the Chrome Extension. E
 | 03 | [Boolean & Condition Logic](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/01-cross-language/02-boolean-principles.md) | Positive-only conditions, named booleans, no negation in `if` |
 | 04 | [Formatting Rules](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/01-cross-language/04-code-style/00-overview.md) | Line-per-argument, object formatting, line length |
 | 05 | [File Organization](../../../99-archive/duplicates/03-coding-guidelines-stale/03-coding-guidelines-spec/00-overview.md) | 200-line limit, module splitting, folder structure |
-| 06 | [Project Config Schema](../10-macro-controller/ts-migration-v2/05-json-config-pipeline.md) | JSON manifest for script loading order and config bindings |
+| 06 | [Project Config Schema](../macro-controller/ts-migration-v2/05a-json-config-pipeline.md) | JSON manifest for script loading order and config bindings |
 
 ---
 

@@ -1,25 +1,40 @@
+<div align="center">
+
+<img src="docs/assets/marco-logo.png" alt="Marco Extension Logo" width="128" height="128" />
+
 # Marco Chrome Extension
 
 > **Browser automation for workspace management, credit monitoring, and AI-driven macro execution** — built as a Manifest V3 Chrome extension with a modular standalone script architecture.
-
-<div align="center">
 
 <!-- Build & Release -->
 [![CI](https://img.shields.io/github/actions/workflow/status/alimtvnetwork/macro-ahk-v21/ci.yml?branch=main&label=CI&logo=github&style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/actions/workflow/status/alimtvnetwork/macro-ahk-v21/release.yml?label=release&logo=github&style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/actions/workflows/release.yml)
 [![Latest Release](https://img.shields.io/github/v/release/alimtvnetwork/macro-ahk-v21?include_prereleases&sort=semver&label=latest&logo=github&style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/releases/latest)
 [![Release Date](https://img.shields.io/github/release-date/alimtvnetwork/macro-ahk-v21?label=released&style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/alimtvnetwork/macro-ahk-v21/total?label=downloads&logo=github&style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/releases)
 
 <!-- Repo activity -->
 [![Last Commit](https://img.shields.io/github/last-commit/alimtvnetwork/macro-ahk-v21/main?style=flat-square&logo=git)](https://github.com/alimtvnetwork/macro-ahk-v21/commits/main)
 [![Commit Activity](https://img.shields.io/github/commit-activity/m/alimtvnetwork/macro-ahk-v21?style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/pulse)
 [![Issues](https://img.shields.io/github/issues/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/issues)
+[![Pull Requests](https://img.shields.io/github/issues-pr/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/pulls)
+[![Discussions](https://img.shields.io/github/discussions/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/discussions)
 [![Repo Size](https://img.shields.io/github/repo-size/alimtvnetwork/macro-ahk-v21?style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21)
+
+<!-- Community -->
+[![Stars](https://img.shields.io/github/stars/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github&color=yellow)](https://github.com/alimtvnetwork/macro-ahk-v21/stargazers)
+[![Forks](https://img.shields.io/github/forks/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/network/members)
+[![Watchers](https://img.shields.io/github/watchers/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/watchers)
+[![Contributors](https://img.shields.io/github/contributors/alimtvnetwork/macro-ahk-v21?style=flat-square&logo=github)](https://github.com/alimtvnetwork/macro-ahk-v21/graphs/contributors)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen?style=flat-square&logo=git&logoColor=white)](./contributing.md)
+[![Made with Love](https://img.shields.io/badge/made%20with-%E2%99%A5-ff69b4?style=flat-square)](https://riseup-asia.com)
 
 <!-- Code-quality report cards (TS/JS analogues to Go Report Card) -->
 [![CodeFactor](https://img.shields.io/codefactor/grade/github/alimtvnetwork/macro-ahk-v21/main?label=CodeFactor&logo=codefactor&style=flat-square)](https://www.codefactor.io/repository/github/alimtvnetwork/macro-ahk-v21)
 [![Codacy](https://img.shields.io/badge/Codacy-activate-blue?style=flat-square&logo=codacy&logoColor=white)](https://app.codacy.com/gh/alimtvnetwork/macro-ahk-v21/dashboard)
 [![Code Climate](https://img.shields.io/badge/Code%20Climate-activate-blue?style=flat-square&logo=codeclimate&logoColor=white)](https://codeclimate.com/github/alimtvnetwork/macro-ahk-v21)
+[![Coverage](https://img.shields.io/badge/coverage-tracked-success?style=flat-square&logo=vitest&logoColor=white)](./vitest.config.ts)
+[![Maintained](https://img.shields.io/badge/maintained-yes-brightgreen?style=flat-square)](https://github.com/alimtvnetwork/macro-ahk-v21/commits/main)
 
 <!-- Stack & standards -->
 [![Manifest V3](https://img.shields.io/badge/Manifest-V3-4285F4?style=flat-square&logo=googlechrome&logoColor=white)](https://developer.chrome.com/docs/extensions/mv3/intro/)
@@ -27,15 +42,17 @@
 [![Node](https://img.shields.io/badge/Node-20%2B-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
 [![pnpm](https://img.shields.io/badge/pnpm-9-F69220?style=flat-square&logo=pnpm&logoColor=white)](https://pnpm.io/)
 [![Vite](https://img.shields.io/badge/Vite-5-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind-3-38B2AC?style=flat-square&logo=tailwindcss&logoColor=white)](https://tailwindcss.com/)
+[![SQLite](https://img.shields.io/badge/SQLite-sql.js-003B57?style=flat-square&logo=sqlite&logoColor=white)](https://sql.js.org/)
 [![ESLint + SonarJS](https://img.shields.io/badge/ESLint-SonarJS%20%E2%80%A2%20zero%20warnings-4B32C3?style=flat-square&logo=eslint&logoColor=white)](./eslint.config.js)
 [![Tested with Vitest](https://img.shields.io/badge/tested%20with-Vitest-6E9F18?style=flat-square&logo=vitest&logoColor=white)](https://vitest.dev/)
+[![Playwright](https://img.shields.io/badge/E2E-Playwright-2EAD33?style=flat-square&logo=playwright&logoColor=white)](https://playwright.dev/)
 [![License: Proprietary](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)](#license)
 
-</div>
+<img src="docs/assets/marco-extension-hero.png" alt="Marco Chrome Extension — Projects view inside the options page" width="820" />
 
-<p align="center">
-  <img src="docs/assets/marco-extension-hero.png" alt="Marco Chrome Extension — Projects view inside the options page" width="820" />
-</p>
+</div>
 
 > **Report cards — activation status**
 >

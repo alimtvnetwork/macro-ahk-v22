@@ -19,10 +19,11 @@
 - **Added:** 2026-04-20
 
 ### Vitest tests for `assertBindable` + `BindError`
-- **Status:** Pending
+- **Status:** ✅ Implemented — 2026-04-22
 - **Priority:** Medium
 - **Description:** Cover INSERT / UPDATE / SELECT / DELETE column inference and verify the Proxy throws `BindError` on undefined params via `db.run`, `db.exec`, and `db.prepare(...).bind()`/.run() paths.
 - **Added:** 2026-04-20
+- **Resolution:** New file `src/test/regression/sqlite-bind-safety.test.ts` adds 20 tests across 3 describe blocks: `BindError` shape, `assertBindable` column inference (8 SQL shapes incl. INSERT, INSERT OR REPLACE, UPDATE, SELECT, DELETE, fallback, first-undefined, long-SQL truncation, null-vs-undefined), and `wrapDatabaseWithBindSafety` Proxy interception (run/exec/prepare/Statement.bind/Statement.run/pass-through). Full suite: 293 tests passing in CI via `pnpm run test`.
 
 ### Vitest tests for handler-guards regression suite
 - **Status:** Pending

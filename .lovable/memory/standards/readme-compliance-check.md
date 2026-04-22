@@ -28,8 +28,34 @@ Flags: `--file=<path>` overrides the README path; `--report=<path>` writes a Mar
 CLI:
 - `pnpm run repair:readme` — dry-run; prints the intended changes and exits 0 without writing.
 - `pnpm run repair:readme:apply` — applies repairs in place, writing a `readme.md.bak` backup first.
-- `--json` emits `{ version: 1, file, applied, dryRun, changedBytes, repairs[] }` with each repair carrying `{ id, label, status, reason?, preview? }` where status ∈ `applied | would-apply | skipped | not-needed`.
+- `pnpm run repair:readme:audit` — dry-run plus an audit log file (default `.lovable/reports/readme-repair-audit-<ISO>.json`).
+- `pnpm run repair:readme:apply:audit` — apply mode plus the same audit log.
+- `--json` emits `{ version: 1, file, applied, dryRun, changedBytes, auditLog, repairs[] }` with each repair carrying `{ id, label, status, reason?, preview?, before?, after?, beforeRange?, afterRange? }` where status ∈ `applied | would-apply | skipped | not-needed`.
+- `--audit[=<path>]` writes a structured JSON audit log of every mutation. Default path is `.lovable/reports/readme-repair-audit-<ISO-timestamp>.json`; pass `--audit=<path>` to override. Audit logs are written for BOTH dry-run and apply modes.
 
-All repairs are idempotent: re-running `--apply` on an already-compliant file produces zero changes. Repairs that cannot be performed safely (ambiguous structure, missing parent section) are reported with status `skipped` and a `reason` field — they are never silently skipped. The script never edits content inside existing badge blocks, code fences, or biography paragraphs.
+### Audit log schema
+
+```
+{
+  version: 1,
+  kind: "readme-repair-audit",
+  timestamp,        // ISO 8601 UTC
+  file,             // absolute path of the README operated on
+  mode,             // "dry-run" | "apply"
+  applied,          // boolean — true only when --apply wrote changes
+  changedBytes,     // working.length - original.length
+  summary: { total, applied, wouldApply, skipped, notNeeded },
+  mutations: [{
+    id, label, status, preview,
+    before: { range: { startLine, endLine }, snippet },
+    after:  { range: { startLine, endLine }, snippet },
+  }],                        // only repairs that mutated (or would mutate) the file
+  allRepairs: [{ id, label, status, reason, preview }]   // full status inventory, no snippets
+}
+```
+
+Snippets are exact line-range slices (1-indexed, inclusive) capturing the affected region with a small amount of context, suitable for code review and for handoff to other AI models. The `mutations` array intentionally excludes `skipped`/`not-needed` repairs to keep the diff compact; the `allRepairs` array carries the full status inventory.
+
+All repairs are idempotent: re-running `--apply` on an already-compliant file produces zero changes (and an audit log with `mutations: []`). Repairs that cannot be performed safely (ambiguous structure, missing parent section) are reported with status `skipped` and a `reason` field — they are never silently skipped. The script never edits content inside existing badge blocks, code fences, or biography paragraphs.
 
 **Recommended workflow:** run `check:readme` first to discover violations → run `repair:readme` (dry-run) to preview the auto-fixes → run `repair:readme:apply` to write them → re-run `check:readme` to confirm 18/18.

@@ -38,6 +38,7 @@
     "check:spec-links:refresh-baseline:rewrite": "node scripts/refresh-spec-links-baseline.mjs --rewrite",
     "check:spec-links:refresh-baseline:accept": "node scripts/refresh-spec-links-baseline.mjs --accept-current",
     "check:spec-links:ci": "node scripts/report-spec-links-ci.mjs",
+    "check:spec-links:ci:strict": "node scripts/report-spec-links-ci.mjs --no-auto-resolve",
     "check:spec-folders": "node scripts/spec-folder-guard.mjs --check",
     "check:spec-folders:repair": "node scripts/spec-folder-guard.mjs",
     "check:spec-folders:verbose": "node scripts/spec-folder-guard.mjs --verbose",

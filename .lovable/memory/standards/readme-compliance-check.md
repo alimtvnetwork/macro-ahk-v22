@@ -30,8 +30,11 @@ CLI:
 - `pnpm run repair:readme:apply` — applies repairs in place, writing a `readme.md.bak` backup first.
 - `pnpm run repair:readme:audit` — dry-run plus an audit log file (default `.lovable/reports/readme-repair-audit-<ISO>.json`).
 - `pnpm run repair:readme:apply:audit` — apply mode plus the same audit log.
+- `pnpm run repair:readme:hero-only` / `repair:readme:license-only` / `repair:readme:author-only` — convenience wrappers around `--only=<id>` for running a single rule.
 - `--json` emits `{ version: 1, file, applied, dryRun, changedBytes, auditLog, repairs[] }` with each repair carrying `{ id, label, status, reason?, preview?, before?, after?, beforeRange?, afterRange? }` where status ∈ `applied | would-apply | skipped | not-needed`.
 - `--audit[=<path>]` writes a structured JSON audit log of every mutation. Default path is `.lovable/reports/readme-repair-audit-<ISO-timestamp>.json`; pass `--audit=<path>` to override. Audit logs are written for BOTH dry-run and apply modes.
+- `--only=<ids>` — comma-separated allowlist (`centered-hero`, `license-section`, `author-misorder`). Repairs not in the list are reported with status `skipped` and reason `disabled by --only flag`.
+- `--skip=<ids>` — comma-separated blocklist with the same id vocabulary. Disabled repairs report `disabled by --skip flag`. Mutually exclusive with `--only` (passing both fails fast). Unknown ids fail fast with the full valid-id list in the error message.
 
 ### Audit log schema
 

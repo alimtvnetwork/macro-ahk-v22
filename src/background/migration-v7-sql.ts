@@ -4,7 +4,7 @@
  * Creates SharedAsset, AssetLink, ProjectGroup, ProjectGroupMember tables
  * for the Cross-Project Sync feature.
  *
- * See: spec/13-features/cross-project-sync.md
+ * See: spec/21-app/02-features/misc-features/cross-project-sync.md
  */
 
 import {

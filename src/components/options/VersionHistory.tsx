@@ -4,7 +4,7 @@
  * Timeline view for SharedAsset version history with content hash diffs
  * and rollback functionality.
  *
- * @see spec/13-features/cross-project-sync.md §VersionHistory
+ * @see spec/21-app/02-features/misc-features/cross-project-sync.md §VersionHistory
  */
 
 import { useState, useEffect, useCallback } from "react";

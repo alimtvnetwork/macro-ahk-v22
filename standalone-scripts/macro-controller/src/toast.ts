@@ -7,8 +7,8 @@
  * This module preserves the original export signatures so all existing
  * consumers continue to work without changes.
  *
- * @see spec/17-app-issues/85-sdk-notifier-config-seeding-database-overhaul.md
- * @see spec/06-coding-guidelines/02-typescript-immutability-standards.md
+ * @see spec/22-app-issues/85-sdk-notifier-config-seeding-database-overhaul.md
+ * @see spec/02-coding-guidelines/02-typescript-immutability-standards.md
  *
  * Conversion (CQ10):
  *   Before: 6 module-level `let` vars, C-style for loops, inline .push()/.shift()/.pop() on globals.

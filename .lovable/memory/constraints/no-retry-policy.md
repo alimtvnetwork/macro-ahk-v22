@@ -24,9 +24,9 @@ Retry logic caused:
 
 ## Reference Files
 
-- **Issue**: `spec/17-app-issues/88-auth-loading-failure-retry-inconsistency/00-overview.md`
+- **Issue**: `spec/22-app-issues/88-auth-loading-failure-retry-inconsistency/00-overview.md`
 - **Diagram**: `standalone-scripts/macro-controller/diagrams/inconsistencies/auth-retry-inconsistencies.mmd`
-- **Spec**: `spec/08-design-diagram/mermaid-design-diagram-spec/01-diagram-spec/injection-pipeline-workflow-clarification-and-correction.md`
+- **Spec**: `spec/21-app/04-design-diagrams/mermaid-design-diagram-spec/01-diagram-spec/injection-pipeline-workflow-clarification-and-correction.md`
 
 ## Correct Pattern
 

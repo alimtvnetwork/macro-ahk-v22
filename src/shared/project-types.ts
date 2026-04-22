@@ -2,7 +2,7 @@
  * Marco Extension — Project Data Types
  *
  * Defines the stored project model used by chrome.storage.local.
- * See spec/06-coding-guidelines/chrome-extension-guidelines/06-project-config-schema.md
+ * See spec/02-coding-guidelines/chrome-extension-guidelines/06-project-config-schema.md
  */
 
 /** URL matching rule for project activation. */
@@ -50,7 +50,7 @@ export interface ProjectSettings {
     allowDynamicRequests?: boolean;
 }
 
-/** Dependency on a shared project. See spec/12-devtools-and-injection/sdk-convention.md */
+/** Dependency on a shared project. See spec/21-app/02-features/devtools-and-injection/sdk-convention.md */
 export interface ProjectDependency {
     projectId: string;
     version: string; // exact, ^major, ~minor

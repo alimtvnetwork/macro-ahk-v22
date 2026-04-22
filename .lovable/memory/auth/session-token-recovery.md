@@ -10,8 +10,8 @@ Additional APIs: `getRawToken()` (sync, no TTL), `getTokenAge()`, `getTokenSaved
 **v2.136 contract**: All operational paths (startup, loop-cycle, credit-fetch, credit-balance, ws-move, rename-api, ws-adjacent, UI controls) now use `getBearerToken()` exclusively. Direct `resolveToken()` is reserved for diagnostic display only. Direct `recoverAuthOnce()` is deprecated.
 
 Root-cause references:
-- `spec/17-app-issues/80-auth-token-bridge-null-on-preview.md`
-- `spec/17-app-issues/81-auth-no-token-stale-macro-bundle.md`
-- `spec/17-app-issues/88-auth-loading-failure-retry-inconsistency/02-working-v133-vs-current-rca.md`
+- `spec/22-app-issues/80-auth-token-bridge-null-on-preview.md`
+- `spec/22-app-issues/81-auth-no-token-stale-macro-bundle.md`
+- `spec/22-app-issues/88-auth-loading-failure-retry-inconsistency/02-working-v133-vs-current-rca.md`
 
-Workflow spec: `spec/11-chrome-extension/36-cookie-only-bearer.md` (v2.0.0)
+Workflow spec: `spec/21-app/02-features/chrome-extension/36-cookie-only-bearer.md` (v2.0.0)

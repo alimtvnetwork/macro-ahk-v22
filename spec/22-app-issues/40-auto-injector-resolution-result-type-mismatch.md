@@ -96,14 +96,14 @@ TypeScript strict mode catches this if return types are explicitly annotated.
 
 ### References to spec sections updated
 
-- `spec/17-app-issues/readme.md` — index entry added
+- `spec/22-app-issues/readme.md` — index entry added
 
 ---
 
 ## Done Checklist
 
-- [x] Spec updated under `/spec/10-macro-controller/`
-- [x] Issue write-up created under `/spec/17-app-issues/`
+- [x] Spec updated under `/spec/21-app/02-features/macro-controller/`
+- [x] Issue write-up created under `/spec/22-app-issues/`
 - [x] Memory updated with summary and prevention rule
 - [x] Acceptance criteria updated or added
 - [x] Iterations recorded if applicable

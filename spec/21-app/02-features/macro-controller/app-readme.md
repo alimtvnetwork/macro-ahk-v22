@@ -1,4 +1,4 @@
-# /spec/10-macro-controller/ — Application Specifications
+# /spec/21-app/02-features/macro-controller/ — Application Specifications
 
 All application-level specification files live here.
 
@@ -8,6 +8,6 @@ All application-level specification files live here.
 
 ## Related
 
-- Issue write-ups: [`/spec/17-app-issues/`](../02-app-issues/)
-- API response specs: [`/spec/07-data-and-api/api-response/`](../07-data-and-api/api-response)
+- Issue write-ups: [`/spec/22-app-issues/`](../02-app-issues/)
+- API response specs: [`/spec/21-app/03-data-and-api/api-response/`](../07-data-and-api/api-response)
 - AHK technical spec: [`marco-script-ahk-v7.latest/specs/spec.md`](../archive/ahk-v7.latest-specs/spec.md)

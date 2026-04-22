@@ -61,7 +61,7 @@ import { CssFragment } from '../types';
 
 // ============================================
 // Helper: focus the current workspace in the workspace list after credit refresh
-// See: spec/17-app-issues/credit-refresh/overview.md
+// See: spec/22-app-issues/credit-refresh/overview.md
 // ============================================
 
 function focusCurrentWorkspaceInList(): void {
@@ -297,7 +297,7 @@ function buildPromptsDropdown(_deps: PanelBuilderDeps, btnStyle: string): Prompt
   setRevalidateContext(promptCtx, taskNextDeps);
 
   // Pre-load prompts on injection so they're warm by first click
-  // See: spec/17-app-issues/64-prompts-loading-when-cached.md
+  // See: spec/22-app-issues/64-prompts-loading-when-cached.md
   loadPromptsFromJson().then(function() {
     log('Prompts pre-loaded on injection', 'success');
   });

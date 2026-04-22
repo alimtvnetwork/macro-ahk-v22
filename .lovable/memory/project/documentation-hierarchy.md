@@ -35,7 +35,7 @@ Project documentation is consolidated in the `spec/` directory using a numbered 
 ## 08-design-diagram Structure
 
 ```
-spec/08-design-diagram/
+spec/21-app/04-design-diagrams/
 └── mermaid-design-diagram-spec/
     └── 01-diagram-spec/
         ├── diagram-standards.md

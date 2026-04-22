@@ -5,7 +5,7 @@
  * Uses the rename-recreate-copy pattern since SQLite cannot ALTER PRIMARY KEY.
  *
  * All column names use PascalCase per database naming convention.
- * See: spec/06-coding-guidelines/coding-guidelines/database-id-convention.md
+ * See: spec/02-coding-guidelines/coding-guidelines/database-id-convention.md
  */
 
 import type { Database as SqlJsDatabase } from "sql.js";

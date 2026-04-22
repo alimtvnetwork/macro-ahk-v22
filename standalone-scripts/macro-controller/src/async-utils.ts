@@ -7,7 +7,7 @@
  * The canonical implementations live in `standalone-scripts/marco-sdk/src/utils.ts`.
  * This shim ensures backward compatibility and provides the same API surface.
  *
- * @see spec/06-coding-guidelines/02-typescript-immutability-standards.md — Rule CQ18
+ * @see spec/02-coding-guidelines/02-typescript-immutability-standards.md — Rule CQ18
  */
 
 // ============================================

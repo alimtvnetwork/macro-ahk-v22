@@ -4,7 +4,7 @@
  * Inline expandable form for creating namespace-based databases.
  * Supports live validation, reserved prefix detection, and database kind selection.
  *
- * @see spec/11-chrome-extension/90-namespace-database-creation.md
+ * @see spec/21-app/02-features/chrome-extension/90-namespace-database-creation.md
  */
 
 import { useState, useMemo } from "react";

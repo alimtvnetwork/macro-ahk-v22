@@ -5,7 +5,7 @@
  * DOM inspection utilities extracted from the IIFE closure.
  * Functions that need state access receive it via parameters.
  *
- * @see spec/06-coding-guidelines/02-typescript-immutability-standards.md
+ * @see spec/02-coding-guidelines/02-typescript-immutability-standards.md
  */
 
 import { CONFIG, TIMING, loopCreditState } from './shared-state';

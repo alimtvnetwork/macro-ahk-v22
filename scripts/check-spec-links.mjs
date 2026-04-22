@@ -6,7 +6,7 @@
  * links and fails (exit 1) if any link target is missing on disk.
  *
  * Why: prevents silent rot of cross-spec references (e.g. links into
- * spec/12-devtools-and-injection/developer-guide/04-sdk-namespace.md) when
+ * spec/21-app/02-features/devtools-and-injection/developer-guide/04-sdk-namespace.md) when
  * files are renamed, moved, or deleted without updating callers.
  *
  * Rules:

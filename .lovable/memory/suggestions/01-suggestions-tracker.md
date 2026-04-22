@@ -45,7 +45,7 @@ When a suggestion is completed:
 ### S-055: P Store Backend API Implementation
 - **createdAt**: 2026-04-05
 - **source**: Risk report v3
-- **affectedProject**: P Store (`spec/13-features/pstore-marketplace.md`)
+- **affectedProject**: P Store (`spec/21-app/02-features/misc-features/pstore-marketplace.md`)
 - **description**: P Store frontend spec exists but no backend API. Need to define and implement the server-side API or mock service.
 - **rationale**: F-025 — 100% failure until backend exists. Highest-impact corrective action for new features.
 - **status**: open

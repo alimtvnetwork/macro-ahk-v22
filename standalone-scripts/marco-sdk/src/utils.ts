@@ -6,8 +6,8 @@
  * functions extracted from macro-controller to reduce its bundle size
  * and enable independent caching.
  *
- * @see spec/06-coding-guidelines/02-typescript-immutability-standards.md — Rule CQ18
- * @see spec/12-devtools-and-injection/sdk-convention.md — SDK convention
+ * @see spec/02-coding-guidelines/02-typescript-immutability-standards.md — Rule CQ18
+ * @see spec/21-app/02-features/devtools-and-injection/sdk-convention.md — SDK convention
  */
 
 import { NamespaceLogger } from "./logger";

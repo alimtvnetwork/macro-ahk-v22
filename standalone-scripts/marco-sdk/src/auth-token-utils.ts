@@ -7,7 +7,7 @@
  * These utilities are site-agnostic and reusable across any
  * website using JWT bearer tokens or Supabase auth.
  *
- * @see spec/13-features/cross-project-sync.md — Shared asset model
+ * @see spec/21-app/02-features/misc-features/cross-project-sync.md — Shared asset model
  * @see standalone-scripts/macro-controller/src/auth-resolve.ts — Consumer
  */
 

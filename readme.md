@@ -568,7 +568,7 @@ curl -fsSL https://github.com/alimtvnetwork/macro-ahk-v21/releases/download/v{VE
 
 ## Engineering Standards
 
-The project enforces strict engineering standards (26 rules documented in `spec/06-coding-guidelines/engineering-standards.md`):
+The project enforces strict engineering standards (26 rules documented in `spec/02-coding-guidelines/engineering-standards.md`):
 
 - **Zero ESLint warnings/errors** — SonarJS plugin enforced across all code
 - **All errors include exact file path, missing item, and reasoning** — optimized for AI-assisted diagnosis

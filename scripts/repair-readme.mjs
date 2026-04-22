@@ -41,6 +41,15 @@
  *
  *   --file=<path>       Override target README path (default: ./readme.md).
  *
+ *   --audit[=<path>]    Write a JSON audit log of every mutation performed
+ *                       (or that would be performed in dry-run). The log
+ *                       captures, per repair: id, label, status, reason,
+ *                       and exact before/after snippets of the affected
+ *                       region. Default path:
+ *                         .lovable/reports/readme-repair-audit-<ISO>.json
+ *                       Audit logs are written for BOTH dry-run and apply
+ *                       modes so handoffs can review proposed changes.
+ *
  * Safety contract:
  *   - The script never edits content INSIDE existing badge blocks, code
  *     fences, or the author biography paragraphs.

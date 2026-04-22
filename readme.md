@@ -486,7 +486,7 @@ Pushing to a `release/*` branch (e.g., `release/v2.117.0`) automatically:
 4. Builds standalone scripts (SDK → XPath → Macro Controller)
 5. Builds the Chrome extension
 6. Copies `readme.md`, `VERSION`, and `changelog.md` into the release asset set
-7. Zips `chrome-extension/dist/` into `marco-extension-v{VERSION}.zip`
+7. Zips `chrome-extension/` into `marco-extension-v{VERSION}.zip`
 8. Generates categorized release notes from commit history with Bash + PowerShell install commands
 9. Creates a GitHub Release with all assets attached
 

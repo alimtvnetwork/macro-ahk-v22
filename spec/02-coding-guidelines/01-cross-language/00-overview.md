@@ -120,7 +120,7 @@ Consolidated reference, audit logs, contradiction checks.
 | 13 | `13-strict-typing.md` | Type Safety |
 | 14 | `14-test-naming-and-structure.md` | Testing |
 | 15 | `15-master-coding-guidelines/00-overview.md` | Reference |
-| 16 | `16-lazy-evaluation-patterns.md` | Patterns |
+| 16 | `16-static-analysis/00-overview.md` | Enforcement |
 | 17 | `17-regex-usage-guidelines.md` | Patterns |
 | 18 | `18-code-mutation-avoidance.md` | Type Safety |
 | 19 | `19-null-pointer-safety.md` | Type Safety |
@@ -128,8 +128,8 @@ Consolidated reference, audit logs, contradiction checks.
 | 21 | `21-newline-styling-examples.md` | Style |
 | 22 | `22-variable-naming-conventions.md` | Naming |
 | 23 | `23-solid-principles.md` | Architecture |
-| 16a | `16-static-analysis/00-overview.md` | Enforcement |
 | 28 | `28-slug-conventions.md` | Naming |
+| 29 | `29-lazy-evaluation-patterns.md` | Patterns |
 | 97 | `97-acceptance-criteria.md` | Meta |
 | 98 | `98-changelog.md` | Meta |
 | 99 | `99-consistency-report.md` | Meta |
